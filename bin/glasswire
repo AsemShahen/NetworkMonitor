@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PY="$DIR/python3/bin/python3.14"
+export PYTHONPATH="$DIR/src:$PYTHONPATH"
+export QT_QPA_PLATFORM=${QT_QPA_PLATFORM:-wayland}
+exec "$PY" -m gwapp "$@"

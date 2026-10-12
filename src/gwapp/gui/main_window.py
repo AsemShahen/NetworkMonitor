@@ -44,11 +44,13 @@ class MainWindow(QMainWindow):
         self.btn_refresh = QPushButton("تحديث الآن")
         self.btn_block = QPushButton("حظر المحدد")
         self.btn_unblock = QPushButton("إلغاء حظر المحدد")
+        self.btn_export = QPushButton("تصدير أسماء البرامج")
         self.filter = QLineEdit()
         self.filter.setPlaceholderText("بحث بالاسم أو المسار...")
         top.addWidget(self.btn_refresh)
         top.addWidget(self.btn_block)
         top.addWidget(self.btn_unblock)
+        top.addWidget(self.btn_export)
         top.addWidget(self.filter)
         lay.addLayout(top)
 
@@ -77,6 +79,10 @@ class MainWindow(QMainWindow):
         self.btn_refresh.clicked.connect(self.refresh)
         self.btn_block.clicked.connect(self.block_selected)
         self.btn_unblock.clicked.connect(self.unblock_selected)
+        try:
+            self.btn_export.clicked.connect(self.export_names)
+        except Exception:
+            pass
 
     def refresh(self):
         procs = self.ctx.proc_scan()
@@ -142,3 +148,21 @@ class MainWindow(QMainWindow):
         self.ctx.remove_block(exe)
         self.status.showMessage(f"تم إلغاء حظر {exe}")
         self.refresh()
+
+    def export_names(self):
+        import os
+        from PySide6.QtWidgets import QFileDialog
+        names = []
+        for r in self.model.rows:
+            nm = str(r.get('name','')).strip()
+            if nm and nm not in names:
+                names.append(nm)
+        txt = ', '.join(names)
+        path, _ = QFileDialog.getSaveFileName(self, "حفظ ملف", os.path.expanduser("~/Desktop/برامج_الشبكة.txt"), "Text Files (*.txt)")
+        if path:
+            try:
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(txt)
+                self.status.showMessage(f"تم التصدير إلى {path}")
+            except Exception as e:
+                self.status.showMessage(f"فشل التصدير: {e}")

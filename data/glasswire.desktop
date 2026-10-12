@@ -1,9 +1,19 @@
 [Desktop Entry]
-Type=Application
-Name=مراقب الشبكة
-GenericName=Network Monitor
+Categories=Network;Security;System;
+Comment[en_US]=GlassWire-like Network Monitor
 Comment=GlassWire-like Network Monitor
 Exec=glasswire
-Icon=glasswire
-Categories=Network;Security;System;
+GenericName[en_US]=Network Monitor
+GenericName=Network Monitor
+Icon=amarok
+MimeType=
+Name[en_US]=مراقب الشبكة
+Name=مراقب الشبكة
+Path=
+PrefersNonDefaultGPU=false
+StartupNotify=true
 Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

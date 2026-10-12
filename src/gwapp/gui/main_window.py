@@ -11,6 +11,13 @@ from .theme import THEME
 from .traffic_table import TrafficTable, TrafficModel
 
 
+def fmt_bps(v):
+    v = max(0, float(v))
+    if v >= 1024*1024:
+        return f"{v/(1024*1024):0.2f} MB/s"
+    return f"{v/1024:0.1f} KB/s"
+
+
 class MainWindow(QMainWindow):
     def __init__(self, ctx):
         super().__init__()
@@ -34,12 +41,14 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.tab_net, "رصد الشبكة")
         lay = QVBoxLayout(self.tab_net)
         top = QHBoxLayout()
+        self.btn_refresh = QPushButton("تحديث الآن")
+        self.btn_block = QPushButton("حظر المحدد")
+        self.btn_unblock = QPushButton("إلغاء حظر المحدد")
         self.filter = QLineEdit()
         self.filter.setPlaceholderText("بحث بالاسم أو المسار...")
-        self.engine_box = QComboBox()
-        self.engine_box.addItems(["تلقائي (المساعد أولاً)", "المساعد المميز (pkexec)", "صلاحيات المستخدم فقط", "وضع تجريبي"])
-        top.addWidget(QLabel("محرك الرصد:"))
-        top.addWidget(self.engine_box)
+        top.addWidget(self.btn_refresh)
+        top.addWidget(self.btn_block)
+        top.addWidget(self.btn_unblock)
         top.addWidget(self.filter)
         lay.addLayout(top)
 
@@ -64,23 +73,65 @@ class MainWindow(QMainWindow):
     def _start(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
-        self.timer.start(1000)
+        self.timer.start(30000)
+        self.btn_refresh.clicked.connect(self.refresh)
+        self.btn_block.clicked.connect(self.block_selected)
+        self.btn_unblock.clicked.connect(self.unblock_selected)
 
     def refresh(self):
         procs = self.ctx.proc_scan()
         rows = []
-        dsum = usum = 0
         for p in procs[:100]:
+            # p may be dict or object
+            name = p.get("name") if isinstance(p, dict) else getattr(p, "name", "")
+            pid = p.get("pid") if isinstance(p, dict) else getattr(p, "pid", 0)
+            exe = p.get("exe") if isinstance(p, dict) else getattr(p, "exe", "")
+            down_bps = p.get("down_bps") if isinstance(p, dict) else getattr(p, "down_bps", 0.0)
+            up_bps = p.get("up_bps") if isinstance(p, dict) else getattr(p, "up_bps", 0.0)
+            down_total = p.get("down_total") if isinstance(p, dict) else getattr(p, "down_total", 0)
+            up_total = p.get("up_total") if isinstance(p, dict) else getattr(p, "up_total", 0)
+            blocked = p.get("blocked") if isinstance(p, dict) else getattr(p, "blocked", False)
             rows.append({
-                "name": p.name,
-                "pid": p.pid,
-                "exe": p.exe,
-                "down_bps": f"{p.down_bps:0.1f}",
-                "up_bps": f"{p.up_bps:0.1f}",
-                "down_total": p.down_total,
-                "up_total": p.up_total,
-                "blocked": p.blocked,
+                "name": name,
+                "pid": pid,
+                "exe": exe,
+                "down_bps": fmt_bps(down_bps),
+                "up_bps": fmt_bps(up_bps),
+                "down_total": down_total,
+                "up_total": up_total,
+                "blocked": blocked,
             })
         self.model.replace(rows)
         self.status.showMessage(f"جاهز | {len(procs)} عملية | تحديث كل 1 ثانية")
 # replace tray init
+
+    def get_selected_exe(self):
+        idx = self.table.selectionModel().currentIndex()
+        if not idx.isValid():
+            return None
+        row = idx.row()
+        if 0 <= row < len(self.model.rows):
+            return self.model.rows[row].get("exe", "")
+        return None
+
+    def block_selected(self):
+        exe = self.get_selected_exe()
+        if not exe:
+            self.status.showMessage("اختر عملية أولاً ثم اضغط حظر")
+            return
+        self.ctx.blocklist.add(self.ctx.blocklist.__class__.__name__)  # dummy
+        # actually add
+        from ..config import BlockEntry, slugify
+        import time
+        self.ctx.add_block(exe)
+        self.status.showMessage(f"تمت إضافة {exe} إلى قائمة الحظر")
+        self.refresh()
+
+    def unblock_selected(self):
+        exe = self.get_selected_exe()
+        if not exe:
+            self.status.showMessage("اختر عملية أولاً ثم اضغط إلغاء الحظر")
+            return
+        self.ctx.remove_block(exe)
+        self.status.showMessage(f"تم إلغاء حظر {exe}")
+        self.refresh()

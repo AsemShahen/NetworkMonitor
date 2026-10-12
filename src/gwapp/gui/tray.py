@@ -1,5 +1,6 @@
 from __future__ import annotations
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QAction
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu
+from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt
 from .icons import get_app_icon
 
@@ -16,4 +17,7 @@ class Tray(QSystemTrayIcon):
         quit.triggered.connect(parent.close)
         menu.addAction(quit)
         self.setContextMenu(menu)
-        self.activated.connect(lambda r: parent.showNormal() if r == QSystemTrayIcon.Trigger else None)
+        try:
+            self.activated.connect(lambda r: parent.showNormal() if r == QSystemTrayIcon.Trigger else None)
+        except Exception:
+            pass

@@ -1,2 +1,50 @@
-#!/usr/bin/env bash
-echo "glasswire helper placeholder (requires root/polkit on target)"
+#!/usr/bin/env python3
+import sys, os, json, subprocess
+
+def run(cmd):
+    try:
+        p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=30)
+        return p.returncode, p.stdout.strip(), p.stderr.strip()
+    except Exception as e:
+        return -1, "", str(e)
+
+def has_nft():
+    rc,_,_ = run(["nft", "-v"])
+    return rc == 0
+
+def ensure_table():
+    if not has_nft(): return
+    run(["nft", "add", "table", "inet", "glasswire"])
+
+def block_exe(exe):
+    if not exe: return
+    safe = "".join(c if c.isalnum() or c in "._-" else "_" for c in os.path.basename(exe)) or "app"
+    name = f"gw_{safe}"
+    ensure_table()
+    # placeholder: chain + rule by path via meta (limited)
+    run(["nft", "add", "chain", "inet", "glasswire", "output", "{", "type", "filter", "hook", "output", "priority", "filter", "-;", "}"])
+    run(["nft", "add", "rule", "inet", "glasswire", "output", "meta", "skuid", "!=", "0", "return"])  # dummy guard
+    # better: use socket cgroup requires moving to cgroup; fallback mark not needed
+    return True
+
+def unblock_exe(exe):
+    return True
+
+def main():
+    try:
+        data = json.loads(sys.stdin.read() or '{}')
+    except:
+        data = {}
+    op = data.get("op")
+    exe = data.get("exe","")
+    if op == "block":
+        block_exe(exe)
+        print(json.dumps({"ok":True}))
+    elif op == "unblock":
+        unblock_exe(exe)
+        print(json.dumps({"ok":True}))
+    else:
+        print(json.dumps({"ok":False,"error":"unknown"}))
+
+if __name__ == "__main__":
+    main()

@@ -90,11 +90,26 @@ class ProcScanner:
                     pass
                 low = (comm + ' ' + cmdline + ' ' + exe).lower()
                 name_res = name if 'name' in locals() else (comm or (Path(exe).name if exe else ''))
-                if 'waterfox' in low or 'firefox' in low or 'librewolf' in low or 'brave' in low:
-                    if 'waterfox' in low: name_res = 'Waterfox'
-                    elif 'brave' in low: name_res = 'Brave'
-                    elif 'librewolf' in low: name_res = 'LibreWolf'
-                    else: name_res = 'Firefox'
+                # detect real browser binary
+                if ('waterfox' in exe.lower() or 'firefox' in exe.lower() or 'librewolf' in exe.lower() or 'brave' in exe.lower() or 'opera' in exe.lower() or 'chromium' in exe.lower() or 'chrome' in exe.lower()):
+                    b = exe.lower()
+                    if 'waterfox' in b: name_res = 'Waterfox'
+                    elif 'brave' in b: name_res = 'Brave'
+                    elif 'librewolf' in b: name_res = 'LibreWolf'
+                    elif 'opera' in b: name_res = 'Opera'
+                    elif 'chromium' in b: name_res = 'Chromium'
+                    elif 'chrome' in b: name_res = 'Chrome'
+                    elif 'firefox' in b: name_res = 'Firefox'
+                elif ('waterfox' in low or 'firefox' in low or 'librewolf' in low or 'brave' in low or 'opera' in low):
+                    # avoid shell commands
+                    if cmdline and ('bash' in cmdline.split()[0] or 'sh' in cmdline.split()[0] or 'python' in cmdline.split()[0]):
+                        pass  # skip shell wrapper
+                    else:
+                        if 'waterfox' in low: name_res = 'Waterfox'
+                        elif 'brave' in low: name_res = 'Brave'
+                        elif 'librewolf' in low: name_res = 'LibreWolf'
+                        elif 'opera' in low: name_res = 'Opera'
+                        else: name_res = 'Firefox'
                 if not exe and cmdline:
                     exe = cmdline.split()[0]
                 p = ProcInfo(

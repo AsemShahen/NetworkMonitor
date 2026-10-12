@@ -72,6 +72,14 @@ class ProcScanner:
                 comm = _read_comm(pid)
                 exe = _read_exe(pid)
                 cmdline = _read_cmdline(pid)
+                name = comm or (Path(exe).name if exe else '')
+                if not name or len(name) < 3:
+                    name = Path(exe).name or ''
+                low = (name + ' ' + cmdline).lower()
+                if 'waterfox' in low or 'firefox' in low or 'librewolf' in low:
+                    name = 'Waterfox' if 'waterfox' in low else ('LibreWolf' if 'librewolf' in low else 'Firefox')
+                    if not exe:
+                        exe = cmdline.split()[0] if cmdline else exe
                 status = _read_status(pid)
                 cpu_total, rss = _read_stat(pid)
                 uid = 0
@@ -80,14 +88,23 @@ class ProcScanner:
                     uid = int(uid_str)
                 except Exception:
                     pass
+                low = (comm + ' ' + cmdline + ' ' + exe).lower()
+                name_res = name if 'name' in locals() else (comm or (Path(exe).name if exe else ''))
+                if 'waterfox' in low or 'firefox' in low or 'librewolf' in low or 'brave' in low:
+                    if 'waterfox' in low: name_res = 'Waterfox'
+                    elif 'brave' in low: name_res = 'Brave'
+                    elif 'librewolf' in low: name_res = 'LibreWolf'
+                    else: name_res = 'Firefox'
+                if not exe and cmdline:
+                    exe = cmdline.split()[0]
                 p = ProcInfo(
                     pid=pid,
-                    name=comm or (Path(exe).name if exe else ""),
+                    name=name_res,
                     exe=exe,
                     cmdline=cmdline,
                     uid=uid,
                     state=status.get("State", "?").split()[0] if status.get("State") else "?",
-                    cpu=cpu_total / 100.0,  # heuristic
+                    cpu=cpu_total / 100.0,
                     rss=rss,
                     down_bps=0.0,
                     up_bps=0.0,

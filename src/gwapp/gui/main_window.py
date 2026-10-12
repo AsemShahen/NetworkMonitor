@@ -101,8 +101,15 @@ class MainWindow(QMainWindow):
                 "up_total": up_total,
                 "blocked": blocked,
             })
+        # filter
+        try:
+            q = self.filter.text().strip().lower()
+            if q:
+                rows = [r for r in rows if q in str(r.get('name','')).lower() or q in str(r.get('exe','')).lower() or q in str(r.get('cmdline','')).lower()]
+        except Exception:
+            pass
         self.model.replace(rows)
-        self.status.showMessage(f"جاهز | {len(procs)} عملية | تحديث كل 1 ثانية")
+        self.status.showMessage(f"جاهز | {len(rows)} / {len(procs)} عملية | تحديث 30ث")
 # replace tray init
 
     def get_selected_exe(self):

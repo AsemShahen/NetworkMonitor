@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=مراقب الشبكة
-GenericName=Network Monitor
-Comment=GlassWire-like Network Monitor
-Exec=glasswire
-Icon=glasswire
-Categories=Network;Security;System;
-Terminal=false

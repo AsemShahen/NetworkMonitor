@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=org.glasswire.Helper
-Exec=/usr/bin/glasswire-helper
-User=root

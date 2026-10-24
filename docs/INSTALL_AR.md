@@ -1,30 +1,65 @@
 # دليل التثبيت على جهاز جديد
 
-## 1. نسخ المجلد
-انسخ مجلد `GlassWire` بالكامل إلى الجهاز المستهدف.
+## 1. المتطلبات
+- نظام ديبيان/أوبونتو أو فيدورا بنواة حديثة تدعم **cgroup v2**.
+- سطح مكتب Wayland أو X11.
+- حزم النظام التالية (لقياس السرعات والحظر):
 
-## 2. التثبيت باستخدام السكريبت
+**ديبيان/أوبونتو:**
+```bash
+sudo apt update
+sudo apt install -y iproute2 nftables polkitd pkexec libxcb-cursor0
+```
+
+**فيدورا:**
+```bash
+sudo dnf install -y iproute nftables polkit libxcb
+```
+
+> ملاحظة: حزمة Python المحمولة `python3/` مرفقة داخل المشروع، لذلك لا يلزم تثبيت Python أو PySide6 على النظام.
+
+## 2. نسخ المجلد
+انسخ مجلد `Network Monitor` بالكامل إلى الجهاز المستهدف (مثلاً إلى مجلد المنزل).
+
+## 3. التثبيت باستخدام السكريبت
 داخل المجلد:
 ```bash
 chmod +x install.sh
-sudo ./install.sh
+./install.sh
 ```
 
-يقوم السكريبت بـ:
-- نسخ الملفات إلى /opt/glasswire
-- إنشاء اختصار في /usr/local/bin/glasswire
-- إضافة ملف .desktop لقائمة التطبيقات
-- إضافة ملف polkit لطلب الصلاحيات عند الحاجة
-- إضافة ملف D-Bus للخدمة المميزة
+لا يحتاج السكريبت إلى `sudo` مسبق؛ سيطلبه بنفسه. يقوم بـ:
+- نسخ المشروع إلى `/opt/network-monitor`.
+- إنشاء مشغّل في `/usr/local/bin/network-monitor` يشير إلى `/opt/network-monitor`.
+- تثبيت المساعد المميز في `/usr/local/bin/network-monitor-helper`.
+- إضافة ملف `.desktop` إلى قائمة التطبيقات.
+- تثبيت الأيقونات بعدة أحجام.
+- إضافة ملف polkit لطلب الصلاحيات عند الحظر.
 
-## 3. التثبيت اليدوي (بديل)
+## 4. التثبيت اليدوي (بديل)
 ```bash
-sudo mkdir -p /opt/glasswire
-sudo cp -r python3 src bin /opt/glasswire/
-sudo ln -s /opt/glasswire/bin/glasswire /usr/local/bin/glasswire 2>/dev/null || sudo cp /opt/glasswire/bin/glasswire /usr/local/bin/glasswire
+sudo rm -rf /opt/network-monitor
+sudo mkdir -p /opt/network-monitor
+sudo cp -r python3 src bin data docs network-monitor /opt/network-monitor/
+sudo chmod +x /opt/network-monitor/network-monitor /opt/network-monitor/bin/network-monitor-helper
+printf '#!/bin/sh\nexec /opt/network-monitor/network-monitor "$@"\n' | sudo tee /usr/local/bin/network-monitor >/dev/null
+sudo chmod +x /usr/local/bin/network-monitor
+sudo cp /opt/network-monitor/bin/network-monitor-helper /usr/local/bin/network-monitor-helper
+sudo cp /opt/network-monitor/data/network-monitor.desktop /usr/share/applications/
+sudo cp /opt/network-monitor/data/network-monitor-256.png /usr/share/icons/hicolor/256x256/apps/network-monitor.png
+sudo cp /opt/network-monitor/data/org.networkmonitor.helper.policy /usr/share/polkit-1/actions/
 ```
 
-## 4. التحقق
+## 5. التحقق
 ```bash
-glasswire --help 2>/dev/null || glasswire
+network-monitor
 ```
+يجب أن تُفتح النافذة، ويظهر في تبويب «الإعدادات» أن `ss` و`nft` وcgroup v2 متوفرة.
+
+## 6. إلغاء التثبيت
+```bash
+sudo ./uninstall.sh
+```
+تُحذف ملفات البرنامج فقط، وتبقى إعداداتك وقائمة الحظر في:
+- `~/.config/network-monitor/`
+- `~/.local/share/network-monitor/`

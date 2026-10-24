@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+"""مساعد مراقب الشبكة المميز.
+
+يُستدعى عبر pkexec من الواجهة الرسومية، ويستقبل طلب JSON واحداً على stdin.
+يطبّق الحظر لكل تطبيق باستخدام cgroup v2 + nftables.
+
+العمليات المدعومة:
+  {"op": "block",   "exe": "/path/to/app", "name": "App"}
+  {"op": "unblock", "exe": "/path/to/app"}
+  {"op": "apply",   "entries": [{"exe": "...", "slug": "..."}, ...]}
+  {"op": "status"}
+  {"op": "stats"}   -> يعيد مخرجات ss الخام
+
+لا يعتمد على أي مكتبات خارجية (stdlib فقط).
+"""
+from __future__ import annotations
+
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+CGROUP_ROOT = "/sys/fs/cgroup"
+CGROUP_BASE = os.path.join(CGROUP_ROOT, "network-monitor")
+NFT = shutil.which("nft")
+TABLE = "network_monitor"
+CHAINS = ("output", "input")
+
+
+def emit(ok: bool, **kw) -> None:
+    data = {"ok": bool(ok)}
+    data.update(kw)
+    sys.stdout.write(json.dumps(data, ensure_ascii=False))
+    sys.stdout.flush()
+
+
+def run(cmd: list[str], timeout: int = 15) -> tuple[int, str, str]:
+    try:
+        p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=timeout)
+        return p.returncode, (p.stdout or "").strip(), (p.stderr or "").strip()
+    except (OSError, subprocess.SubprocessError) as exc:
+        return -1, "", str(exc)
+
+
+def sanitize(value: str) -> str:
+    base = os.path.basename(value.rstrip("/")) or "app"
+    clean = re.sub(r"[^A-Za-z0-9._-]", "_", base)
+    return (clean.strip("._-") or "app")[:40]
+
+
+def valid_exe(exe: str) -> bool:
+    return bool(exe) and os.path.isabs(exe) and os.path.exists(exe)
+
+
+def cgroup2_available() -> bool:
+    return os.path.exists(os.path.join(CGROUP_ROOT, "cgroup.controllers"))
+
+
+def ensure_base() -> None:
+    os.makedirs(CGROUP_BASE, exist_ok=True)
+
+
+def ensure_table() -> tuple[bool, str]:
+    if not NFT:
+        return False, "أداة nft غير مثبتة (حزمة nftables)."
+    run([NFT, "add", "table", "inet", TABLE])
+    for chain in CHAINS:
+        hook = "output" if chain == "output" else "input"
+        run([NFT, "add", "chain", "inet", TABLE, chain,
+             "{", "type", "filter", "hook", hook, "priority", "0", ";", "policy", "accept", ";", "}"])
+    rc, _, err = run([NFT, "list", "table", "inet", TABLE])
+    if rc != 0:
+        return False, err or "تعذّر إنشاء جدول nftables."
+    return True, ""
+
+
+def list_chain(chain: str) -> str:
+    rc, out, _ = run([NFT, "-a", "list", "chain", "inet", TABLE, chain])
+    return out if rc == 0 else ""
+
+
+def rule_comment(slug: str, chain: str) -> str:
+    return f"nm-{slug}-{chain}"
+
+
+def ensure_rule(chain: str, slug: str) -> tuple[bool, str]:
+    comment = rule_comment(slug, chain)
+    if comment in list_chain(chain):
+        return True, ""
+    cg_path = f"network-monitor/{slug}"
+    rc, _, err = run([
+        NFT, "add", "rule", "inet", TABLE, chain,
+        "socket", "cgroupv2", "level", "2", cg_path,
+        "drop", "comment", f'"{comment}"',
+    ])
+    if rc != 0:
+        return False, err or "تعذّر إضافة قاعدة nftables."
+    return True, ""
+
+
+def delete_rule(chain: str, slug: str) -> None:
+    comment = rule_comment(slug, chain)
+    listing = list_chain(chain)
+    for line in listing.splitlines():
+        if comment in line:
+            m = re.search(r"handle\s+(\d+)", line)
+            if m:
+                run([NFT, "delete", "rule", "inet", TABLE, chain, "handle", m.group(1)])
+
+
+def find_pids_by_exe(exe: str) -> list[int]:
+    if not exe:
+        return []
+    target = os.path.realpath(exe)
+    pids: list[int] = []
+    for entry in os.listdir("/proc"):
+        if not entry.isdigit():
+            continue
+        pid = int(entry)
+        try:
+            if os.path.realpath(f"/proc/{pid}/exe") == target:
+                pids.append(pid)
+        except OSError:
+            continue
+    return pids
+
+
+def move_pids(pids: list[int], dest_procs_file: str) -> None:
+    for pid in pids:
+        try:
+            with open(dest_procs_file, "a", encoding="ascii") as f:
+                f.write(str(pid))
+        except OSError:
+            continue
+
+
+def leaf_path(slug: str) -> str:
+    return os.path.join(CGROUP_BASE, slug)
+
+
+def block_app(exe: str, slug: str) -> tuple[bool, str]:
+    if not valid_exe(exe):
+        return False, "مسار التنفيذ غير صالح."
+    slug = sanitize(slug or exe)
+    if not cgroup2_available():
+        return False, "النظام لا يستخدم cgroup v2 (غير مدعوم)."
+    ensure_base()
+    leaf = leaf_path(slug)
+    os.makedirs(leaf, exist_ok=True)
+    ok, err = ensure_table()
+    if not ok:
+        return False, err
+    pids = find_pids_by_exe(exe)
+    move_pids(pids, os.path.join(leaf, "cgroup.procs"))
+    for chain in CHAINS:
+        ok, err = ensure_rule(chain, slug)
+        if not ok:
+            return False, err
+    return True, f"تم حظر {len(pids)} عملية/عمليات."
+
+
+def unblock_app(exe: str, slug: str) -> tuple[bool, str]:
+    if NFT:
+        for chain in CHAINS:
+            delete_rule(chain, slug)
+    leaf = leaf_path(slug)
+    if os.path.isdir(leaf):
+        procs_file = os.path.join(leaf, "cgroup.procs")
+        pids: list[int] = []
+        try:
+            with open(procs_file, encoding="ascii") as f:
+                pids = [int(x) for x in f.read().split() if x]
+        except OSError:
+            pids = []
+        move_pids(pids, os.path.join(CGROUP_ROOT, "cgroup.procs"))
+        try:
+            os.rmdir(leaf)
+        except OSError:
+            pass
+    return True, "تم إلغاء الحظر."
+
+
+def apply_entries(entries: list[dict]) -> tuple[bool, str]:
+    if not entries:
+        return True, "لا توجد تطبيقات محظورة."
+    errors: list[str] = []
+    for entry in entries:
+        exe = str(entry.get("exe") or "")
+        slug = sanitize(str(entry.get("slug") or exe))
+        ok, err = block_app(exe, slug)
+        if not ok:
+            errors.append(f"{exe}: {err}")
+    if errors:
+        return False, " | ".join(errors)
+    return True, f"أُعيد تطبيق {len(entries)} قاعدة حظر."
+
+
+def status() -> tuple[bool, str, dict]:
+    slugs: list[str] = []
+    if NFT:
+        for chain in CHAINS:
+            for line in list_chain(chain).splitlines():
+                m = re.search(r'comment "nm-([A-Za-z0-9._-]+)-' + chain + r'"', line)
+                if m and m.group(1) not in slugs:
+                    slugs.append(m.group(1))
+    return True, "", {
+        "nft": bool(NFT),
+        "cgroup2": cgroup2_available(),
+        "blocked": sorted(slugs),
+        "uid": os.geteuid(),
+    }
+
+
+def main() -> int:
+    if os.geteuid() != 0:
+        emit(False, error="يجب تشغيل المساعد بصلاحيات الجذر (عبر pkexec).")
+        return 1
+
+    raw = sys.stdin.read().strip()
+    try:
+        req = json.loads(raw) if raw else {}
+    except json.JSONDecodeError:
+        emit(False, error="طلب JSON غير صالح.")
+        return 1
+
+    op = str(req.get("op") or "")
+    try:
+        if op == "block":
+            exe = str(req.get("exe") or "")
+            slug = sanitize(exe)
+            ok, msg = block_app(exe, slug)
+            emit(ok, message=msg, slug=slug, error=None if ok else msg)
+        elif op == "unblock":
+            exe = str(req.get("exe") or "")
+            ok, msg = unblock_app(exe, sanitize(exe))
+            emit(ok, message=msg, error=None if ok else msg)
+        elif op == "apply":
+            ok, msg = apply_entries(list(req.get("entries") or []))
+            emit(ok, message=msg, error=None if ok else msg)
+        elif op == "status":
+            ok, err, info = status()
+            emit(ok, error=err or None, **info)
+        elif op == "stats":
+            text = ""
+            ss = shutil.which("ss")
+            if ss:
+                rc, out, _ = run([ss, "-tinape"], timeout=10)
+                text = out
+            emit(True, ss=text)
+        else:
+            emit(False, error="عملية غير معروفة.")
+            return 1
+    except Exception as exc:  # noqa: BLE001
+        emit(False, error=f"خطأ غير متوقع: {exc}")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

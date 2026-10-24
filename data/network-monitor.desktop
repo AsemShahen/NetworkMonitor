@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Network Monitor
+Name[ar]=مراقب الشبكة
+Comment=مراقب حركة الإنترنت لكل تطبيق مع إمكانية الحظر
+Comment[en_US]=Per-application network monitor with blocking
+GenericName=Network Monitor
+GenericName[en_US]=Network Monitor
+Exec=network-monitor
+Icon=network-monitor
+Terminal=false
+Categories=Network;Security;System;Monitor;
+Keywords=network;bandwidth;firewall;monitor;شبكة;حظر;
+StartupNotify=true
+StartupWMClass=network-monitor

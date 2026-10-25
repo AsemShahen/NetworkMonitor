@@ -4,6 +4,7 @@ import os
 import time
 
 from .config import BlocklistStore, ConfigStore, TotalsStore, slugify
+from .i18n import tr
 from .collectors.proc_scanner import ProcScanner
 from .collectors.traffic import TrafficEngine
 from .models import BlockEntry
@@ -113,7 +114,7 @@ class Controller:
     # ---------- الحظر ----------
     def block(self, exe: str, name: str = "") -> tuple[bool, str]:
         if not exe:
-            return False, "لا يمكن تحديد المسار التنفيذي لهذه العملية (صلاحيات غير كافية)."
+            return False, tr("error.no_exe")
         from .firewall.helper_client import HelperClient
 
         ok, err = HelperClient().block(exe, name)
@@ -124,7 +125,7 @@ class Controller:
 
     def unblock(self, exe: str) -> tuple[bool, str]:
         if not exe:
-            return False, "مسار التنفيذ غير معروف."
+            return False, tr("error.no_exe_short")
         from .firewall.helper_client import HelperClient
 
         ok, err = HelperClient().unblock(exe)
@@ -135,13 +136,13 @@ class Controller:
     def unblock_slug(self, slug: str) -> tuple[bool, str]:
         entry = self.blocklist.entries.get(slug)
         if not entry:
-            return False, "هذا التطبيق غير موجود في قائمة الحظر."
+            return False, tr("error.not_in_blocklist")
         return self.unblock(entry.exe)
 
     def apply_blocklist(self) -> tuple[bool, str]:
         entries = [e.to_dict() for e in self.blocklist.list()]
         if not entries:
-            return True, "قائمة الحظر فارغة."
+            return True, tr("action.blocklist_empty")
         from .firewall.helper_client import HelperClient
 
         return HelperClient().apply(entries)

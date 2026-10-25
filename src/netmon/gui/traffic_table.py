@@ -4,22 +4,27 @@ from PySide6.QtCore import QAbstractTableModel, QModelIndex, QSortFilterProxyMod
 from PySide6.QtGui import QColor, QFont
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QTableView
 
+from ..i18n import is_rtl, tr
 from ..util import fmt_bytes, fmt_rate, short_path
 from . import theme
 
 COLUMNS = [
-    ("status", "الحالة", 80),
-    ("name", "التطبيق", 170),
-    ("pid", "PID", 70),
-    ("exe", "المسار التنفيذي", 300),
-    ("down_bps", "التحميل", 110),
-    ("up_bps", "الرفع", 110),
-    ("down_total", "إجمالي التحميل", 120),
-    ("up_total", "إجمالي الرفع", 120),
-    ("conns", "الاتصالات", 90),
+    ("status", "col.status", 80),
+    ("name", "col.name", 170),
+    ("pid", "col.pid", 70),
+    ("exe", "col.exe", 300),
+    ("down_bps", "col.down_bps", 110),
+    ("up_bps", "col.up_bps", 110),
+    ("down_total", "col.down_total", 120),
+    ("up_total", "col.up_total", 120),
+    ("conns", "col.conns", 90),
 ]
 
 SORT_ROLE = Qt.UserRole + 1
+
+
+def _leading() -> Qt.AlignmentFlag:
+    return (Qt.AlignRight if is_rtl() else Qt.AlignLeft) | Qt.AlignVCenter
 
 
 class TrafficModel(QAbstractTableModel):
@@ -35,7 +40,7 @@ class TrafficModel(QAbstractTableModel):
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole):
         if role == Qt.DisplayRole and orientation == Qt.Horizontal and 0 <= section < len(COLUMNS):
-            return COLUMNS[section][1]
+            return tr(COLUMNS[section][1])
         return None
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole):
@@ -55,7 +60,7 @@ class TrafficModel(QAbstractTableModel):
 
         if role == Qt.DisplayRole:
             if key == "status":
-                return "محظور" if blocked else ("نشط" if active else "خامل")
+                return tr("status.blocked" if blocked else ("status.active" if active else "status.idle"))
             if key == "name":
                 return str(row.get("name") or "—")
             if key == "pid":
@@ -63,15 +68,15 @@ class TrafficModel(QAbstractTableModel):
             if key == "exe":
                 return "\u202a" + short_path(str(row.get("exe") or ""), 72) + "\u202c"
             if key == "down_bps":
-                return fmt_rate(row.get("down_bps", 0))
+                return "\u202a" + fmt_rate(row.get("down_bps", 0)) + "\u202c"
             if key == "up_bps":
-                return fmt_rate(row.get("up_bps", 0))
+                return "\u202a" + fmt_rate(row.get("up_bps", 0)) + "\u202c"
             if key == "down_total":
-                return fmt_bytes(row.get("down_total", 0))
+                return "\u202a" + fmt_bytes(row.get("down_total", 0)) + "\u202c"
             if key == "up_total":
-                return fmt_bytes(row.get("up_total", 0))
+                return "\u202a" + fmt_bytes(row.get("up_total", 0)) + "\u202c"
             if key == "conns":
-                return str(row.get("conns", 0))
+                return "\u202a" + str(row.get("conns", 0)) + "\u202c"
             return str(row.get(key, ""))
 
         if role == Qt.ForegroundRole:
@@ -91,7 +96,7 @@ class TrafficModel(QAbstractTableModel):
                 return int(Qt.AlignLeft | Qt.AlignVCenter)
             if key in ("pid", "down_bps", "up_bps", "down_total", "up_total", "conns"):
                 return int(Qt.AlignRight | Qt.AlignVCenter)
-            return int(Qt.AlignVCenter | Qt.AlignRight)
+            return int(_leading())
 
         if role == Qt.FontRole:
             if key == "name":
@@ -104,9 +109,9 @@ class TrafficModel(QAbstractTableModel):
             cmd = row.get("cmdline") or ""
             parts = [f"PID: {row.get('pid')}"]
             if exe:
-                parts.append(f"المسار: \u202a{exe}\u202c")
+                parts.append(tr("table.tooltip.path", path="\u202a" + exe + "\u202c"))
             if cmd:
-                parts.append(f"الأمر: {cmd[:400]}")
+                parts.append(tr("table.tooltip.cmd", cmd=cmd[:400]))
             return "\n".join(parts)
 
         return None
@@ -115,6 +120,14 @@ class TrafficModel(QAbstractTableModel):
         self.beginResetModel()
         self.rows = list(rows)
         self.endResetModel()
+
+    def retranslate(self) -> None:
+        self.headerDataChanged.emit(Qt.Horizontal, 0, len(COLUMNS) - 1)
+        if self.rows:
+            self.dataChanged.emit(
+                self.index(0, 0),
+                self.index(len(self.rows) - 1, len(COLUMNS) - 1),
+            )
 
     def row_at(self, index: QModelIndex) -> dict | None:
         if 0 <= index.row() < len(self.rows):
@@ -168,8 +181,10 @@ class TrafficTable(QTableView):
         header = self.horizontalHeader()
         header.setHighlightSections(False)
         header.setStretchLastSection(False)
-        for i, (_, _, width) in enumerate(COLUMNS):
-            self.setColumnWidth(i, width)
-        header.setSectionResizeMode(3, QHeaderView.Stretch)
         self.verticalHeader().setVisible(False)
         self.verticalHeader().setDefaultSectionSize(34)
+
+    def apply_column_widths(self) -> None:
+        for i, (_, _, width) in enumerate(COLUMNS):
+            self.setColumnWidth(i, width)
+        self.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)

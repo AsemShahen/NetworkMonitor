@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt
+
+from ..i18n import is_rtl
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout
 
 
@@ -24,9 +26,20 @@ class StatCard(QFrame):
         self.hint.setObjectName("cardHint")
 
         for label in (self.title, self.value, self.hint):
-            label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
             layout.addWidget(label)
+        self.set_rtl(is_rtl())
         layout.addStretch(1)
+
+    def set_rtl(self, rtl: bool) -> None:
+        align = (Qt.AlignRight if rtl else Qt.AlignLeft) | Qt.AlignVCenter
+        for label in (self.title, self.value, self.hint):
+            label.setAlignment(align)
+
+    def set_title(self, title: str) -> None:
+        self.title.setText(title)
+
+    def set_hint(self, hint: str) -> None:
+        self.hint.setText(hint)
 
     def set_value(self, value: str, hint: str | None = None) -> None:
         self.value.setText(value)

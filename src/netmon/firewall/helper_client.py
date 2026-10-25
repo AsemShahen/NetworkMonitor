@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from ..i18n import get_language, tr
+
 
 def find_helper() -> str | None:
     env = os.environ.get("NETWORK_MONITOR_HELPER")
@@ -31,15 +33,16 @@ class HelperClient:
         self.last_error = ""
 
     def _call(self, payload: dict, timeout: int = 120) -> dict:
+        payload = {**payload, "lang": get_language()}
         if not self.helper:
-            return {"ok": False, "error": "لم يتم العثور على المساعد network-monitor-helper. شغّل install.sh أولاً."}
+            return {"ok": False, "error": tr("helper.not_found")}
         runner = [self.helper] if os.access(self.helper, os.X_OK) else [sys.executable, self.helper]
         if os.geteuid() == 0:
             cmd = runner
         else:
             pkexec = shutil.which("pkexec")
             if not pkexec:
-                return {"ok": False, "error": "pkexec/polkit غير مثبت على النظام. ثبّت polkit أو شغّل البرنامج كـ root."}
+                return {"ok": False, "error": tr("helper.pkexec_missing")}
             cmd = [pkexec, *runner]
         try:
             proc = subprocess.run(
@@ -51,19 +54,19 @@ class HelperClient:
                 timeout=timeout,
             )
         except subprocess.TimeoutExpired:
-            return {"ok": False, "error": "انتهت مهلة انتظار المساعد."}
+            return {"ok": False, "error": tr("helper.timeout")}
         except OSError as exc:
-            return {"ok": False, "error": f"تعذّر تشغيل المساعد: {exc}"}
+            return {"ok": False, "error": tr("helper.oserror", error=exc)}
 
         if proc.returncode != 0:
-            err = (proc.stderr or "").strip() or f"فشل المساعد (رمز {proc.returncode}). تأكد من إدخال كلمة المرور."
+            err = (proc.stderr or "").strip() or tr("helper.failed", code=proc.returncode)
             return {"ok": False, "error": err}
         try:
             data = json.loads(proc.stdout.strip() or "{}")
         except json.JSONDecodeError:
-            return {"ok": False, "error": "رد غير صالح من المساعد."}
+            return {"ok": False, "error": tr("helper.bad_json")}
         if not isinstance(data, dict):
-            return {"ok": False, "error": "رد غير متوقع من المساعد."}
+            return {"ok": False, "error": tr("helper.unexpected")}
         return data
 
     def block(self, exe: str, name: str = "") -> tuple[bool, str]:

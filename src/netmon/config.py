@@ -21,13 +21,7 @@ CONFIG_DIR = xdg_config / "network-monitor"
 DATA_DIR = xdg_data / "network-monitor"
 CACHE_DIR = xdg_cache / "network-monitor"
 
-REFRESH_CHOICES = [
-    ("5 ثوانٍ", 5000),
-    ("10 ثوانٍ", 10000),
-    ("30 ثانية", 30000),
-    ("دقيقة واحدة", 60000),
-    ("5 دقائق", 300000),
-]
+REFRESH_CHOICES = [5000, 10000, 30000, 60000, 300000]
 
 CONFIG_FILE = CONFIG_DIR / "config.json"
 BLOCKLIST_FILE = DATA_DIR / "blocklist.json"
@@ -46,6 +40,7 @@ class ConfigStore:
     """إعدادات قابلة للحفظ في ~/.config/network-monitor/config.json."""
 
     DEFAULTS = {
+        "language": "en",
         "refresh_ms": 30000,
         "engine": "auto",
         "unit_auto": True,
@@ -71,7 +66,9 @@ class ConfigStore:
                     self.data.update(loaded)
             except Exception:
                 pass
-        valid = {ms for _, ms in REFRESH_CHOICES}
+        if self.data.get("language") not in ("en", "ar"):
+            self.data["language"] = "en"
+        valid = set(REFRESH_CHOICES)
         try:
             if int(self.data.get("refresh_ms", 30000)) not in valid:
                 self.data["refresh_ms"] = 30000
@@ -210,7 +207,8 @@ def install_autostart(enabled: bool) -> str:
     desktop = (
         "[Desktop Entry]\n"
         "Type=Application\n"
-        'Name=مراقب الشبكة\n'
+        'Name=Network Monitor\n'
+        'Name[ar]=مراقب الشبكة\n'
         f"Exec={exe}\n"
         "X-GNOME-Autostart-enabled=true\n"
     )

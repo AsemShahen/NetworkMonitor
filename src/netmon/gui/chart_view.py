@@ -7,6 +7,7 @@ import pyqtgraph as pg
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 from . import theme
+from ..i18n import tr
 
 pg.setConfigOptions(antialias=True)
 
@@ -41,7 +42,7 @@ class ChartView(QWidget):
             symbolBrush=pg.mkBrush(theme.DOWN),
             fillLevel=0,
             brush=pg.mkBrush(56, 189, 248, 38),
-            name="التحميل",
+            name=tr("chart.down"),
         )
         self.curve_up = self.plot.plot(
             [], [],
@@ -51,15 +52,19 @@ class ChartView(QWidget):
             symbolBrush=pg.mkBrush(theme.UP),
             fillLevel=0,
             brush=pg.mkBrush(52, 211, 153, 30),
-            name="الرفع",
+            name=tr("chart.up"),
         )
 
-        legend = self.plot.addLegend(offset=(-10, 10))
-        legend.setLabelTextColor(theme.TEXT)
+        self.legend = self.plot.addLegend(offset=(-10, 10))
+        self.legend.setLabelTextColor(theme.TEXT)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)
         layout.addWidget(self.plot)
+
+        now = time.time()
+        self.plot.setYRange(0, 5, padding=0)
+        self.plot.setXRange(now - float(window_sec), now, padding=0)
 
     def add_point(self, down_bps: float, up_bps: float, ts: float | None = None) -> None:
         ts = time.time() if ts is None else ts
@@ -76,7 +81,15 @@ class ChartView(QWidget):
         window = max(60.0, min(float(self.window_sec), span + 15.0))
         self.plot.setXRange(ts - window, ts, padding=0)
 
+    def retranslate(self) -> None:
+        self.legend.clear()
+        self.legend.addItem(self.curve_down, tr("chart.down"))
+        self.legend.addItem(self.curve_up, tr("chart.up"))
+
     def clear(self) -> None:
+        now = time.time()
+        self.plot.setYRange(0, 5, padding=0)
+        self.plot.setXRange(now - float(self.window_sec), now, padding=0)
         self.t.clear()
         self.down.clear()
         self.up.clear()

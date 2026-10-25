@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 
 from .net_conn import get_active_pids
 
+from ..i18n import tr
 STATE_TOKENS = {
     "ESTAB", "LISTEN", "SYN-SENT", "SYN-RECV", "FIN-WAIT-1", "FIN-WAIT-2",
     "TIME-WAIT", "CLOSE-WAIT", "LAST-ACK", "CLOSING", "CLOSE", "UNCONN",
@@ -154,8 +155,8 @@ class TrafficEngine:
 
     def describe(self) -> str:
         if self._ss_available:
-            return "sock_diag (ss)"
-        return "كشف الاتصالات من /proc/net (بدون عدّادات)"
+            return tr("source.ss")
+        return tr("source.proc")
 
     def poll(self) -> SampleResult:
         now = time.monotonic()
@@ -167,7 +168,7 @@ class TrafficEngine:
             active = get_active_pids()
             result.active_pids = set(active)
             result.source = "proc-net"
-            result.error = "أداة ss غير متوفرة (حزمة iproute2). لن تُعرض السرعات."
+            result.error = tr("error.ss_missing")
             self.last_error = result.error
             return result
 

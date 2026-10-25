@@ -7,6 +7,7 @@ from pathlib import Path
 
 from netmon.collectors.traffic import parse_ss
 from netmon.config import BlocklistStore, ConfigStore, slugify
+from netmon.i18n import get_language, refresh_label, set_language, tr
 from netmon.models import BlockEntry
 from netmon.util import fmt_rate, pretty_name
 
@@ -59,12 +60,32 @@ class TestFormatting(unittest.TestCase):
         self.assertEqual(pretty_name("code", "/usr/bin/code"), "code")
 
 
+class TestI18n(unittest.TestCase):
+    def tearDown(self) -> None:
+        set_language("en")
+
+    def test_default_english_and_switch(self) -> None:
+        set_language("en")
+        self.assertEqual(get_language(), "en")
+        self.assertEqual(tr("tab.live"), "Live")
+        set_language("ar")
+        self.assertEqual(get_language(), "ar")
+        self.assertEqual(tr("tab.live"), "الرصد المباشر")
+
+    def test_interval_labels(self) -> None:
+        set_language("en")
+        self.assertEqual(refresh_label(30000), "30 seconds")
+        set_language("ar")
+        self.assertEqual(refresh_label(30000), "30 ثانية")
+
+
 class TestStores(unittest.TestCase):
     def test_config_roundtrip(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "config.json"
             cfg = ConfigStore(path)
             self.assertEqual(cfg.get("refresh_ms"), 30000)
+            self.assertEqual(cfg.get("language"), "en")
             cfg.set("refresh_ms", 5000)
             self.assertTrue(path.exists())
             again = ConfigStore(path)

@@ -4,6 +4,8 @@ import os
 import re
 import time
 
+from .i18n import tr
+
 
 def fmt_rate(bps: float, unit_auto: bool = True) -> str:
     """تحويل سرعة بالبايت/ثانية إلى نص مقروء (B/s, KB/s, MB/s, GB/s)."""
@@ -40,10 +42,10 @@ def fmt_duration(seconds: float) -> str:
     h, rem = divmod(seconds, 3600)
     m, s = divmod(rem, 60)
     if h:
-        return f"{h}س {m}د"
+        return tr("duration.hm", h=h, m=m)
     if m:
-        return f"{m}د {s}ث"
-    return f"{s}ث"
+        return tr("duration.ms", m=m, s=s)
+    return tr("duration.s", s=s)
 
 
 def fmt_time(ts: float) -> str:

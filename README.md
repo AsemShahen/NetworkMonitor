@@ -11,7 +11,7 @@ A dark, Arabic-first desktop network monitor for Linux (Debian/Ubuntu and Fedora
 - Export visible application names to a text file.
 - Real block/unblock via cgroup v2 + nftables with polkit authentication.
 - Persistent blocklist with import/export and apply-on-start.
-- Arabic RTL interface, dark theme, tray icon, and desktop integration.
+- English and Arabic interfaces with instant switching in Settings (English is the default), RTL support, dark theme, tray icon, and desktop integration.
 
 ## Quick start
 ```bash

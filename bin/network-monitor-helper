@@ -26,6 +26,12 @@ CGROUP_ROOT = "/sys/fs/cgroup"
 CGROUP_BASE = os.path.join(CGROUP_ROOT, "network-monitor")
 NFT = shutil.which("nft")
 TABLE = "network_monitor"
+
+_LANG = "en"
+
+
+def t(en: str, ar: str) -> str:
+    return ar if _LANG == "ar" else en
 CHAINS = ("output", "input")
 
 
@@ -64,7 +70,7 @@ def ensure_base() -> None:
 
 def ensure_table() -> tuple[bool, str]:
     if not NFT:
-        return False, "أداة nft غير مثبتة (حزمة nftables)."
+        return False, t("The nft tool is not installed (nftables package).", "أداة nft غير مثبتة (حزمة nftables).")
     run([NFT, "add", "table", "inet", TABLE])
     for chain in CHAINS:
         hook = "output" if chain == "output" else "input"
@@ -72,7 +78,7 @@ def ensure_table() -> tuple[bool, str]:
              "{", "type", "filter", "hook", hook, "priority", "0", ";", "policy", "accept", ";", "}"])
     rc, _, err = run([NFT, "list", "table", "inet", TABLE])
     if rc != 0:
-        return False, err or "تعذّر إنشاء جدول nftables."
+        return False, err or t("Could not create the nftables table.", "تعذّر إنشاء جدول nftables.")
     return True, ""
 
 
@@ -96,7 +102,7 @@ def ensure_rule(chain: str, slug: str) -> tuple[bool, str]:
         "drop", "comment", f'"{comment}"',
     ])
     if rc != 0:
-        return False, err or "تعذّر إضافة قاعدة nftables."
+        return False, err or t("Could not add the nftables rule.", "تعذّر إضافة قاعدة nftables.")
     return True, ""
 
 
@@ -142,10 +148,10 @@ def leaf_path(slug: str) -> str:
 
 def block_app(exe: str, slug: str) -> tuple[bool, str]:
     if not valid_exe(exe):
-        return False, "مسار التنفيذ غير صالح."
+        return False, t("Invalid executable path.", "مسار التنفيذ غير صالح.")
     slug = sanitize(slug or exe)
     if not cgroup2_available():
-        return False, "النظام لا يستخدم cgroup v2 (غير مدعوم)."
+        return False, t("The system does not use cgroup v2 (unsupported).", "النظام لا يستخدم cgroup v2 (غير مدعوم).")
     ensure_base()
     leaf = leaf_path(slug)
     os.makedirs(leaf, exist_ok=True)
@@ -158,7 +164,7 @@ def block_app(exe: str, slug: str) -> tuple[bool, str]:
         ok, err = ensure_rule(chain, slug)
         if not ok:
             return False, err
-    return True, f"تم حظر {len(pids)} عملية/عمليات."
+    return True, t(f"Blocked {len(pids)} process(es).", f"تم حظر {len(pids)} عملية/عمليات.")
 
 
 def unblock_app(exe: str, slug: str) -> tuple[bool, str]:
@@ -179,12 +185,12 @@ def unblock_app(exe: str, slug: str) -> tuple[bool, str]:
             os.rmdir(leaf)
         except OSError:
             pass
-    return True, "تم إلغاء الحظر."
+    return True, t("Unblocked.", "تم إلغاء الحظر.")
 
 
 def apply_entries(entries: list[dict]) -> tuple[bool, str]:
     if not entries:
-        return True, "لا توجد تطبيقات محظورة."
+        return True, t("No applications are blocked.", "لا توجد تطبيقات محظورة.")
     errors: list[str] = []
     for entry in entries:
         exe = str(entry.get("exe") or "")
@@ -194,7 +200,7 @@ def apply_entries(entries: list[dict]) -> tuple[bool, str]:
             errors.append(f"{exe}: {err}")
     if errors:
         return False, " | ".join(errors)
-    return True, f"أُعيد تطبيق {len(entries)} قاعدة حظر."
+    return True, t(f"Re-applied {len(entries)} block rule(s).", f"أُعيد تطبيق {len(entries)} قاعدة حظر.")
 
 
 def status() -> tuple[bool, str, dict]:
@@ -215,16 +221,18 @@ def status() -> tuple[bool, str, dict]:
 
 def main() -> int:
     if os.geteuid() != 0:
-        emit(False, error="يجب تشغيل المساعد بصلاحيات الجذر (عبر pkexec).")
+        emit(False, error=t("The helper must run as root (via pkexec).", "يجب تشغيل المساعد بصلاحيات الجذر (عبر pkexec)."))
         return 1
 
     raw = sys.stdin.read().strip()
     try:
         req = json.loads(raw) if raw else {}
     except json.JSONDecodeError:
-        emit(False, error="طلب JSON غير صالح.")
+        emit(False, error=t("Invalid JSON request.", "طلب JSON غير صالح."))
         return 1
 
+    global _LANG
+    _LANG = "ar" if str(req.get("lang") or "") == "ar" else "en"
     op = str(req.get("op") or "")
     try:
         if op == "block":
@@ -250,10 +258,10 @@ def main() -> int:
                 text = out
             emit(True, ss=text)
         else:
-            emit(False, error="عملية غير معروفة.")
+            emit(False, error=t("Unknown operation.", "عملية غير معروفة."))
             return 1
     except Exception as exc:  # noqa: BLE001
-        emit(False, error=f"خطأ غير متوقع: {exc}")
+        emit(False, error=t(f"Unexpected error: {exc}", f"خطأ غير متوقع: {exc}"))
         return 1
     return 0
 

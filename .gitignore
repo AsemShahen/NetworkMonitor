@@ -5,3 +5,6 @@ __pycache__/
 *.log
 build/
 dist/
+
+python3/
+wheels/

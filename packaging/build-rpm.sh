@@ -18,12 +18,15 @@ fi
 command -v rpmbuild >/dev/null 2>&1 || { echo "rpmbuild is required" >&2; exit 1; }
 
 rm -rf "$TOP"
-mkdir -p "$ROOTFS/opt/network-monitor" "$RPMDIR" \
+mkdir -p "$ROOTFS/opt/network-monitor" "$ROOTFS/usr/bin" "$RPMDIR" \
     "$TOP/SPECS" "$TOP/BUILD" "$TOP/BUILDROOT" "$TOP/SRPMS"
 
 cp -a "$RUNTIME" "$ROOTFS/opt/network-monitor/runtime"
 cp -a "$ROOT/src" "$ROOTFS/opt/network-monitor/src"
-cp -a "$ROOT/bin" "$ROOTFS/opt/network-monitor/bin"
+
+# Do not ship developer launchers or bytecode compiled by another Python.
+find "$ROOTFS/opt/network-monitor" -type d -name '__pycache__' -prune -exec rm -rf {} +
+find "$ROOTFS/opt/network-monitor" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
 install -Dm755 "$ROOT/bin/network-monitor-helper" \
     "$ROOTFS/usr/libexec/network-monitor/network-monitor-helper"

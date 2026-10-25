@@ -22,6 +22,9 @@ cp -a "$RUNTIME/." "$APPDIR/usr/"
 cp -a "$ROOT/src" "$APPDIR/usr/share/network-monitor/src"
 cp -a "$ROOT/LICENSE" "$APPDIR/usr/share/network-monitor/LICENSE"
 
+find "$APPDIR/usr/share/network-monitor" -type d -name '__pycache__' -prune -exec rm -rf {} +
+find "$APPDIR/usr/share/network-monitor" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
 install -Dm755 "$ROOT/bin/network-monitor-helper" \
     "$APPDIR/usr/libexec/network-monitor/network-monitor-helper"
 install -Dm644 "$ROOT/data/network-monitor-256.png" "$APPDIR/network-monitor.png"

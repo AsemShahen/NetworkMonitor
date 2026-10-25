@@ -45,6 +45,7 @@ fi
 
 # Remove build-only and unused runtime files to keep the packages reasonable.
 PY_LIB="$RUNTIME/lib/python${PYTHON_VERSION%.*}"
+PYTHON_BIN="python${PYTHON_VERSION%.*}"
 rm -rf \
     "$PY_LIB/test" \
     "$PY_LIB/idlelib" \
@@ -64,8 +65,17 @@ rm -rf \
     "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/Qt/translations" \
     "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/Qt/lib/cmake" \
     "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/Qt/plugins/sqldrivers" \
+    "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/Qt/plugins/designer" \
+    "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/Qt/plugins/qmltooling" \
     "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/include" \
     "$RUNTIME/lib/python${PYTHON_VERSION%.*}/site-packages/PySide6/typesystems"
+
+# Keep only the interpreter in bin/.  The pip/PySide console scripts embed
+# absolute build-time interpreter paths in their shebangs, which would make
+# RPM add uninstallable requirements such as /home/runner/.../python3.
+find "$RUNTIME/bin" -mindepth 1 -maxdepth 1 \
+    ! -name 'python' ! -name 'python3' ! -name "$PYTHON_BIN" \
+    -exec rm -rf {} +
 
 find "$RUNTIME" -type d -name '__pycache__' -prune -exec rm -rf {} +
 find "$RUNTIME" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete

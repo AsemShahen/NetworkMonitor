@@ -1,5 +1,10 @@
 %global debug_package %{nil}
 
+# Never turn a build-time interpreter path into a runtime dependency.  The
+# bundled runtime is self-contained, and its Python entry points are invoked
+# explicitly from the launcher.
+%global __requires_exclude ^/home/.*$
+
 Name:           network-monitor
 Version:        %{_version}
 Release:        1%{?dist}

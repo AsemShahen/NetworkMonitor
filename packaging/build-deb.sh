@@ -29,7 +29,10 @@ mkdir -p \
 
 cp -a "$RUNTIME" "$PKG/opt/network-monitor/runtime"
 cp -a "$ROOT/src" "$PKG/opt/network-monitor/src"
-cp -a "$ROOT/bin" "$PKG/opt/network-monitor/bin"
+
+# Do not ship developer launchers or bytecode compiled by another Python.
+find "$PKG/opt/network-monitor" -type d -name '__pycache__' -prune -exec rm -rf {} +
+find "$PKG/opt/network-monitor" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
 install -Dm755 "$ROOT/bin/network-monitor-helper" \
     "$PKG/usr/libexec/network-monitor/network-monitor-helper"

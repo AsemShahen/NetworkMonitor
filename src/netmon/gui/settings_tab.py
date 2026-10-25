@@ -137,6 +137,17 @@ class SettingsTab(QWidget):
         self.about_name.setObjectName("cardValue")
         alay.addWidget(self.about_name)
 
+        self.author_label = QLabel()
+        self.author_label.setObjectName("cardHint")
+        self.author_label.setWordWrap(True)
+        self.author_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        alay.addWidget(self.author_label)
+
+        self.email_label = QLabel()
+        self.email_label.setObjectName("cardHint")
+        self.email_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        alay.addWidget(self.email_label)
+
         self.engine_label = QLabel()
         self.engine_label.setWordWrap(True)
         self.engine_label.setObjectName("cardHint")
@@ -216,6 +227,12 @@ class SettingsTab(QWidget):
             self.language.setCurrentIndex(idx)
             self.language.blockSignals(False)
 
+        self.author_label.setText(
+            tr("settings.author", author="\u202aAL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free\u202c")
+        )
+        self.email_label.setText(
+            tr("settings.email", email="\u202aasemshahen5@gmail.com\u202c")
+        )
         self._render_engine()
         self.env_label.setText(self._env_value)
         self._apply_direction()
@@ -231,6 +248,8 @@ class SettingsTab(QWidget):
         self.engine_label.setAlignment(align)
         self.env_label.setAlignment(align)
         self.about_name.setAlignment(align)
+        self.author_label.setAlignment(align)
+        self.email_label.setAlignment(align)
 
         for group in (self.group_monitor, self.group_maintenance, self.group_about):
             group.setAlignment(Qt.AlignRight if rtl else Qt.AlignLeft)

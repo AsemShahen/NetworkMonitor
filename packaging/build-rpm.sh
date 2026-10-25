@@ -57,7 +57,6 @@ rpmbuild -bb \
     --define "_buildrootdir $TOP/BUILDROOT" \
     --define "_specdir $TOP/SPECS" \
     --define "_srcrpmdir $TOP/SRPMS" \
-    --define "_licensedir /usr/share/licenses" \
     "$ROOT/packaging/network-monitor.spec"
 
 RPM_FILE="$(find "$RPMDIR" -type f -name 'network-monitor-*.rpm' | head -n 1)"

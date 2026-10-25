@@ -5,13 +5,37 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "network-monitor"
 version = "1.0.0"
-description = "مراقب شبكة رسومي ل لينكس (Debian/Fedora)"
+description = "Per-application network monitor for Linux with cgroup v2 + nftables blocking"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["PySide6>=6.8", "pyqtgraph>=0.14"]
+license = {text = "GPL-3.0-or-later"}
+authors = [
+    {name = "AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free", email = "asemshahen5@gmail.com"},
+]
+dependencies = ["PySide6>=6.8", "pyqtgraph>=0.14", "numpy>=1.26"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Networking :: Monitoring",
+]
 
 [project.scripts]
 network-monitor = "netmon.app:run"
 
+[project.urls]
+Homepage = "https://github.com/AsemShahen/NetworkMonitor"
+Repository = "https://github.com/AsemShahen/NetworkMonitor"
+Issues = "https://github.com/AsemShahen/NetworkMonitor/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"netmon.resources.icons" = ["*.png"]

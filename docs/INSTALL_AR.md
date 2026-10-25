@@ -16,7 +16,7 @@ sudo apt install -y iproute2 nftables polkitd pkexec libxcb-cursor0
 sudo dnf install -y iproute nftables polkit libxcb
 ```
 
-> ملاحظة: حزمة Python المحمولة `python3/` مرفقة داخل المشروع، لذلك لا يلزم تثبيت Python أو PySide6 على النظام.
+> ملاحظة: حزمة Python المحمولة `python3/` مرفقة داخل المشروع، لذلك لا يلزم تثبيت Python أو PySide6 لتشغيل الواجهة. المساعد المميز يستخدم `python3` النظام (متوفر عادةً في التوزيعات المدعومة).
 
 ## 2. نسخ المجلد
 انسخ مجلد `Network Monitor` بالكامل إلى الجهاز المستهدف (مثلاً إلى مجلد المنزل).
@@ -31,7 +31,7 @@ chmod +x install.sh
 لا يحتاج السكريبت إلى `sudo` مسبق؛ سيطلبه بنفسه. يقوم بـ:
 - نسخ المشروع إلى `/opt/network-monitor`.
 - إنشاء مشغّل في `/usr/local/bin/network-monitor` يشير إلى `/opt/network-monitor`.
-- تثبيت المساعد المميز في `/usr/local/bin/network-monitor-helper`.
+- تثبيت المساعد المميز في `/usr/libexec/network-monitor/network-monitor-helper`.
 - إضافة ملف `.desktop` إلى قائمة التطبيقات.
 - تثبيت الأيقونات بعدة أحجام.
 - إضافة ملف polkit لطلب الصلاحيات عند الحظر.
@@ -44,7 +44,7 @@ sudo cp -r python3 src bin data docs network-monitor /opt/network-monitor/
 sudo chmod +x /opt/network-monitor/network-monitor /opt/network-monitor/bin/network-monitor-helper
 printf '#!/bin/sh\nexec /opt/network-monitor/network-monitor "$@"\n' | sudo tee /usr/local/bin/network-monitor >/dev/null
 sudo chmod +x /usr/local/bin/network-monitor
-sudo cp /opt/network-monitor/bin/network-monitor-helper /usr/local/bin/network-monitor-helper
+sudo install -Dm755 /opt/network-monitor/bin/network-monitor-helper /usr/libexec/network-monitor/network-monitor-helper
 sudo cp /opt/network-monitor/data/network-monitor.desktop /usr/share/applications/
 sudo cp /opt/network-monitor/data/network-monitor-256.png /usr/share/icons/hicolor/256x256/apps/network-monitor.png
 sudo cp /opt/network-monitor/data/org.networkmonitor.helper.policy /usr/share/polkit-1/actions/

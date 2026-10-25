@@ -152,7 +152,7 @@ network-monitor
 - إغلاق تلقائي آمن للمساعد عند فشل pkexec أو غيابه، مع رسالة عربية واضحة.
 
 ## 23. التثبيت والاختبارات
-- `install.sh` ينسخ المشروع إلى `/opt/network-monitor`، وينشئ مشغلاً في `/usr/local/bin/network-monitor`، ويثبّت الأيقونات بعدة أحجام وملف polkit.
+- `install.sh` ينسخ المشروع إلى `/opt/network-monitor`، وينشئ مشغلاً في `/usr/local/bin/network-monitor`، ويثبّت المساعد في `/usr/libexec/network-monitor/` والأيقونات بعدة أحجام وملف polkit.
 - `uninstall.sh` يزيل كل ما ثُبّت مع الإبقاء على بيانات المستخدم.
 - `tests/test_core.py`: اختبارات لتحليل مخرجات ss (بما فيها تجاهل مقابس الاستماع)، تنسيق السرعات، حدود الكلمات في أسماء التطبيقات، دورة حفظ/تحميل الإعدادات وقائمة الحظر، والتصدير.
 - أمر التشغيل: `PYTHONPATH=src python3/bin/python3.14 -m unittest discover -s tests`.
@@ -188,3 +188,10 @@ network-monitor
 - المؤلف: `AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free`
 - البريد الإلكتروني: `asemshahen5@gmail.com`
 - النصوص قابلة للتحديد بالماوس، وتُعرض باتجاه LTR داخل الواجهة العربية، وتُترجم تسمياتها إلى الإنجليزية والعربية.
+
+## 29. حزم النشر عبر GitHub Releases
+- اعتُمد الترخيص `GPL-3.0-or-later` وأُضيف ملف `LICENSE` الكامل.
+- أُضيفت بنية بناء مستقلة تحت `packaging/` تنتج `.deb` و`.rpm` و`.AppImage` مع Python 3.12 وPySide6-Essentials وpyqtgraph وnumpy مرفقة.
+- يعمل سير العمل `.github/workflows/release.yml` عند دفع وسم `v*`، ويبني الحزم الثلاث، وينشئ Release على GitHub ويحمّل الملفات وبصمات `SHA256SUMS`.
+- حزم deb/rpm تثبّت المساعد المميز في `/usr/libexec/network-monitor/network-monitor-helper` وتضيف سياسة polkit؛ AppImage يحوي المساعد داخله ويحتاج `pkexec` و`nftables` وcgroup v2 على المضيف.
+- لم يُعتمد مسار Flathub لأن عزل Flatpak يمنع الوصول إلى عمليات المضيف و`/proc` وتشغيل `pkexec` وnftables، وهو ما تعتمد عليه الوظائف الأساسية.

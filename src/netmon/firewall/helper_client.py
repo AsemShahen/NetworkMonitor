@@ -15,6 +15,7 @@ def find_helper() -> str | None:
     if env and Path(env).exists():
         return env
     candidates = [
+        Path("/usr/libexec/network-monitor/network-monitor-helper"),
         Path("/usr/local/bin/network-monitor-helper"),
         Path("/usr/bin/network-monitor-helper"),
         Path(__file__).resolve().parents[3] / "bin" / "network-monitor-helper",

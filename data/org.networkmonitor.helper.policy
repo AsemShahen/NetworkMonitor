@@ -11,6 +11,6 @@
       <allow_inactive>auth_admin_keep</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/local/bin/network-monitor-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/libexec/network-monitor/network-monitor-helper</annotate>
   </action>
 </policyconfig>

@@ -14,7 +14,7 @@ sudo cp -r \
   "$ROOT/python3" "$ROOT/src" "$ROOT/bin" "$ROOT/data" \
   "$ROOT/docs" "$ROOT/packaging" "$ROOT/tests" \
   "$ROOT/README.md" "$ROOT/README_AR.md" "$ROOT/REPORT_AR.md" \
-  "$ROOT/pyproject.toml" "$ROOT/install.sh" "$ROOT/uninstall.sh" \
+  "$ROOT/pyproject.toml" "$ROOT/LICENSE" "$ROOT/install.sh" "$ROOT/uninstall.sh" \
   "$ROOT/network-monitor" \
   "$PREFIX/"
 
@@ -25,7 +25,7 @@ sudo tee /usr/local/bin/network-monitor >/dev/null <<'WRAP'
 exec /opt/network-monitor/network-monitor "$@"
 WRAP
 sudo chmod 755 /usr/local/bin/network-monitor
-sudo install -m 755 "$PREFIX/bin/network-monitor-helper" /usr/local/bin/network-monitor-helper || true
+sudo install -Dm755 "$PREFIX/bin/network-monitor-helper" /usr/libexec/network-monitor/network-monitor-helper
 
 sudo install -m 644 "$PREFIX/data/network-monitor.desktop" /usr/share/applications/network-monitor.desktop
 for size in 64 128 256 512; do

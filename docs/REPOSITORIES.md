@@ -140,7 +140,10 @@ The output is written to `build/repo/`. You need `apt-ftparchive`, `createrepo_c
 ## AUR and AppImageHub
 
 - Arch Linux: see [`packaging/aur/README_AR.md`](../packaging/aur/README_AR.md).
-- AppImageHub: see [`packaging/appimagehub/README_AR.md`](../packaging/appimagehub/README_AR.md).
+  The AUR package name is `network-monitor-qt-bin` (the existing
+  `network-monitor-bin` belongs to a different project).
+- AppImageHub: see [`packaging/appimagehub/README.md`](../packaging/appimagehub/README.md)
+  or the Arabic [`README_AR.md`](../packaging/appimagehub/README_AR.md).
 
 ## Troubleshooting
 

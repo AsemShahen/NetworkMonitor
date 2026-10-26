@@ -68,10 +68,11 @@ GitHub Pages:
 
 ## AUR
 
-حزمة Arch Linux الثنائية موجودة في `packaging/aur/`:
+حزمة Arch Linux الثنائية موجودة في `packaging/aur/` باسم
+`network-monitor-qt-bin`:
 
 - `PKGBUILD`
-- `network-monitor-bin.install`
+- `network-monitor-qt-bin.install`
 - `.SRCINFO`
 
 راجع [`packaging/aur/README_AR.md`](aur/README_AR.md) للبناء المحلي وخطوات

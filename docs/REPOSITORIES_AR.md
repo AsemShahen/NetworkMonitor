@@ -135,7 +135,10 @@ PUBLISH=0 ./packaging/publish-repo.sh
 ## AUR وAppImageHub
 
 - Arch Linux: راجع [`packaging/aur/README_AR.md`](../packaging/aur/README_AR.md).
-- AppImageHub: راجع [`packaging/appimagehub/README_AR.md`](../packaging/appimagehub/README_AR.md).
+  اسم حزمة AUR هو `network-monitor-qt-bin` (الاسم `network-monitor-bin`
+  مستخدم لمشروع آخر).
+- AppImageHub: راجع [`packaging/appimagehub/README_AR.md`](../packaging/appimagehub/README_AR.md)
+  أو النسخة الإنجليزية [`README.md`](../packaging/appimagehub/README.md).
 
 ## حل المشكلات
 

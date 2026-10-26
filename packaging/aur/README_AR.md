@@ -1,8 +1,11 @@
-# حزمة AUR: `network-monitor-bin`
+# حزمة AUR: `network-monitor-qt-bin`
 
 هذه حزمة ثنائية لمستخدمي Arch Linux. تنزّل ملف `.deb` الرسمي من GitHub
 Releases وتستخرج منه نفس الملفات: التطبيق، المساعد المميز، سياسة polkit،
 الأيقونات، وملف سطح المكتب.
+
+> الاسم `network-monitor-bin` مستخدم في AUR لتطبيق آخر (Rust/GTK4)؛ لذلك
+> نستخدم الاسم الفريد `network-monitor-qt-bin` لتطبيق Qt/PySide6 هذا.
 
 ## البناء والاختبار محليًا
 
@@ -40,22 +43,22 @@ makepkg --printsrcinfo > .SRCINFO
 2. استنسخ مستودع الحزمة:
 
 ```bash
-git clone ssh://aur@aur.archlinux.org/network-monitor-bin.git
-cd network-monitor-bin
+git clone ssh://aur@aur.archlinux.org/network-monitor-qt-bin.git
+cd network-monitor-qt-bin
 cp /path/to/NetworkMonitor/packaging/aur/PKGBUILD .
-cp /path/to/NetworkMonitor/packaging/aur/network-monitor-bin.install .
+cp /path/to/NetworkMonitor/packaging/aur/network-monitor-qt-bin.install .
 cp /path/to/NetworkMonitor/packaging/aur/.SRCINFO .
-git add PKGBUILD network-monitor-bin.install .SRCINFO
-git commit -m "Initial import: network-monitor-bin 1.0.1"
+git add PKGBUILD network-monitor-qt-bin.install .SRCINFO
+git commit -m "Initial import: network-monitor-qt-bin 1.0.1"
 git push
 ```
 
 بعد القبول سيستطيع المستخدمون التثبيت عبر:
 
 ```bash
-yay -S network-monitor-bin
+yay -S network-monitor-qt-bin
 # أو
-paru -S network-monitor-bin
+paru -S network-monitor-qt-bin
 ```
 
 ## ملاحظات

@@ -1,5 +1,58 @@
 # دليل التثبيت على جهاز جديد
 
+## طرق التثبيت السريعة
+
+### Debian / Ubuntu من مستودع APT الموقّع
+
+```bash
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+echo "deb [signed-by=/etc/apt/keyrings/network-monitor.gpg] https://asemshahen.github.io/NetworkMonitor/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/network-monitor.list
+sudo apt update
+sudo apt install network-monitor
+```
+
+### Fedora / RHEL من مستودع RPM الموقّع
+
+```bash
+sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.repo \
+  -o /etc/yum.repos.d/network-monitor.repo
+sudo dnf install network-monitor
+```
+
+بصمة مفتاح التوقيع:
+`4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`.
+
+### AppImage
+
+```bash
+chmod +x NetworkMonitor-<version>-x86_64.AppImage
+./NetworkMonitor-<version>-x86_64.AppImage
+```
+
+### Arch Linux (AUR)
+
+اسم الحزمة `network-monitor-qt-bin` (بانتظار القبول في AUR):
+
+```bash
+yay -S network-monitor-qt-bin
+# أو
+paru -S network-monitor-qt-bin
+```
+
+> الاسم `network-monitor-bin` في AUR يخص مشروعًا آخر (Rust/GTK4).
+
+### التثبيت من المصدر
+
+```bash
+git clone https://github.com/AsemShahen/NetworkMonitor.git
+cd NetworkMonitor
+./install.sh
+network-monitor
+```
+
 ## 1. المتطلبات
 - نظام ديبيان/أوبونتو أو فيدورا بنواة حديثة تدعم **cgroup v2**.
 - سطح مكتب Wayland أو X11.

@@ -46,7 +46,7 @@ cp /path/to/NetworkMonitor/packaging/aur/PKGBUILD .
 cp /path/to/NetworkMonitor/packaging/aur/network-monitor-bin.install .
 cp /path/to/NetworkMonitor/packaging/aur/.SRCINFO .
 git add PKGBUILD network-monitor-bin.install .SRCINFO
-git commit -m "Initial import: network-monitor-bin 1.0.0"
+git commit -m "Initial import: network-monitor-bin 1.0.1"
 git push
 ```
 

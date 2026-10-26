@@ -13,6 +13,16 @@ A dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubu
 - Persistent blocklist with import/export and apply-on-start.
 - English and Arabic interfaces with instant switching in Settings (English is the default), RTL support, dark theme, tray icon, and desktop integration.
 
+## Screenshots
+
+| Live activity | Traffic chart |
+| --- | --- |
+| ![Live per-application activity](docs/screenshots/live-english.png) | ![Traffic chart](docs/screenshots/chart.png) |
+
+| Blocked applications | Settings and About |
+| --- | --- |
+| ![Blocked applications](docs/screenshots/blocked-apps.png) | ![Settings and About](docs/screenshots/about.png) |
+
 ## Download
 Prebuilt packages are published on **GitHub Releases**:
 

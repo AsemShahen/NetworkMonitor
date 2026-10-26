@@ -64,5 +64,8 @@ fi
 /usr/share/icons/hicolor/scalable/apps/network-monitor.svg
 
 %changelog
-* Sun Oct 25 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+* Mon Oct 26 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+- Add AppStream metadata
+- Use zstd compression for the bundled runtime
+* Sun Oct 25 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.0-1
 - Initial package

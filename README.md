@@ -68,7 +68,8 @@ If the repository is not available yet, use the GitHub Releases packages above. 
 ./install.sh
 network-monitor
 ```
-See `docs/INSTALL_AR.md` and `docs/FIRST_RUN_AR.md` (Arabic).
+See [docs/INSTALL.md](docs/INSTALL.md) for all package and source install
+methods, and `docs/INSTALL_AR.md` and `docs/FIRST_RUN_AR.md` (Arabic).
 
 ## Build packages
 The release workflow builds all three formats on every `v*` tag. To build locally:

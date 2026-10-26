@@ -11,7 +11,7 @@
 - **الترخيص:** GPL-3.0-or-later
 - **المستودع:** <https://github.com/AsemShahen/NetworkMonitor>
 - **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1>
-- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (بانتظار أول دفع لفرع `gh-pages`)
+- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح)
 - **بصمة GPG:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (جاهزة؛ بانتظار مفتاح حساب AUR والدفع)
 - **AppImageHub:** ملف PR جاهز في `packaging/appimagehub/` (بانتظار Fork وPR)
@@ -46,7 +46,7 @@ Network Monitor تطبيق سطح مكتب داكن ثنائي اللغة (إن�
 > GPL-3.0-or-later، ويعمل محليًا من `/proc` دون حساب أو تتبّع.
 >
 > الحزم: `.deb` و`.rpm` و`.AppImage` على GitHub Releases، ومستودع APT/RPM
-> موقّع قيد النشر على GitHub Pages. يسعدني تلقي ملاحظات حول التغليف
+> موقّع متاح على GitHub Pages. يسعدني تلقي ملاحظات حول التغليف
 > وتوافق Fedora/RHEL ومساعد الحظر.
 
 ## Reddit
@@ -170,14 +170,14 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 
 ## قائمة الإطلاق
 
-- [ ] دفع فرع `gh-pages` وتفعيل Pages.
-- [ ] عودة <https://asemshahen.github.io/NetworkMonitor/> بشكل صحيح.
-- [ ] التحقق من `apt/dists/stable/InRelease` بالمفتاح المنشور.
-- [ ] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
+- [x] دفع فرع `gh-pages` وتفعيل Pages.
+- [x] عودة <https://asemshahen.github.io/NetworkMonitor/> بشكل صحيح.
+- [x] التحقق من `apt/dists/stable/InRelease` بالمفتاح المنشور.
+- [x] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
 - [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها.
 - [ ] فتح PR في AppImageHub (ملف واحد فقط) ومتابعة تعليق الاختبار.
 - [ ] ظهور لقطات README على GitHub.
-- [ ] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
+- [x] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
 - [ ] نشر Show HN وأحد المجتمعات، ثم الانتظار قبل النشر المتعدد.
 - [ ] إرسال ثلاث ملاحظات لمواقع أخبار لينكس مع لقطة شاشة.
 - [ ] إضافة رابط المستودع إلى حقل Homepage في GitHub.

@@ -28,9 +28,9 @@ Download: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1>
 ### Signed APT/RPM repository
 
 The repository is published at
-<https://asemshahen.github.io/NetworkMonitor/>. It is rebuilt from the same
-`v1.0.1` tag, so its package hashes differ from the release assets above. Both
-contain the same version and source. The repository metadata is signed with:
+<https://asemshahen.github.io/NetworkMonitor/>. It serves the official
+`v1.0.1` release assets, so its package hashes match `SHA256SUMS`. The
+repository metadata is signed with:
 
 ```text
 Network Monitor packages <asemshahen5@gmail.com>
@@ -72,9 +72,9 @@ A one-file AppImageHub pull request is prepared in
 - The `.deb` and `.rpm` install the privileged helper and polkit policy.
 - The AppImage bundles the helper, but blocking still requires host `pkexec`,
   `python3`, `nftables`, and cgroup v2.
-- The release assets are built by the GitHub Actions workflow; the repository
-  packages are rebuilt locally from the same tag. Use `SHA256SUMS` for release
-  assets and the signed APT/RPM metadata for repository packages.
+- The release assets are built by the GitHub Actions workflow; the signed
+  package repository serves the same official assets. `SHA256SUMS` and the
+  signed APT/RPM metadata therefore agree.
 
 ## العربية
 
@@ -104,8 +104,8 @@ A one-file AppImageHub pull request is prepared in
 
 <https://asemshahen.github.io/NetworkMonitor/>
 
-المستودع مُعاد بناؤه من الوسم `v1.0.1` نفسه؛ لذلك تختلف بصمات حزمه عن أصول
-الإصدار، لكن الإصدار والمصدر واحد. بصمة مفتاح التوقيع:
+المستودع يخدم أصول الإصدار `v1.0.1` الرسمية؛ لذلك تطابق بصمات حزمه
+`SHA256SUMS`. بصمة مفتاح التوقيع:
 
 ```text
 4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE

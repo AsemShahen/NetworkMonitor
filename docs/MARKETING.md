@@ -12,7 +12,7 @@ Do not claim a channel is live before it is.
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
 - **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (pending first `gh-pages` push)
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live)
 - **GPG fingerprint:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (prepared; pending AUR account key and push)
 - **AppImageHub:** one-file PR prepared in `packaging/appimagehub/` (pending fork/PR)
@@ -54,7 +54,7 @@ English. It is GPL-3.0-or-later, local-first, and reads `/proc`; there is no
 account or telemetry.
 
 Packages: `.deb`, `.rpm`, and `.AppImage` on GitHub Releases. A signed APT/RPM
-repository is being published on GitHub Pages. I would especially appreciate
+repository is available on GitHub Pages. I would especially appreciate
 feedback on packaging, Fedora/RHEL compatibility, and the blocking helper.
 
 ## Reddit
@@ -184,14 +184,14 @@ in `docs/screenshots/` as thumbnails.
 
 ## Launch checklist
 
-- [ ] `gh-pages` branch pushed and Pages enabled.
-- [ ] `https://asemshahen.github.io/NetworkMonitor/` returns the repository page.
-- [ ] `apt/dists/stable/InRelease` verifies with the published key.
-- [ ] `rpm/x86_64/repodata/repomd.xml.asc` verifies with the published key.
+- [x] `gh-pages` branch pushed and Pages enabled.
+- [x] `https://asemshahen.github.io/NetworkMonitor/` returns the repository page.
+- [x] `apt/dists/stable/InRelease` verifies with the published key.
+- [x] `rpm/x86_64/repodata/repomd.xml.asc` verifies with the published key.
 - [ ] AUR `network-monitor-qt-bin` pushed and visible.
 - [ ] AppImageHub PR opened (one file only) and test comment reviewed.
 - [ ] README screenshots render on GitHub.
-- [ ] Release notes mention the signed repository, AUR, and AppImageHub status.
+- [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [ ] Post Show HN and one subreddit; wait for feedback before cross-posting.
 - [ ] Send three Linux news tips with a screenshot.
 - [ ] Add the repository URL to the GitHub repository homepage field.

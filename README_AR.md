@@ -40,9 +40,11 @@
 
 ## التثبيت من مستودع الحزم الموقّع
 
-بعد نشر المستودع، يمكن تثبيت Network Monitor وتحديثه عبر مدير الحزم. المستودع موقّع بمفتاح GPG، والمفتاح العام والبصمة منشوران على:
+المستودع الموقّع متاح على:
 
 <https://asemshahen.github.io/NetworkMonitor/>
+
+يمكن تثبيت Network Monitor وتحديثه عبر مدير الحزم. المستودع موقّع بمفتاح GPG، والمفتاح العام والبصمة منشوران هناك.
 
 ### Debian / Ubuntu
 ```bash
@@ -62,7 +64,7 @@ sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.
 sudo dnf install network-monitor
 ```
 
-إن لم يكن المستودع متاحًا بعد، استخدم حزم GitHub Releases أعلاه. للمشرفين، خطوات الإعداد في [docs/REPOSITORIES_AR.md](docs/REPOSITORIES_AR.md).
+للمشرفين، خطوات الإعداد في [docs/REPOSITORIES_AR.md](docs/REPOSITORIES_AR.md).
 
 ## التشغيل السريع
 ```bash

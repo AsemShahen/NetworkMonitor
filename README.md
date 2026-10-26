@@ -40,7 +40,7 @@ The `.deb` and `.rpm` packages install the privileged helper and the polkit poli
 
 ## Install from the signed package repository
 
-Once the repository is published, you can install and update Network Monitor with your package manager. The repository is signed with GPG; the public key and fingerprint are published at <https://asemshahen.github.io/NetworkMonitor/>.
+The signed repository is available at <https://asemshahen.github.io/NetworkMonitor/>. Install and update Network Monitor with your package manager. The repository is signed with GPG; the public key and fingerprint are published there.
 
 ### Debian / Ubuntu
 ```bash
@@ -60,7 +60,7 @@ sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.
 sudo dnf install network-monitor
 ```
 
-If the repository is not available yet, use the GitHub Releases packages above. Maintainers can find the repository setup in [docs/REPOSITORIES.md](docs/REPOSITORIES.md).
+Maintainers can find the repository setup in [docs/REPOSITORIES.md](docs/REPOSITORIES.md).
 
 ## Quick start
 ```bash

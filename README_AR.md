@@ -23,6 +23,10 @@
 | --- | --- |
 | ![التطبيقات المحظورة](docs/screenshots/blocked-apps.png) | ![الإعدادات وحول البرنامج](docs/screenshots/about.png) |
 
+| الاتصالات النشطة | الإعدادات |
+| --- | --- |
+| ![الاتصالات النشطة](docs/screenshots/live-connections.png) | ![الإعدادات](docs/screenshots/settings.png) |
+
 ## التحميل
 تُنشر الحزم الجاهزة عبر **GitHub Releases**:
 

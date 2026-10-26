@@ -23,6 +23,10 @@ A dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubu
 | --- | --- |
 | ![Blocked applications](docs/screenshots/blocked-apps.png) | ![Settings and About](docs/screenshots/about.png) |
 
+| Live connections | Settings |
+| --- | --- |
+| ![Live connections](docs/screenshots/live-connections.png) | ![Settings](docs/screenshots/settings.png) |
+
 ## Download
 Prebuilt packages are published on **GitHub Releases**:
 

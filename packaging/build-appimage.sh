@@ -30,6 +30,7 @@ install -Dm755 "$ROOT/bin/network-monitor-helper" \
 install -Dm644 "$ROOT/data/network-monitor-256.png" "$APPDIR/network-monitor.png"
 cp "$APPDIR/network-monitor.png" "$APPDIR/.DirIcon"
 install -Dm644 "$ROOT/packaging/appimage/network-monitor.desktop" "$APPDIR/network-monitor.desktop"
+install -Dm644 "$ROOT/data/network-monitor.metainfo.xml" "$APPDIR/usr/share/metainfo/network-monitor.metainfo.xml"
 install -Dm755 "$ROOT/packaging/appimage/AppRun" "$APPDIR/AppRun"
 
 if [ ! -x "$TOOL" ]; then

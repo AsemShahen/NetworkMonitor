@@ -14,6 +14,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: package-repository
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -26,18 +30,24 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VERSION="${{ inputs.version }}"
+            TAG_NAME="v${VERSION}"
           else
             VERSION="${GITHUB_REF_NAME#v}"
+            TAG_NAME="${GITHUB_REF_NAME}"
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
 
       - name: Install packaging tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm binutils desktop-file-utils file python3-packaging
+          sudo apt-get install -y rpm binutils desktop-file-utils file python3-packaging apt-utils gnupg
+          sudo apt-get install -y createrepo-c || sudo apt-get install -y createrepo
           rpm --version
           rpmbuild --version
           dpkg-deb --version | head -n 1
+          command -v apt-ftparchive
+          command -v createrepo_c || command -v createrepo
 
       - name: Cache Python runtime
         uses: actions/cache@v4
@@ -82,7 +92,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Network Monitor ${{ env.VERSION }}
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ env.TAG_NAME }}
           generate_release_notes: true
           overwrite_files: true
           files: |
@@ -96,4 +106,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete-asset "${{ github.ref_name }}" appimagetool-x86_64.AppImage -y || true
+          gh release delete-asset "${{ env.TAG_NAME }}" appimagetool-x86_64.AppImage -y || true
+
+      - name: Check package repository signing key
+        id: repo_key
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          if [ -n "$GPG_PRIVATE_KEY" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::GPG_PRIVATE_KEY is not configured; skipping signed package repository publication."
+          fi
+
+      - name: Publish signed package repository
+        if: steps.repo_key.outputs.enabled == 'true'
+        env:
+          PUBLISH: "1"
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PAGES_BASE_URL: https://asemshahen.github.io/NetworkMonitor
+        run: ./packaging/publish-repo.sh

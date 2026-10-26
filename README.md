@@ -24,6 +24,30 @@ Prebuilt packages are published on **GitHub Releases**:
 
 The `.deb` and `.rpm` packages install the privileged helper and the polkit policy. The AppImage contains the helper, but blocking still requires host `pkexec`, `python3`, `nftables`, and cgroup v2.
 
+## Install from the signed package repository
+
+Once the repository is published, you can install and update Network Monitor with your package manager. The repository is signed with GPG; the public key and fingerprint are published at <https://asemshahen.github.io/NetworkMonitor/>.
+
+### Debian / Ubuntu
+```bash
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+echo "deb [signed-by=/etc/apt/keyrings/network-monitor.gpg] https://asemshahen.github.io/NetworkMonitor/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/network-monitor.list
+sudo apt update
+sudo apt install network-monitor
+```
+
+### Fedora / RHEL
+```bash
+sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.repo \
+  -o /etc/yum.repos.d/network-monitor.repo
+sudo dnf install network-monitor
+```
+
+If the repository is not available yet, use the GitHub Releases packages above. Maintainers can find the repository setup in [docs/REPOSITORIES.md](docs/REPOSITORIES.md).
+
 ## Quick start
 ```bash
 ./network-monitor
@@ -56,7 +80,8 @@ Output is written to `build/`. See `packaging/README_AR.md` for details and requ
 
 ## Tests
 ```bash
-PYTHONPATH=src python3/bin/python3.14 -m unittest discover -s tests -v
+./packaging/build-runtime.sh
+PYTHONPATH=src build/runtime/bin/python3 -m unittest discover -s tests -v
 ```
 
 ## Author

@@ -8,3 +8,9 @@ dist/
 
 python3/
 wheels/
+
+# Local GPG signing material (never commit private keys)
+network-monitor-private.asc
+network-monitor-public.asc
+*.private.asc
+*.secret.asc

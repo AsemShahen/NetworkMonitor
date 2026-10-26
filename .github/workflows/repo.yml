@@ -1,0 +1,59 @@
+name: Publish package repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to publish (use a release built with zstd, for example v1.0.1)"
+        required: true
+        default: "v1.0.1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-repository
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install repository tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-utils gnupg
+          sudo apt-get install -y createrepo-c || sudo apt-get install -y createrepo
+          command -v apt-ftparchive
+          command -v createrepo_c || command -v createrepo
+
+      - name: Check signing key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          if [ -z "$GPG_PRIVATE_KEY" ]; then
+            echo "::error::GPG_PRIVATE_KEY is not configured. Add it in Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          gh release download "${{ inputs.tag }}" --dir build --pattern 'network-monitor*' --clobber
+          ls -lh build
+
+      - name: Publish signed repository
+        env:
+          PUBLISH: "1"
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PAGES_BASE_URL: https://asemshahen.github.io/NetworkMonitor
+          VERSION: ${{ inputs.tag }}
+        run: ./packaging/publish-repo.sh

@@ -23,6 +23,7 @@ mkdir -p \
     "$PKG/usr/bin" \
     "$PKG/usr/libexec/network-monitor" \
     "$PKG/usr/share/applications" \
+    "$PKG/usr/share/metainfo" \
     "$PKG/usr/share/polkit-1/actions" \
     "$PKG/usr/share/doc/network-monitor" \
     "$PKG/usr/share/licenses/network-monitor"
@@ -38,6 +39,8 @@ install -Dm755 "$ROOT/bin/network-monitor-helper" \
     "$PKG/usr/libexec/network-monitor/network-monitor-helper"
 install -Dm644 "$ROOT/data/network-monitor.desktop" \
     "$PKG/usr/share/applications/network-monitor.desktop"
+install -Dm644 "$ROOT/data/network-monitor.metainfo.xml" \
+    "$PKG/usr/share/metainfo/network-monitor.metainfo.xml"
 install -Dm644 "$ROOT/data/org.networkmonitor.helper.policy" \
     "$PKG/usr/share/polkit-1/actions/org.networkmonitor.helper.policy"
 install -Dm644 "$ROOT/LICENSE" "$PKG/usr/share/doc/network-monitor/copyright"

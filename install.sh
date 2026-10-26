@@ -28,6 +28,7 @@ sudo chmod 755 /usr/local/bin/network-monitor
 sudo install -Dm755 "$PREFIX/bin/network-monitor-helper" /usr/libexec/network-monitor/network-monitor-helper
 
 sudo install -m 644 "$PREFIX/data/network-monitor.desktop" /usr/share/applications/network-monitor.desktop
+sudo install -Dm644 "$PREFIX/data/network-monitor.metainfo.xml" /usr/share/metainfo/network-monitor.metainfo.xml
 for size in 64 128 256 512; do
   if [ -f "$PREFIX/data/network-monitor-$size.png" ]; then
     sudo install -Dm 644 "$PREFIX/data/network-monitor-$size.png" \

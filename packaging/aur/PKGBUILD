@@ -1,0 +1,55 @@
+# Maintainer: AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com>
+# Binary package built from the official .deb release asset.
+# Update pkgver and sha256sums together for every release.
+pkgname=network-monitor-bin
+_pkgname=network-monitor
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Per-application network monitor with blocking (binary release)"
+arch=('x86_64')
+url="https://github.com/AsemShahen/NetworkMonitor"
+license=('GPL-3.0-or-later')
+depends=(
+    'glibc'
+    'gcc-libs'
+    'python3'
+    'polkit'
+    'nftables'
+    'iproute2'
+    'dbus'
+    'glib2'
+    'fontconfig'
+    'freetype2'
+    'libglvnd'
+    'libx11'
+    'libxext'
+    'libxrender'
+    'libxi'
+    'libsm'
+    'libice'
+    'libxcb'
+    'libxkbcommon'
+    'libxkbcommon-x11'
+    'xcb-util'
+    'xcb-util-cursor'
+    'xcb-util-wm'
+    'xcb-util-image'
+    'xcb-util-keysyms'
+    'xcb-util-renderutil'
+)
+optdepends=('noto-fonts: improved Arabic font rendering')
+provides=('network-monitor')
+conflicts=('network-monitor')
+options=('!strip' '!debug')
+install="${pkgname}.install"
+source=("${url}/releases/download/v${pkgver}/${_pkgname}_${pkgver}_amd64.deb")
+sha256sums=('998207eea8f46bda5d8e051395f487a233336b76812fab2f6c642d9a0091ee37')
+makedepends=('binutils' 'zstd')
+
+package() {
+    cd "$srcdir"
+    ar x "${_pkgname}_${pkgver}_amd64.deb"
+    tar -xf data.tar.*
+    install -d "$pkgdir"
+    cp -a opt usr "$pkgdir/"
+}

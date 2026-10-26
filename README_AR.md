@@ -24,6 +24,32 @@
 
 حزم `.deb` و`.rpm` تثبّت المساعد المميز وسياسة polkit. أما AppImage فيحوي المساعد داخله، لكن الحظر يحتاج إلى `pkexec` و`python3` و`nftables` وcgroup v2 على النظام المضيف.
 
+## التثبيت من مستودع الحزم الموقّع
+
+بعد نشر المستودع، يمكن تثبيت Network Monitor وتحديثه عبر مدير الحزم. المستودع موقّع بمفتاح GPG، والمفتاح العام والبصمة منشوران على:
+
+<https://asemshahen.github.io/NetworkMonitor/>
+
+### Debian / Ubuntu
+```bash
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+echo "deb [signed-by=/etc/apt/keyrings/network-monitor.gpg] https://asemshahen.github.io/NetworkMonitor/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/network-monitor.list
+sudo apt update
+sudo apt install network-monitor
+```
+
+### Fedora / RHEL
+```bash
+sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.repo \
+  -o /etc/yum.repos.d/network-monitor.repo
+sudo dnf install network-monitor
+```
+
+إن لم يكن المستودع متاحًا بعد، استخدم حزم GitHub Releases أعلاه. للمشرفين، خطوات الإعداد في [docs/REPOSITORIES_AR.md](docs/REPOSITORIES_AR.md).
+
 ## التشغيل السريع
 ```bash
 ./network-monitor
@@ -56,7 +82,8 @@ network-monitor
 
 ## الاختبارات
 ```bash
-PYTHONPATH=src python3/bin/python3.14 -m unittest discover -s tests -v
+./packaging/build-runtime.sh
+PYTHONPATH=src build/runtime/bin/python3 -m unittest discover -s tests -v
 ```
 
 ## المؤلف

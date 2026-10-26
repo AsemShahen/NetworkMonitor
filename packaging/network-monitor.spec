@@ -1,5 +1,9 @@
 %global debug_package %{nil}
 
+# zstd level 19 keeps the bundled runtime below GitHub Pages' 100 MiB limit.
+# gzip produces an RPM that is too large for a git-backed Pages repository.
+%global _binary_payload w19.zstdio
+
 # Never turn a build-time interpreter path into a runtime dependency.  The
 # bundled runtime is self-contained, and its Python entry points are invoked
 # explicitly from the launcher.
@@ -51,6 +55,7 @@ fi
 /usr/bin/network-monitor
 /usr/libexec/network-monitor/network-monitor-helper
 /usr/share/applications/network-monitor.desktop
+/usr/share/metainfo/network-monitor.metainfo.xml
 /usr/share/polkit-1/actions/org.networkmonitor.helper.policy
 /usr/share/icons/hicolor/64x64/apps/network-monitor.png
 /usr/share/icons/hicolor/128x128/apps/network-monitor.png

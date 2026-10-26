@@ -32,6 +32,8 @@ install -Dm755 "$ROOT/bin/network-monitor-helper" \
     "$ROOTFS/usr/libexec/network-monitor/network-monitor-helper"
 install -Dm644 "$ROOT/data/network-monitor.desktop" \
     "$ROOTFS/usr/share/applications/network-monitor.desktop"
+install -Dm644 "$ROOT/data/network-monitor.metainfo.xml" \
+    "$ROOTFS/usr/share/metainfo/network-monitor.metainfo.xml"
 install -Dm644 "$ROOT/data/org.networkmonitor.helper.policy" \
     "$ROOTFS/usr/share/polkit-1/actions/org.networkmonitor.helper.policy"
 

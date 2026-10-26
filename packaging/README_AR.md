@@ -36,15 +36,51 @@ PySide6/pyqtgraph/numpy. بعد ذلك يمكن إعادة استخدام `build
 
 ```bash
 git push -u origin main
-git push origin v1.0.0
+git push origin v1.0.1
 ```
 
-الوسم `v1.0.0` موجود محليًا ويشير إلى آخر التزام. إن غيّرت الإصدار، أنشئ وسمًا
-جديدًا مثل `v1.0.1` بدل إعادة استخدام وسم منشور.
+الوسم `v1.0.0` موجود محليًا ويشير إلى التزام الإصدار المنشور. بعد تغييرات
+التغليف الحالية، أنشئ وسمًا جديدًا مثل `v1.0.1` بدل إعادة استخدام وسم منشور.
 
 سيعمل سير العمل `.github/workflows/release.yml` تلقائيًا، ويبني الحزم الثلاث،
 وينشئ Release ويحمّل الملفات إليه. يمكن أيضًا تشغيله يدويًا من تبويب Actions
-مع إدخال رقم الإصدار.
+لبناء الحزم ورفعها كـArtifacts فقط؛ لإنشاء Release جديد استخدم وسمًا مثل
+`v1.0.1`.
+
+## مستودع APT/RPM الموقّع
+
+بعد إعداد مفتاح GPG وأسرار GitHub، ينشر المشروع مستودعًا موقّعًا على
+GitHub Pages:
+
+<https://asemshahen.github.io/NetworkMonitor/>
+
+- `packaging/publish-repo.sh` يبني المستودع ويوقّعه ويدفعه إلى `gh-pages`.
+- `.github/workflows/repo.yml` يشغّل النشر يدويًا لإصدار موجود.
+- `.github/workflows/release.yml` ينشر المستودع تلقائيًا مع كل وسم جديد إذا
+  كان السر `GPG_PRIVATE_KEY` موجودًا.
+
+> ملاحظة: حزمة RPM في الإصدار `v1.0.0` بُنيت بضغط gzip وحجمها 118MB، لذلك
+> لا يمكن دفعها إلى `gh-pages` (حد GitHub هو 100MiB للملف). أضفنا ضغط zstd
+> في مواصفات RPM؛ أنشئ إصدارًا جديدًا مثل `v1.0.1` وانشر مستودعه.
+
+راجع [`docs/REPOSITORIES_AR.md`](../docs/REPOSITORIES_AR.md) لخطوات إنشاء
+المفتاح، وإضافة الأسرار، وتفعيل GitHub Pages، وأوامر التثبيت.
+
+## AUR
+
+حزمة Arch Linux الثنائية موجودة في `packaging/aur/`:
+
+- `PKGBUILD`
+- `network-monitor-bin.install`
+- `.SRCINFO`
+
+راجع [`packaging/aur/README_AR.md`](aur/README_AR.md) للبناء المحلي وخطوات
+النشر في AUR.
+
+## AppImageHub
+
+ملف الإدراج الجاهز موجود في `packaging/appimagehub/Network_Monitor`، مع
+تعليمات في [`packaging/appimagehub/README_AR.md`](appimagehub/README_AR.md).
 
 ## ملاحظات
 

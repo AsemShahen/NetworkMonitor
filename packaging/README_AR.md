@@ -76,7 +76,7 @@ GitHub Pages:
 - `.SRCINFO`
 
 راجع [`packaging/aur/README_AR.md`](aur/README_AR.md) للبناء المحلي وخطوات
-النشر في AUR.
+النشر في AUR، أو النسخة الإنجليزية [`packaging/aur/README.md`](aur/README.md).
 
 ## AppImageHub
 

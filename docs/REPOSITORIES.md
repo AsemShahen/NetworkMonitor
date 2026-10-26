@@ -19,6 +19,24 @@ The repository contains:
 older versions remain available on GitHub Releases. This keeps the Pages site
 and git history small.
 
+## Current repository packages (v1.0.1)
+
+The repository is rebuilt from the same `v1.0.1` tag in the maintainer's
+environment. Its package hashes therefore differ from the GitHub Release
+assets; both contain the same version and source. The APT/RPM metadata signs
+the repository hashes, while `SHA256SUMS` on the release signs the release
+assets.
+
+- `.deb`: `90,592,662` bytes, SHA-256
+  `ae45c99a0cafebc45f21408a393f3826cdd563064bf6c0d24c6a19b7141cd56f`
+- `.rpm`: `91,522,938` bytes, SHA-256
+  `9281e48ce01c4cdd85bb487ca81e1d662113de6fca452258b3a1f0a89a2c61dc`
+- GPG fingerprint:
+  `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
+
+The AUR package uses the official release `.deb` hash instead:
+`b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`.
+
 ## One-time setup
 
 ### 1. Create a signing key

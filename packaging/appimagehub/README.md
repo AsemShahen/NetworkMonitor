@@ -13,7 +13,9 @@ repository and tests the newest AppImage from its GitHub Releases page.
    ```
 
    The ready-to-copy file is
-   [`Network_Monitor`](Network_Monitor) in this directory.
+   [`Network_Monitor`](Network_Monitor) in this directory. If you already have
+   a clone of the catalog, apply [`Network_Monitor.patch`](Network_Monitor.patch)
+   with `git apply Network_Monitor.patch`.
 3. Commit and push the branch to your fork.
 4. Open a pull request against `AppImage/appimage.github.io:master` titled
    `Add Network_Monitor`.

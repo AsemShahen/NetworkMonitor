@@ -1,0 +1,6 @@
+diff --git a/data/Network_Monitor b/data/Network_Monitor
+new file mode 100644
+--- /dev/null
++++ b/data/Network_Monitor
+@@ -0,0 +1 @@
++https://github.com/AsemShahen/NetworkMonitor

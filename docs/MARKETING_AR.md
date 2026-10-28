@@ -10,11 +10,11 @@
 - **البريد:** <asemshahen5@gmail.com>
 - **الترخيص:** GPL-3.0-or-later
 - **المستودع:** <https://github.com/AsemShahen/NetworkMonitor>
-- **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1>
-- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح)
+- **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
+- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم حاليًا أصول `v1.0.1` الرسمية)
 - **بصمة GPG:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (جاهزة؛ بانتظار مفتاح حساب AUR والدفع)
-- **AppImageHub:** ملف PR جاهز في `packaging/appimagehub/` (بانتظار Fork وPR)
+- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04 وبانتظار إعادة الاختبار)
 
 ## الوصف المختصر
 
@@ -175,8 +175,9 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [x] التحقق من `apt/dists/stable/InRelease` بالمفتاح المنشور.
 - [x] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
 - [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها.
-- [ ] فتح PR في AppImageHub (ملف واحد فقط) ومتابعة تعليق الاختبار.
-- [ ] ظهور لقطات README على GitHub.
+- [x] فتح PR في AppImageHub (ملف واحد فقط) ومتابعة تعليق الاختبار.
+- [ ] نجاح اختبار AppImageHub على `v1.0.3` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04).
+- [x] ظهور لقطات README على GitHub.
 - [x] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
 - [ ] نشر Show HN وأحد المجتمعات، ثم الانتظار قبل النشر المتعدد.
 - [ ] إرسال ثلاث ملاحظات لمواقع أخبار لينكس مع لقطة شاشة.

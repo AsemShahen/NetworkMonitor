@@ -24,6 +24,11 @@ and git history small.
 The repository serves the official `v1.0.1` release assets, so these hashes
 match `SHA256SUMS` and the AUR source.
 
+The `v1.0.2` and `v1.0.3` releases are available on GitHub Releases, but the
+repository remains on `v1.0.1` until the existing signing key is restored. Do not replace
+the key blindly: clients already trust the fingerprint below, and a new key
+would make `apt update` and `dnf` fail until every client imports it.
+
 - `.deb`: `90,981,106` bytes, SHA-256
   `b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`
 - `.rpm`: `91,608,523` bytes, SHA-256

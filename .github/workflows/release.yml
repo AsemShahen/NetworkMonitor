@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to build (for example 1.0.2)"
+        description: "Version to build (for example 1.0.3)"
         required: true
-        default: "1.0.2"
+        default: "1.0.3"
 
 permissions:
   contents: write
@@ -20,7 +20,11 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    # AppImageHub tests on the oldest supported Ubuntu LTS (22.04).  Building
+    # the runtime and AppImage on 24.04 produces GLIBC_2.38 references, which
+    # cannot start on 22.04.  Keep this on 22.04 so the portable AppImage stays
+    # compatible with the catalog's baseline.
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -59,7 +63,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/runtime
-          key: runtime-${{ runner.os }}-${{ hashFiles('packaging/build-runtime.sh') }}
+          key: runtime-${{ runner.os }}-ubuntu2204-${{ hashFiles('packaging/build-runtime.sh') }}
 
       - name: Build Python runtime
         run: ./packaging/build-runtime.sh

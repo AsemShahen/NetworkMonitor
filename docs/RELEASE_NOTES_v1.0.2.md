@@ -22,7 +22,10 @@ full RTL support and defaults to English.
   xcb helper libraries. It starts with the Qt xcb platform plugin on minimal
   Debian/Ubuntu systems that do not have those X11 helpers installed, including
   the AppImageHub test runner.
-- AppImageHub PR #10786 was retested with this release.
+- AppImageHub PR #10786 was retested with this release. It still failed,
+  because the bundled `libxcb-cursor` was copied from Ubuntu 24.04 and
+  references `GLIBC_2.38`. Version 1.0.3 fixes this by building on Ubuntu
+  22.04.
 
 ## Packages
 
@@ -75,7 +78,9 @@ existing `network-monitor-bin` belongs to a different project.
 
 One-file PR: <https://github.com/AppImage/appimage.github.io/pull/10786>. The
 v1.0.1 AppImage failed the catalog test because the host lacked
-`libxkbcommon-x11`; this release bundles it. The retest is pending.
+`libxkbcommon-x11`; this release bundles it, but the retest failed because the
+bundled xcb helper libraries were built on Ubuntu 24.04 and reference
+`GLIBC_2.38`. Use v1.0.3, which is built on Ubuntu 22.04.
 
 ## Notes
 
@@ -97,7 +102,9 @@ v1.0.1 AppImage failed the catalog test because the host lacked
 - أصبحت حزمة AppImage تضم `libxkbcommon-x11` و`libxcb-cursor` ومكتبات xcb
   المساعدة، لتعمل واجهة Qt xcb على أنظمة Debian/Ubuntu البسيطة التي لا
   تحتوي هذه المكتبات، بما فيها بيئة اختبار AppImageHub.
-- أُعيد اختبار PR #10786 باستخدام هذا الإصدار.
+- أُعيد اختبار PR #10786 باستخدام هذا الإصدار، لكنه فشل أيضًا لأن
+  `libxcb-cursor` المضمّن نُسخ من Ubuntu 24.04 ويشير إلى `GLIBC_2.38`.
+  الإصدار 1.0.3 يصلح ذلك بالبناء على Ubuntu 22.04.
 
 ### الحزم
 
@@ -129,7 +136,8 @@ v1.0.1 AppImage failed the catalog test because the host lacked
 
 طلب PR بملف واحد: <https://github.com/AppImage/appimage.github.io/pull/10786>.
 فشل اختبار إصدار v1.0.1 بسبب غياب `libxkbcommon-x11`؛ هذا الإصدار يضمّنه،
-والاختبار الجديد قيد الانتظار.
+لكن الاختبار الجديد فشل أيضًا لأن مكتبات xcb المضمّنة بُنيت على Ubuntu 24.04
+وتشير إلى `GLIBC_2.38`. استخدم v1.0.3 المبني على Ubuntu 22.04.
 
 ## Author
 

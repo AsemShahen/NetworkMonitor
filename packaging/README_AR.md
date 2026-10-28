@@ -57,7 +57,8 @@ GitHub Pages:
 - `packaging/publish-repo.sh` يبني المستودع ويوقّعه ويدفعه إلى `gh-pages`.
 - `.github/workflows/repo.yml` يشغّل النشر يدويًا لإصدار موجود.
 - `.github/workflows/release.yml` ينشر المستودع تلقائيًا مع كل وسم جديد إذا
-  كان السر `GPG_PRIVATE_KEY` موجودًا.
+  كان السر `GPG_PRIVATE_KEY` صالحًا وكان المتغير
+  `PUBLISH_SIGNED_REPOSITORY=true` مضبوطًا.
 
 > ملاحظة: حزمة RPM في الإصدار `v1.0.0` بُنيت بضغط gzip وحجمها 118MB، لذلك
 > لا يمكن دفعها إلى `gh-pages` (حد GitHub هو 100MiB للملف). أضفنا ضغط zstd

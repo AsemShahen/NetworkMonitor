@@ -87,7 +87,30 @@ fi
 if [ -n "${GPG_PRIVATE_KEY_FILE:-}" ]; then
     gpg --batch --import "$GPG_PRIVATE_KEY_FILE"
 elif [ -n "${GPG_PRIVATE_KEY:-}" ]; then
-    printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
+    # GitHub secrets sometimes store an armored key as one line with literal
+    # "\n" sequences (or as a JSON-quoted string). Normalize those forms before
+    # importing, without ever printing the key.
+    KEY_FILE="$(mktemp)"
+    chmod 600 "$KEY_FILE"
+    GPG_PRIVATE_KEY="$GPG_PRIVATE_KEY" python3 - "$KEY_FILE" <<'PY'
+import json
+import os
+import sys
+
+value = os.environ.get("GPG_PRIVATE_KEY", "")
+if value.startswith('"') and value.endswith('"'):
+    try:
+        value = json.loads(value)
+    except ValueError:
+        pass
+value = value.replace("\\r\\n", "\n").replace("\\n", "\n")
+if not value.endswith("\n"):
+    value += "\n"
+with open(sys.argv[1], "w", encoding="utf-8") as handle:
+    handle.write(value)
+PY
+    gpg --batch --import "$KEY_FILE"
+    rm -f "$KEY_FILE"
 fi
 
 GPG_KEY_ID="${GPG_KEY_ID:-$(gpg --batch --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^fpr:/ {print $10; exit}')}"

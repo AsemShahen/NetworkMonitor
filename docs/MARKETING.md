@@ -66,7 +66,7 @@ subreddit at once.
 
 **Title:** Network Monitor: per-app bandwidth monitor with real nftables blocking
 
-I released Network Monitor 1.0.1, a GPL-3.0-or-later desktop app for Linux. It
+I released Network Monitor 1.0.3, a GPL-3.0-or-later desktop app for Linux. It
 shows live per-application download/upload speeds, connections, executable
 paths, session totals, and a chart. It can block apps with cgroup v2 +
 nftables via polkit, and the UI is English/Arabic with RTL support.
@@ -81,7 +81,7 @@ combinations need more testing.
 
 **Title:** Per-app network monitor with blocking for Ubuntu (deb + signed repo)
 
-I published Network Monitor 1.0.1 for Ubuntu/Debian. It shows per-app
+I published Network Monitor 1.0.3 for Ubuntu/Debian. It shows per-app
 download/upload rates and can block selected applications with cgroup v2 +
 nftables through a polkit helper. There is a `.deb` on GitHub Releases and a
 signed APT repository on GitHub Pages.
@@ -91,13 +91,13 @@ Install instructions and screenshots:
 
 ### r/Fedora
 
-**Title:** Network Monitor 1.0.1 RPM: per-app bandwidth and nftables blocking
+**Title:** Network Monitor 1.0.3 RPM: per-app bandwidth and nftables blocking
 
 I published a Fedora/RHEL RPM for Network Monitor, a per-application bandwidth
 monitor with real blocking through cgroup v2 + nftables and polkit. The UI is
 English/Arabic with RTL support.
 
-RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1>
+RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
 Signed RPM repository: <https://asemshahen.github.io/NetworkMonitor/>
 
 Feedback on Fedora packaging and SELinux/nftables behavior is welcome.
@@ -120,7 +120,7 @@ to another project.
 
 **Title:** مراقب الشبكة: راقب استهلاك كل تطبيق واحظره على لينكس
 
-أصدرت Network Monitor 1.0.1، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
+أصدرت Network Monitor 1.0.3، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
 لمراقبة سرعة التنزيل والرفع لكل تطبيق على لينكس، مع حظر فعلي عبر cgroup v2
 وnftables ومصادقة polkit. الواجهة إنجليزية وعربية مع دعم كامل للاتجاه من
 اليمين إلى اليسار، والافتراضي إنجليزي.
@@ -141,16 +141,16 @@ Send a short, factual note with a link and a screenshot to:
 - Fedora Magazine: <https://fedoramagazine.org/contribute/>
 - Ubuntu Discourse (community news): <https://discourse.ubuntu.com/>
 
-Suggested subject: `Network Monitor 1.0.1: per-app bandwidth + nftables blocking for Linux`
+Suggested subject: `Network Monitor 1.0.3: per-app bandwidth + nftables blocking for Linux`
 
 Suggested body:
 
-> Network Monitor 1.0.1 is a GPL-3.0-or-later desktop app for Linux that shows
+> Network Monitor 1.0.3 is a GPL-3.0-or-later desktop app for Linux that shows
 > live per-application download/upload speeds and can block selected apps with
 > cgroup v2 + nftables through a polkit helper. It ships as `.deb`, `.rpm`, and
 > `.AppImage`, has a signed APT/RPM repository, and a bilingual English/Arabic
 > UI with RTL support. Screenshots and release notes:
-> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.1
+> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3
 
 ## SEO
 

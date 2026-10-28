@@ -20,9 +20,9 @@ makepkg -si
 
 The current `PKGBUILD` uses:
 
-- Version: `1.0.1`
-- Source: `https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.1/network-monitor_1.0.1_amd64.deb`
-- SHA-256: `b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`
+- Version: `1.0.3`
+- Source: `https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.3/network-monitor_1.0.3_amd64.deb`
+- SHA-256: `603170ecc2f67d9fa942294da04232d6eedb266b28edac43648c712539cd4991`
 
 ## Submit to AUR
 
@@ -41,7 +41,7 @@ The current `PKGBUILD` uses:
 
    ```bash
    git add PKGBUILD .SRCINFO network-monitor-qt-bin.install
-   git commit -m "Initial import: network-monitor-qt-bin 1.0.1"
+   git commit -m "Initial import: network-monitor-qt-bin 1.0.3"
    git push
    ```
 

@@ -108,6 +108,11 @@ therefore remains on the official `v1.0.1` assets. After restoring the key,
 set the variable and run the **Publish package repository** workflow manually
 for the desired release tag.
 
+A recovery check on 2026-10-28 found only an empty
+`~/network-monitor-private.asc`; the temporary keyring used to create the key
+no longer exists. The private key cannot be recovered from this machine. Do not
+generate a replacement without deciding how to handle existing clients.
+
 ## Install from the repository
 
 ### Debian / Ubuntu

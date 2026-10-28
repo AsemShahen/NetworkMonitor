@@ -43,15 +43,18 @@ Download: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
 ### Signed APT/RPM repository
 
 The signed repository is published at
-<https://asemshahen.github.io/NetworkMonitor/> and continues to serve the
-official `v1.0.1` assets while the repository signing key is being restored.
-The `v1.0.3` packages are attached to this GitHub release and match the
-release's `SHA256SUMS`. The repository fingerprint remains:
+<https://asemshahen.github.io/NetworkMonitor/> and serves the official
+`v1.0.3` assets. The `v1.0.3` packages are attached to this GitHub release and
+match the release's `SHA256SUMS`. The repository fingerprint is:
 
 ```text
 Network Monitor packages <asemshahen5@gmail.com>
-Fingerprint: 4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE
+Fingerprint: D53CB321C38875CCA82128CC77EED1C545319AE8
 ```
+
+> If you added the repository before 2026-10-28, re-import the public key with
+> the APT/RPM commands in the install guide. The previous key was lost and has
+> been replaced.
 
 APT:
 
@@ -123,13 +126,15 @@ v1.0.1 AppImage failed the catalog test because the host lacked
 
 <https://asemshahen.github.io/NetworkMonitor/>
 
-المستودع الموقّع يخدم حاليًا أصول الإصدار `v1.0.1` الرسمية إلى أن يُستعاد
-مفتاح توقيع المستودع. حزم `v1.0.3` مرفقة بهذا الإصدار وتطابق `SHA256SUMS`.
-بصمة المفتاح:
+يخدم المستودع الموقّع أصول الإصدار `v1.0.3` الرسمية. حزم `v1.0.3` مرفقة
+بهذا الإصدار وتطابق `SHA256SUMS`. بصمة المفتاح:
 
 ```text
-4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE
+D53CB321C38875CCA82128CC77EED1C545319AE8
 ```
+
+> إذا أضفت المستودع قبل 2026-10-28، فأعد استيراد المفتاح العام بالأوامر
+> الموجودة في دليل التثبيت. المفتاح السابق فُقد واستُبدل بمفتاح جديد.
 
 أوامر APT وRPM موجودة في [دليل التثبيت](https://github.com/AsemShahen/NetworkMonitor/blob/main/docs/INSTALL.md).
 

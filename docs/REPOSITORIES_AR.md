@@ -20,20 +20,44 @@
 
 ## حزم المستودع الحالية (v1.0.1)
 
-يخدم المستودع أصول الإصدار `v1.0.1` الرسمية، لذلك تطابق هذه البصمات
+يخدم المستودع حاليًا أصول الإصدار `v1.0.1` الرسمية، لذلك تطابق هذه البصمات
 `SHA256SUMS` ومصدر AUR.
 
-الإصداران `v1.0.2` و`v1.0.3` متاحان على GitHub Releases، لكن المستودع يبقى
-على `v1.0.1` إلى أن يُستعاد مفتاح التوقيع الحالي. لا تستبدل المفتاح عشوائيًا: العملاء
-يثقون بالبصمة أدناه، وأي مفتاح جديد سيجعل `apt update` و`dnf` يفشلان حتى
-يستورد كل عميل المفتاح الجديد.
+الإصداران `v1.0.2` و`v1.0.3` متاحان على GitHub Releases. يخدم المستودع الآن
+`v1.0.3` موقّعًا بالمفتاح الجديد. العملاء الحاليون يثقون بالبصمة السابقة
+أدناه، وعليهم استيراد المفتاح العام الجديد قبل تحديث `apt` أو `dnf` التالي.
 
 - `.deb`: `90,981,106` بايت، SHA-256
   `b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`
 - `.rpm`: `91,608,523` بايت، SHA-256
   `5d1c165d2330f760c2089496b21402c95978dbad52bcbd158c0534a49b5c1700`
-- بصمة GPG:
+- البصمة السابقة (للعملاء المثبتين قبل 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
+- البصمة الحالية:
+  `D53CB321C38875CCA82128CC77EED1C545319AE8`
+
+### ترحيل عملاء APT/RPM الحاليين
+
+بعد إعادة نشر المستودع، يستورد العملاء الحاليون المفتاح العام الجديد مرة واحدة.
+
+APT:
+
+```bash
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+sudo apt update
+```
+
+RPM:
+
+```bash
+sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  -o /etc/pki/rpm-gpg/RPM-GPG-KEY-network-monitor
+sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-network-monitor
+sudo dnf clean all
+sudo dnf makecache
+```
 
 حزمة AUR تستخدم ملف `.deb` الرسمي للإصدار `v1.0.3`.
 
@@ -99,16 +123,14 @@ gpg --armor --export "$KEY_ID" > network-monitor-public.asc
 <https://asemshahen.github.io/NetworkMonitor/>
 
 النشر التلقائي للمستودع من `.github/workflows/release.yml` مُقيّد بمتغير
-المستودع `PUBLISH_SIGNED_REPOSITORY=true`. وهو معطّل حاليًا لأن السر
-`GPG_PRIVATE_KEY` ليس بيانات OpenPGP صالحة، والمفتاح الخاص الأصلي غير متاح.
-لذلك يبقى المستودع الحي على أصول `v1.0.1` الرسمية. بعد استعادة المفتاح،
-فعّل المتغير ثم شغّل سير عمل **Publish package repository** يدويًا للإصدار
-المطلوب.
+المستودع `PUBLISH_SIGNED_REPOSITORY=true`. أُنشئ المفتاح الجديد في
+2026-10-28، ويُحفظ المفتاح الخاص وعبارة المرور محليًا ولا يُرفعان إلى
+المستودع. أُعيد نشر المستودع بـ`v1.0.3` في 2026-10-29، ويجتاز كل من
+`InRelease` و`repomd.xml.asc` التحقق بالبصمة الجديدة.
 
-أظهر فحص الاستعادة في 2026-10-28 وجود ملف فارغ فقط في
-`~/network-monitor-private.asc`؛ وحلقة المفاتيح المؤقتة التي أُنشئ فيها المفتاح
-لم تعد موجودة. لا يمكن استعادة المفتاح الخاص من هذا الجهاز. لا تنشئ مفتاحًا
-بديلًا قبل تحديد كيفية التعامل مع العملاء الحاليين.
+المفتاح السابق (`4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`) غير قابل
+للاستعادة. المفتاح الجديد يستبدله؛ وعلى العملاء الحاليين تنفيذ أوامر الترحيل
+أعلاه.
 
 ## التثبيت من المستودع
 

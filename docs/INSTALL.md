@@ -113,8 +113,12 @@ The repository is signed by:
 
 ```text
 Network Monitor packages <asemshahen5@gmail.com>
-Fingerprint: 4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE
+Fingerprint: D53CB321C38875CCA82128CC77EED1C545319AE8
 ```
+
+> If you added the repository before 2026-10-28, re-import the public key with
+> the commands above. The repository was republished with a new signing key
+> after the previous key was lost.
 
 Check the key after importing it:
 

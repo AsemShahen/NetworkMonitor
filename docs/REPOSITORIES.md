@@ -21,20 +21,46 @@ and git history small.
 
 ## Current repository packages (v1.0.1)
 
-The repository serves the official `v1.0.1` release assets, so these hashes
-match `SHA256SUMS` and the AUR source.
+The repository currently serves the official `v1.0.1` release assets, so these
+hashes match `SHA256SUMS` and the AUR source.
 
-The `v1.0.2` and `v1.0.3` releases are available on GitHub Releases, but the
-repository remains on `v1.0.1` until the existing signing key is restored. Do not replace
-the key blindly: clients already trust the fingerprint below, and a new key
-would make `apt update` and `dnf` fail until every client imports it.
+The `v1.0.2` and `v1.0.3` releases are available on GitHub Releases. The
+repository now serves `v1.0.3`, signed with the new key. Existing clients trust
+the previous fingerprint below and must import the new public key before the
+next `apt update` or `dnf` refresh.
 
 - `.deb`: `90,981,106` bytes, SHA-256
   `b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`
 - `.rpm`: `91,608,523` bytes, SHA-256
   `5d1c165d2330f760c2089496b21402c95978dbad52bcbd158c0534a49b5c1700`
-- GPG fingerprint:
+- Previous fingerprint (clients installed before 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
+- Current fingerprint:
+  `D53CB321C38875CCA82128CC77EED1C545319AE8`
+
+### Migrate existing APT/RPM clients
+
+After the repository is republished, existing clients must import the new
+public key once.
+
+APT:
+
+```bash
+sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+sudo apt update
+```
+
+RPM:
+
+```bash
+sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc \
+  -o /etc/pki/rpm-gpg/RPM-GPG-KEY-network-monitor
+sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-network-monitor
+sudo dnf clean all
+sudo dnf makecache
+```
 
 The AUR package uses the official `v1.0.3` release `.deb`.
 
@@ -101,17 +127,15 @@ Save. GitHub Pages will publish the repository at:
 <https://asemshahen.github.io/NetworkMonitor/>
 
 Automatic repository publication from `.github/workflows/release.yml` is
-gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. It is
-currently disabled because the existing `GPG_PRIVATE_KEY` secret is not valid
-OpenPGP data and the original private key is unavailable. The live repository
-therefore remains on the official `v1.0.1` assets. After restoring the key,
-set the variable and run the **Publish package repository** workflow manually
-for the desired release tag.
+gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. The new key
+was generated on 2026-10-28; its private key and passphrase are stored locally
+and are not committed. The repository was republished with `v1.0.3` on
+2026-10-29, and both `InRelease` and `repomd.xml.asc` verify against the new
+fingerprint.
 
-A recovery check on 2026-10-28 found only an empty
-`~/network-monitor-private.asc`; the temporary keyring used to create the key
-no longer exists. The private key cannot be recovered from this machine. Do not
-generate a replacement without deciding how to handle existing clients.
+The previous key (`4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`) is
+unrecoverable. The new key replaces it; existing clients must run the migration
+commands above.
 
 ## Install from the repository
 

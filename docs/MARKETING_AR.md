@@ -11,8 +11,8 @@
 - **الترخيص:** GPL-3.0-or-later
 - **المستودع:** <https://github.com/AsemShahen/NetworkMonitor>
 - **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
-- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم حاليًا أصول `v1.0.1` الرسمية)
-- **بصمة GPG:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
+- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.0.3` موقّعًا بالمفتاح الجديد)
+- **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
 - **AUR:** `network-monitor-qt-bin` (حزمة `1.0.3` المحلية جاهزة؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503، لذا إنشاء الحساب وإضافة مفتاح SSH والدفع متوقف حاليًا)
 - **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.3`؛ تحذيران: الثيم الداكن افتراضيًا ولا معلومات تحديث لـAppImage)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (منشور؛ حُدّث العنوان إلى عنوان Show HN المُعدّ)

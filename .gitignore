@@ -12,5 +12,6 @@ wheels/
 # Local GPG signing material (never commit private keys)
 network-monitor-private.asc
 network-monitor-public.asc
+network-monitor-passphrase.txt
 *.private.asc
 *.secret.asc

@@ -12,8 +12,8 @@ Do not claim a channel is live before it is.
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
 - **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; currently serves the official `v1.0.1` assets)
-- **GPG fingerprint:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.3` signed with the new key)
+- **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
 - **AUR:** `network-monitor-qt-bin` (local `1.0.3` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.3`; warnings: dark default theme and no AppImage update information)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)

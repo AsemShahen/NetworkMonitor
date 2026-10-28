@@ -194,4 +194,4 @@ in `docs/screenshots/` as thumbnails.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [ ] Post Show HN and one subreddit; wait for feedback before cross-posting.
 - [ ] Send three Linux news tips with a screenshot.
-- [ ] Add the repository URL to the GitHub repository homepage field.
+- [x] Add the repository URL to the GitHub repository homepage field.

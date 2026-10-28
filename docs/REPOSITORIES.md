@@ -36,7 +36,7 @@ would make `apt update` and `dnf` fail until every client imports it.
 - GPG fingerprint:
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 
-The AUR package uses the same official release `.deb`.
+The AUR package uses the official `v1.0.3` release `.deb`.
 
 ## One-time setup
 

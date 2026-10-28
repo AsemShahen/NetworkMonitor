@@ -13,7 +13,7 @@
 - **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
 - **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم حاليًا أصول `v1.0.1` الرسمية)
 - **بصمة GPG:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
-- **AUR:** `network-monitor-qt-bin` (جاهزة؛ بانتظار مفتاح حساب AUR والدفع)
+- **AUR:** `network-monitor-qt-bin` (حزمة `1.0.3` المحلية جاهزة؛ بانتظار مفتاح حساب AUR والدفع)
 - **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.3`؛ تحذيران: الثيم الداكن افتراضيًا ولا معلومات تحديث لـAppImage)
 
 ## الوصف المختصر

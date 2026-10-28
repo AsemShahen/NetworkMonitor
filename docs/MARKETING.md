@@ -17,7 +17,7 @@ Do not claim a channel is live before it is.
 - **AUR:** `network-monitor-qt-bin` (local `1.0.3` package ready; pending AUR account key and push)
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.3`; warnings: dark default theme and no AppImage update information)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
-- **Reddit:** <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> (live in r/linux; flair: Software Release)
+- **Reddit:** r/linux post <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> was removed by AutoModerator because the account has 1 karma; an r/linuxapps retry hit Reddit's rate limit/error, so there is no live Reddit post yet.
 
 ## One-line pitch
 
@@ -66,7 +66,7 @@ feedback on packaging, Fedora/RHEL compatibility, and the blocking helper.
 Use the version that fits each community; do not post the same text to every
 subreddit at once.
 
-**Posted to r/linux:**
+**Attempted in r/linux (removed by AutoModerator: account has 1 karma):**
 <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
 
 ### r/linux
@@ -201,7 +201,8 @@ in `docs/screenshots/` as thumbnails.
 - [x] README screenshots render on GitHub.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [x] Post Show HN: <https://news.ycombinator.com/item?id=50268737>
-- [x] Post one subreddit: <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
+- [x] Attempt r/linux: <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> (removed by AutoModerator; account has 1 karma)
+- [ ] Post one subreddit: r/linuxapps retry hit Reddit's rate limit/error; wait or build account history.
 - [ ] Wait for feedback before cross-posting.
 - [ ] Send three Linux news tips with a screenshot.
 - [x] Add the repository URL to the GitHub repository homepage field.

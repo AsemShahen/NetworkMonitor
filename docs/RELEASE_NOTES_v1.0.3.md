@@ -26,7 +26,10 @@ full RTL support and defaults to English.
   so the portable AppImage runs on the oldest supported Ubuntu LTS. Version
   1.0.2 was built on 24.04 and failed the catalog test with a `GLIBC_2.38`
   reference.
-- AppImageHub PR #10786 is being retested with this release.
+- AppImageHub PR #10786 passed the catalog test with this release:
+  <https://github.com/AppImage/appimage.github.io/pull/10786#issuecomment-6459735235>.
+  The test notes that the default window is dark and that the AppImage has no
+  update information; both are follow-up improvements, not blockers.
 
 ## Packages
 
@@ -104,7 +107,10 @@ v1.0.1 AppImage failed the catalog test because the host lacked
 - تُبنى الحزم على Ubuntu 22.04 (glibc 2.35) بدل Ubuntu 24.04، ليعمل
   AppImage على أقدم إصدار LTS مدعوم. الإصدار 1.0.2 بُني على 24.04 وفشل في
   اختبار الدليل بسبب مرجع `GLIBC_2.38`.
-- يجري إعادة اختبار PR #10786 باستخدام هذا الإصدار.
+- نجح اختبار PR #10786 في دليل AppImageHub باستخدام هذا الإصدار:
+  <https://github.com/AppImage/appimage.github.io/pull/10786#issuecomment-6459735235>.
+  أشار الاختبار إلى أن النافذة داكنة افتراضيًا وأن AppImage بلا معلومات تحديث؛
+  وهما تحسينان لاحقان لا يمنعان القبول.
 
 ### الحزم
 

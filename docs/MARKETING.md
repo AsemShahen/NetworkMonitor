@@ -15,7 +15,7 @@ Do not claim a channel is live before it is.
 - **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; currently serves the official `v1.0.1` assets)
 - **GPG fingerprint:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (prepared; pending AUR account key and push)
-- **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 missed the glibc 2.35 baseline; v1.0.3 is built on Ubuntu 22.04 and awaits retest)
+- **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.3`; warnings: dark default theme and no AppImage update information)
 
 ## One-line pitch
 
@@ -190,7 +190,7 @@ in `docs/screenshots/` as thumbnails.
 - [x] `rpm/x86_64/repodata/repomd.xml.asc` verifies with the published key.
 - [ ] AUR `network-monitor-qt-bin` pushed and visible.
 - [x] AppImageHub PR opened (one file only) and test comment reviewed.
-- [ ] AppImageHub test passes on `v1.0.3` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 is built on Ubuntu 22.04).
+- [x] AppImageHub test passes on `v1.0.3` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 is built on Ubuntu 22.04).
 - [x] README screenshots render on GitHub.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [ ] Post Show HN and one subreddit; wait for feedback before cross-posting.

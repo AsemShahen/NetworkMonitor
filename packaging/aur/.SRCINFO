@@ -1,6 +1,6 @@
 pkgbase = network-monitor-qt-bin
 	pkgdesc = Per-application network monitor with blocking (Qt/PySide6 binary release)
-	pkgver = 1.0.1
+	pkgver = 1.0.3
 	pkgrel = 1
 	url = https://github.com/AsemShahen/NetworkMonitor
 	install = network-monitor-qt-bin.install
@@ -41,6 +41,6 @@ pkgbase = network-monitor-qt-bin
 	options = !strip
 	options = !debug
 	source = https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.1/network-monitor_1.0.1_amd64.deb
-	sha256sums = b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161
+	sha256sums = 603170ecc2f67d9fa942294da04232d6eedb266b28edac43648c712539cd4991
 
 pkgname = network-monitor-qt-bin

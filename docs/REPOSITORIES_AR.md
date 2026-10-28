@@ -98,9 +98,12 @@ gpg --armor --export "$KEY_ID" > network-monitor-public.asc
 
 <https://asemshahen.github.io/NetworkMonitor/>
 
-الإصدارات المستقبلية تُنشر تلقائيًا من `.github/workflows/release.yml` عندما
-يكون `GPG_PRIVATE_KEY` مضبوطًا. إن لم يكن السر موجودًا، ينجح الإصدار ويُتخطى
-نشر المستودع مع تحذير.
+النشر التلقائي للمستودع من `.github/workflows/release.yml` مُقيّد بمتغير
+المستودع `PUBLISH_SIGNED_REPOSITORY=true`. وهو معطّل حاليًا لأن السر
+`GPG_PRIVATE_KEY` ليس بيانات OpenPGP صالحة، والمفتاح الخاص الأصلي غير متاح.
+لذلك يبقى المستودع الحي على أصول `v1.0.1` الرسمية. بعد استعادة المفتاح،
+فعّل المتغير ثم شغّل سير عمل **Publish package repository** يدويًا للإصدار
+المطلوب.
 
 ## التثبيت من المستودع
 

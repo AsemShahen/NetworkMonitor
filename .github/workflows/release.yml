@@ -118,9 +118,13 @@ jobs:
         run: |
           gh release delete-asset "${{ env.TAG_NAME }}" appimagetool-x86_64.AppImage -y || true
 
+      # Repository signing is gated until the existing GPG secret is restored.
+      # The live gh-pages repository remains on v1.0.1; see docs/REPOSITORIES.md.
+      # Set the repository variable PUBLISH_SIGNED_REPOSITORY=true after fixing
+      # the secret to re-enable automatic repository publication.
       - name: Check package repository signing key
         id: repo_key
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') && vars.PUBLISH_SIGNED_REPOSITORY == 'true'
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |

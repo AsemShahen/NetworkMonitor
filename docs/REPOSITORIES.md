@@ -100,9 +100,13 @@ Save. GitHub Pages will publish the repository at:
 
 <https://asemshahen.github.io/NetworkMonitor/>
 
-Future releases publish automatically from `.github/workflows/release.yml` when
-`GPG_PRIVATE_KEY` is configured. If the secret is missing, the release still
-succeeds and the repository step is skipped with a warning.
+Automatic repository publication from `.github/workflows/release.yml` is
+gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. It is
+currently disabled because the existing `GPG_PRIVATE_KEY` secret is not valid
+OpenPGP data and the original private key is unavailable. The live repository
+therefore remains on the official `v1.0.1` assets. After restoring the key,
+set the variable and run the **Publish package repository** workflow manually
+for the desired release tag.
 
 ## Install from the repository
 

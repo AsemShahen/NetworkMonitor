@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to build (for example 1.0.1)"
+        description: "Version to build (for example 1.0.2)"
         required: true
-        default: "1.0.1"
+        default: "1.0.2"
 
 permissions:
   contents: write
@@ -43,6 +43,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm binutils desktop-file-utils file python3-packaging apt-utils gnupg
           sudo apt-get install -y createrepo-c || sudo apt-get install -y createrepo
+          # Qt's xcb platform plugin needs these on the build host so the
+          # AppImage can bundle them for minimal systems.
+          sudo apt-get install -y \
+            libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-util1 \
+            libxcb-xinerama0 libxcb-xkb1
           rpm --version
           rpmbuild --version
           dpkg-deb --version | head -n 1

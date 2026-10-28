@@ -33,6 +33,31 @@ install -Dm644 "$ROOT/packaging/appimage/network-monitor.desktop" "$APPDIR/netwo
 install -Dm644 "$ROOT/data/network-monitor.metainfo.xml" "$APPDIR/usr/share/metainfo/network-monitor.metainfo.xml"
 install -Dm755 "$ROOT/packaging/appimage/AppRun" "$APPDIR/AppRun"
 
+# Qt's xcb platform plugin needs a few X11 helper libraries that are not
+# installed on a minimal Debian/Ubuntu system (AppImageHub's runner is one).
+# Keep them inside the AppImage so the application can open its window even
+# when the host only provides the base X11 stack.
+XCB_LIBS=(
+    libxkbcommon-x11.so.0
+    libxcb-cursor.so.0
+    libxcb-icccm.so.4
+    libxcb-image.so.0
+    libxcb-keysyms.so.1
+    libxcb-render-util.so.0
+    libxcb-shape.so.0
+    libxcb-util.so.1
+    libxcb-xinerama.so.0
+    libxcb-xkb.so.1
+)
+for lib in "${XCB_LIBS[@]}"; do
+    src="$(ldconfig -p 2>/dev/null | awk -v name="$lib" '$1 == name { print $NF; exit }' || true)"
+    if [ -z "$src" ]; then
+        echo "error: required X11 helper library not found: $lib" >&2
+        exit 1
+    fi
+    install -Dm644 "$(readlink -f "$src")" "$APPDIR/usr/lib/$lib"
+done
+
 if [ ! -x "$TOOL" ]; then
     curl -fL --retry 3 \
         "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage" \

@@ -15,6 +15,8 @@
 - **بصمة GPG:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (حزمة `1.0.3` المحلية جاهزة؛ بانتظار مفتاح حساب AUR والدفع)
 - **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.3`؛ تحذيران: الثيم الداكن افتراضيًا ولا معلومات تحديث لـAppImage)
+- **Show HN:** <https://news.ycombinator.com/item?id=50268737> (منشور؛ حُدّث العنوان إلى عنوان Show HN المُعدّ)
+- **Reddit:** <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> (منشور في r/linux؛ التصنيف: Software Release)
 
 ## الوصف المختصر
 
@@ -28,6 +30,8 @@ Network Monitor تطبيق سطح مكتب داكن ثنائي اللغة (إن�
 الافتراضية إنجليزية، ويمكن تبديلها فورًا إلى العربية مع دعم RTL كامل.
 
 ## منشور Show HN
+
+**تم النشر:** <https://news.ycombinator.com/item?id=50268737>
 
 **العنوان:** Show HN: Network Monitor – per-app bandwidth and blocking for Linux
 
@@ -52,6 +56,9 @@ Network Monitor تطبيق سطح مكتب داكن ثنائي اللغة (إن�
 ## Reddit
 
 استخدم الصيغة المناسبة لكل مجتمع، ولا تنشر النص نفسه في كل الأماكن دفعة واحدة.
+
+**تم النشر في r/linux:**
+<https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
 
 ### r/linux
 
@@ -179,6 +186,8 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [x] نجاح اختبار AppImageHub على `v1.0.3` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04).
 - [x] ظهور لقطات README على GitHub.
 - [x] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
-- [ ] نشر Show HN وأحد المجتمعات، ثم الانتظار قبل النشر المتعدد.
+- [x] نشر Show HN: <https://news.ycombinator.com/item?id=50268737>
+- [x] نشر أحد المجتمعات: <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
+- [ ] الانتظار قبل النشر المتعدد.
 - [ ] إرسال ثلاث ملاحظات لمواقع أخبار لينكس مع لقطة شاشة.
 - [x] إضافة رابط المستودع إلى حقل Homepage في GitHub.

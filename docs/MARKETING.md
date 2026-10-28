@@ -16,6 +16,8 @@ Do not claim a channel is live before it is.
 - **GPG fingerprint:** `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - **AUR:** `network-monitor-qt-bin` (local `1.0.3` package ready; pending AUR account key and push)
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.3`; warnings: dark default theme and no AppImage update information)
+- **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
+- **Reddit:** <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> (live in r/linux; flair: Software Release)
 
 ## One-line pitch
 
@@ -35,6 +37,8 @@ service. The interface defaults to English and switches instantly to Arabic
 with full RTL support.
 
 ## Show HN
+
+**Posted:** <https://news.ycombinator.com/item?id=50268737>
 
 **Title:** Show HN: Network Monitor – per-app bandwidth and blocking for Linux
 
@@ -61,6 +65,9 @@ feedback on packaging, Fedora/RHEL compatibility, and the blocking helper.
 
 Use the version that fits each community; do not post the same text to every
 subreddit at once.
+
+**Posted to r/linux:**
+<https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
 
 ### r/linux
 
@@ -193,6 +200,8 @@ in `docs/screenshots/` as thumbnails.
 - [x] AppImageHub test passes on `v1.0.3` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 is built on Ubuntu 22.04).
 - [x] README screenshots render on GitHub.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
-- [ ] Post Show HN and one subreddit; wait for feedback before cross-posting.
+- [x] Post Show HN: <https://news.ycombinator.com/item?id=50268737>
+- [x] Post one subreddit: <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/>
+- [ ] Wait for feedback before cross-posting.
 - [ ] Send three Linux news tips with a screenshot.
 - [x] Add the repository URL to the GitHub repository homepage field.

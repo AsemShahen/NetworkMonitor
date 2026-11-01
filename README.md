@@ -1,6 +1,6 @@
 # Network Monitor
 
-A dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubuntu and Fedora) that shows per-application download/upload speed and lets you block any application with cgroup v2 + nftables.
+A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubuntu and Fedora) that shows per-application download/upload speed and lets you block any application with cgroup v2 + nftables.
 
 ## Features
 - Live per-process download and upload rates (KB/s–MB/s).
@@ -11,7 +11,7 @@ A dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubu
 - Export visible application names to a text file.
 - Real block/unblock via cgroup v2 + nftables with polkit authentication.
 - Persistent blocklist with import/export and apply-on-start.
-- English and Arabic interfaces with instant switching in Settings (English is the default), RTL support, dark theme, tray icon, and desktop integration.
+- English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, and desktop integration.
 
 ## Screenshots
 
@@ -35,8 +35,9 @@ Prebuilt packages are published on **GitHub Releases**:
 - **Debian/Ubuntu:** `network-monitor_<version>_amd64.deb`
 - **Fedora/RHEL:** `network-monitor-<version>-1.x86_64.rpm`
 - **Portable:** `NetworkMonitor-<version>-x86_64.AppImage`
+- **AppImage updates:** `NetworkMonitor-<version>-x86_64.AppImage.zsync`
 
-The `.deb` and `.rpm` packages install the privileged helper and the polkit policy. The AppImage contains the helper, but blocking still requires host `pkexec`, `python3`, `nftables`, and cgroup v2.
+The `.deb` and `.rpm` packages install the privileged helper and the polkit policy. The AppImage contains the helper, but blocking still requires host `pkexec`, `python3`, `nftables`, and cgroup v2. The AppImage embeds `gh-releases-zsync` update information, so AppImageUpdate can use the published `.zsync` file for delta updates.
 
 ## Install from the signed package repository
 

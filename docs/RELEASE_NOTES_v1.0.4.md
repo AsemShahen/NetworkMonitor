@@ -28,9 +28,9 @@ full RTL support and defaults to English.
 - The AppImage now embeds `gh-releases-zsync` update information and publishes
   `NetworkMonitor-1.0.4-x86_64.AppImage.zsync` next to the AppImage. Users can
   update with AppImageUpdate or similar tools.
-- The AppImageHub catalog test passed on v1.0.3. Version 1.0.4 addresses the
-  two follow-up warnings: dark default theme and missing AppImage update
-  information.
+- The AppImageHub catalog test passed on v1.0.4 with no warnings. Version
+  1.0.4 resolves the two v1.0.3 follow-up warnings: dark default theme and
+  missing AppImage update information.
 
 ## Packages
 
@@ -114,8 +114,8 @@ information. A `/retest` comment will re-run the catalog test.
 - أصبح AppImage يضم معلومات تحديث `gh-releases-zsync` وينشر ملف
   `NetworkMonitor-1.0.4-x86_64.AppImage.zsync` بجانب AppImage، ليعمل التحديث
   عبر AppImageUpdate والأدوات المشابهة.
-- نجح اختبار دليل AppImageHub على v1.0.3، ويعالج الإصدار 1.0.4 التحذيرين:
-  المظهر الداكن الافتراضي وغياب معلومات تحديث AppImage.
+- نجح اختبار دليل AppImageHub على v1.0.4 دون تحذيرات، ويعالج الإصدار التحذيرين
+  السابقين: المظهر الداكن الافتراضي وغياب معلومات تحديث AppImage.
 
 ### الحزم
 

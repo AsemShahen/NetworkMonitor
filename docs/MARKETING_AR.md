@@ -10,11 +10,11 @@
 - **البريد:** <asemshahen5@gmail.com>
 - **الترخيص:** GPL-3.0-or-later
 - **المستودع:** <https://github.com/AsemShahen/NetworkMonitor>
-- **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
-- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.0.3` موقّعًا بالمفتاح الجديد)
+- **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4>
+- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.0.4` موقّعًا بالمفتاح الجديد)
 - **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
-- **AUR:** `network-monitor-qt-bin` (حزمة `1.0.3` المحلية جاهزة؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503، لذا إنشاء الحساب وإضافة مفتاح SSH والدفع متوقف حاليًا)
-- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.3`؛ تحذيران: الثيم الداكن افتراضيًا ولا معلومات تحديث لـAppImage)
+- **AUR:** `network-monitor-qt-bin` (حزمة `1.0.4` المحلية جاهزة؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503، لذا إنشاء الحساب وإضافة مفتاح SSH والدفع متوقف حاليًا)
+- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.4`؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (منشور؛ حُدّث العنوان إلى عنوان Show HN المُعدّ)
 - **Reddit:** منشور r/linux <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> أزاله AutoModerator لأن الحساب يملك 1 من الكارما؛ ومحاولة r/linuxapps اصطدمت بحد المعدل/خطأ من Reddit، لذا لا يوجد منشور Reddit حي بعد.
 
@@ -64,7 +64,7 @@ Network Monitor تطبيق سطح مكتب داكن ثنائي اللغة (إن�
 
 **العنوان:** Network Monitor: per-app bandwidth monitor with real nftables blocking
 
-أصدرت Network Monitor 1.0.3، تطبيق سطح مكتب GPL-3.0-or-later لينكس. يعرض
+أصدرت Network Monitor 1.0.4، تطبيق سطح مكتب GPL-3.0-or-later لينكس. يعرض
 سرعات التنزيل والرفع اللحظية لكل تطبيق، والاتصالات، ومسارات الملفات
 التنفيذية، وإجماليات الجلسة، ورسمًا بيانيًا. يحظر التطبيقات عبر cgroup v2 +
 nftables بواسطة polkit، والواجهة إنجليزية/عربية مع RTL.
@@ -78,7 +78,7 @@ nftables بواسطة polkit، والواجهة إنجليزية/عربية مع
 
 **العنوان:** Per-app network monitor with blocking for Ubuntu (deb + signed repo)
 
-أصدرت Network Monitor 1.0.3 لـUbuntu/Debian. يعرض سرعة كل تطبيق ويحظر
+أصدرت Network Monitor 1.0.4 لـUbuntu/Debian. يعرض سرعة كل تطبيق ويحظر
 التطبيقات المحددة عبر cgroup v2 + nftables وpolkit. توجد حزمة `.deb` على
 GitHub Releases ومستودع APT موقّع على GitHub Pages.
 
@@ -87,13 +87,13 @@ GitHub Releases ومستودع APT موقّع على GitHub Pages.
 
 ### r/Fedora
 
-**العنوان:** Network Monitor 1.0.3 RPM: per-app bandwidth and nftables blocking
+**العنوان:** Network Monitor 1.0.4 RPM: per-app bandwidth and nftables blocking
 
 أصدرت حزمة RPM لـFedora/RHEL لتطبيق Network Monitor، وهو مراقب استهلاك
 لكل تطبيق مع حظر فعلي عبر cgroup v2 + nftables وpolkit. الواجهة
 إنجليزية/عربية مع RTL.
 
-RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
+RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4>
 مستودع RPM موقّع: <https://asemshahen.github.io/NetworkMonitor/>
 
 أرحّب بملاحظات حول تغليف Fedora وسلوك SELinux/nftables.
@@ -115,7 +115,7 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 
 **العنوان:** مراقب الشبكة: راقب استهلاك كل تطبيق واحظره على لينكس
 
-أصدرت Network Monitor 1.0.3، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
+أصدرت Network Monitor 1.0.4، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
 لمراقبة سرعة التنزيل والرفع لكل تطبيق على لينكس، مع حظر فعلي عبر cgroup v2
 وnftables ومصادقة polkit. الواجهة إنجليزية وعربية مع دعم كامل للاتجاه من
 اليمين إلى اليسار، والافتراضي إنجليزي.
@@ -136,15 +136,15 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - Fedora Magazine: <https://fedoramagazine.org/contribute/>
 - Ubuntu Discourse: <https://discourse.ubuntu.com/>
 
-**الموضوع المقترح:** `Network Monitor 1.0.3: per-app bandwidth + nftables blocking for Linux`
+**الموضوع المقترح:** `Network Monitor 1.0.4: per-app bandwidth + nftables blocking for Linux`
 
 **النص المقترح:**
 
-> Network Monitor 1.0.3 تطبيق سطح مكتب GPL-3.0-or-later لينكس يعرض سرعة
+> Network Monitor 1.0.4 تطبيق سطح مكتب GPL-3.0-or-later لينكس يعرض سرعة
 > التنزيل والرفع اللحظية لكل تطبيق، ويحظر التطبيقات المحددة عبر cgroup v2 +
 > nftables من خلال مساعد polkit. يتوفر كـ`.deb` و`.rpm` و`.AppImage`، وله
 > مستودع APT/RPM موقّع وواجهة إنجليزية/عربية مع RTL. لقطات الشاشة وملاحظات
-> الإصدار: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
+> الإصدار: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4>
 
 ## SEO
 
@@ -183,7 +183,7 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [x] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
 - [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها (متوقف: لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا، HTTP 503).
 - [x] فتح PR في AppImageHub (ملف واحد فقط) ومتابعة تعليق الاختبار.
-- [x] نجاح اختبار AppImageHub على `v1.0.3` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04).
+- [x] نجاح اختبار AppImageHub على `v1.0.4` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04؛ v1.0.4 يعالج الثيم الداكن الافتراضي ويضيف معلومات تحديث `.zsync`).
 - [x] ظهور لقطات README على GitHub.
 - [x] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
 - [x] نشر Show HN: <https://news.ycombinator.com/item?id=50268737>

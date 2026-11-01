@@ -19,20 +19,20 @@ The repository contains:
 older versions remain available on GitHub Releases. This keeps the Pages site
 and git history small.
 
-## Current repository packages (v1.0.1)
+## Current repository packages (v1.0.4)
 
-The repository currently serves the official `v1.0.1` release assets, so these
+The repository currently serves the official `v1.0.4` release assets, so these
 hashes match `SHA256SUMS` and the AUR source.
 
-The `v1.0.2` and `v1.0.3` releases are available on GitHub Releases. The
-repository now serves `v1.0.3`, signed with the new key. Existing clients trust
+The `v1.0.2` and `v1.0.3` releases remain available on GitHub Releases. The
+repository now serves `v1.0.4`, signed with the new key. Existing clients trust
 the previous fingerprint below and must import the new public key before the
 next `apt update` or `dnf` refresh.
 
-- `.deb`: `90,981,106` bytes, SHA-256
-  `b36e747f21c7eb8db1e9cba49341aad001c68326d2016043c6412f20f16ef161`
-- `.rpm`: `91,608,523` bytes, SHA-256
-  `5d1c165d2330f760c2089496b21402c95978dbad52bcbd158c0534a49b5c1700`
+- `.deb`: `91,973,986` bytes, SHA-256
+  `c911a57dbf6898fb16c38a2510c9d0f39d726698d2b42d4d4ed36262649a8ae4`
+- `.rpm`: `92,672,601` bytes, SHA-256
+  `1f8e0327b892a4ec14edb16f060d66c15d7768a7555bb1500b8496b19d9fb2cc`
 - Previous fingerprint (clients installed before 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - Current fingerprint:
@@ -62,7 +62,7 @@ sudo dnf clean all
 sudo dnf makecache
 ```
 
-The AUR package uses the official `v1.0.3` release `.deb`.
+The AUR package uses the official `v1.0.4` release `.deb`.
 
 ## One-time setup
 
@@ -129,8 +129,8 @@ Save. GitHub Pages will publish the repository at:
 Automatic repository publication from `.github/workflows/release.yml` is
 gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. The new key
 was generated on 2026-10-28; its private key and passphrase are stored locally
-and are not committed. The repository was republished with `v1.0.3` on
-2026-10-29, and both `InRelease` and `repomd.xml.asc` verify against the new
+and are not committed. The repository was republished with `v1.0.4` on
+2026-11-01, and both `InRelease` and `repomd.xml.asc` verify against the new
 fingerprint.
 
 The previous key (`4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`) is

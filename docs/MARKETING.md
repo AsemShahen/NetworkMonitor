@@ -11,11 +11,11 @@ Do not claim a channel is live before it is.
 - **Email:** <asemshahen5@gmail.com>
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
-- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.3` signed with the new key)
+- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4>
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.4` signed with the new key)
 - **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
-- **AUR:** `network-monitor-qt-bin` (local `1.0.3` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
-- **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.3`; warnings: dark default theme and no AppImage update information)
+- **AUR:** `network-monitor-qt-bin` (local `1.0.4` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
+- **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.4`; the v1.0.3 dark-default and missing-update-information warnings are resolved)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
 - **Reddit:** r/linux post <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> was removed by AutoModerator because the account has 1 karma; an r/linuxapps retry hit Reddit's rate limit/error, so there is no live Reddit post yet.
 
@@ -26,8 +26,8 @@ Do not claim a channel is live before it is.
 
 ## Short description
 
-Network Monitor is a dark, bilingual (English/Arabic) desktop monitor for
-Debian/Ubuntu and Fedora. It shows per-application download/upload rates,
+Network Monitor is a light/dark, bilingual (English/Arabic) desktop monitor
+for Debian/Ubuntu and Fedora. It shows per-application download/upload rates,
 active connections, executable paths, session totals, and an interactive
 traffic chart. Blocking is real: a polkit-authenticated helper applies cgroup
 v2 and nftables rules, with a persistent blocklist and import/export.
@@ -73,7 +73,7 @@ subreddit at once.
 
 **Title:** Network Monitor: per-app bandwidth monitor with real nftables blocking
 
-I released Network Monitor 1.0.3, a GPL-3.0-or-later desktop app for Linux. It
+I released Network Monitor 1.0.4, a GPL-3.0-or-later desktop app for Linux. It
 shows live per-application download/upload speeds, connections, executable
 paths, session totals, and a chart. It can block apps with cgroup v2 +
 nftables via polkit, and the UI is English/Arabic with RTL support.
@@ -88,7 +88,7 @@ combinations need more testing.
 
 **Title:** Per-app network monitor with blocking for Ubuntu (deb + signed repo)
 
-I published Network Monitor 1.0.3 for Ubuntu/Debian. It shows per-app
+I published Network Monitor 1.0.4 for Ubuntu/Debian. It shows per-app
 download/upload rates and can block selected applications with cgroup v2 +
 nftables through a polkit helper. There is a `.deb` on GitHub Releases and a
 signed APT repository on GitHub Pages.
@@ -98,13 +98,13 @@ Install instructions and screenshots:
 
 ### r/Fedora
 
-**Title:** Network Monitor 1.0.3 RPM: per-app bandwidth and nftables blocking
+**Title:** Network Monitor 1.0.4 RPM: per-app bandwidth and nftables blocking
 
 I published a Fedora/RHEL RPM for Network Monitor, a per-application bandwidth
 monitor with real blocking through cgroup v2 + nftables and polkit. The UI is
 English/Arabic with RTL support.
 
-RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3>
+RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4>
 Signed RPM repository: <https://asemshahen.github.io/NetworkMonitor/>
 
 Feedback on Fedora packaging and SELinux/nftables behavior is welcome.
@@ -127,7 +127,7 @@ to another project.
 
 **Title:** مراقب الشبكة: راقب استهلاك كل تطبيق واحظره على لينكس
 
-أصدرت Network Monitor 1.0.3، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
+أصدرت Network Monitor 1.0.4، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
 لمراقبة سرعة التنزيل والرفع لكل تطبيق على لينكس، مع حظر فعلي عبر cgroup v2
 وnftables ومصادقة polkit. الواجهة إنجليزية وعربية مع دعم كامل للاتجاه من
 اليمين إلى اليسار، والافتراضي إنجليزي.
@@ -148,16 +148,16 @@ Send a short, factual note with a link and a screenshot to:
 - Fedora Magazine: <https://fedoramagazine.org/contribute/>
 - Ubuntu Discourse (community news): <https://discourse.ubuntu.com/>
 
-Suggested subject: `Network Monitor 1.0.3: per-app bandwidth + nftables blocking for Linux`
+Suggested subject: `Network Monitor 1.0.4: per-app bandwidth + nftables blocking for Linux`
 
 Suggested body:
 
-> Network Monitor 1.0.3 is a GPL-3.0-or-later desktop app for Linux that shows
+> Network Monitor 1.0.4 is a GPL-3.0-or-later desktop app for Linux that shows
 > live per-application download/upload speeds and can block selected apps with
 > cgroup v2 + nftables through a polkit helper. It ships as `.deb`, `.rpm`, and
 > `.AppImage`, has a signed APT/RPM repository, and a bilingual English/Arabic
 > UI with RTL support. Screenshots and release notes:
-> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.3
+> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.4
 
 ## SEO
 
@@ -197,7 +197,7 @@ in `docs/screenshots/` as thumbnails.
 - [x] `rpm/x86_64/repodata/repomd.xml.asc` verifies with the published key.
 - [ ] AUR `network-monitor-qt-bin` pushed and visible (blocked: no AUR account yet and registration temporarily closed, HTTP 503).
 - [x] AppImageHub PR opened (one file only) and test comment reviewed.
-- [x] AppImageHub test passes on `v1.0.3` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 is built on Ubuntu 22.04).
+- [x] AppImageHub test passes on `v1.0.4` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 was built on Ubuntu 22.04; v1.0.4 resolves the dark default and adds `.zsync` update information).
 - [x] README screenshots render on GitHub.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [x] Post Show HN: <https://news.ycombinator.com/item?id=50268737>

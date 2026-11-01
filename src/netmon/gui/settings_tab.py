@@ -28,6 +28,7 @@ class SettingsTab(QWidget):
     keep_totals_changed = Signal(bool)
     apply_on_start_changed = Signal(bool)
     language_changed = Signal(str)
+    theme_changed = Signal(str)
     reset_totals_requested = Signal()
     apply_blocklist_requested = Signal()
 
@@ -75,6 +76,17 @@ class SettingsTab(QWidget):
         self.language.setMaximumWidth(240)
         self.language.currentIndexChanged.connect(self._emit_language)
         lay.addLayout(self._row("settings.language", self.language))
+
+        self.theme = QComboBox()
+        for code in ("system", "light", "dark"):
+            self.theme.addItem("", code)
+        current_theme = str(config.get("theme", "system"))
+        theme_idx = self.theme.findData(current_theme)
+        if theme_idx >= 0:
+            self.theme.setCurrentIndex(theme_idx)
+        self.theme.setMaximumWidth(240)
+        self.theme.currentIndexChanged.connect(self._emit_theme)
+        lay.addLayout(self._row("settings.theme", self.theme))
 
         self.interval = QComboBox()
         for ms in REFRESH_CHOICES:
@@ -195,6 +207,10 @@ class SettingsTab(QWidget):
         code = str(self.language.currentData() or "en")
         self.language_changed.emit(code)
 
+    def _emit_theme(self) -> None:
+        code = str(self.theme.currentData() or "system")
+        self.theme_changed.emit(code)
+
     def _emit_keep_totals(self, value: bool) -> None:
         self.keep_totals_changed.emit(value)
 
@@ -220,6 +236,16 @@ class SettingsTab(QWidget):
 
         for i, ms in enumerate(REFRESH_CHOICES):
             self.interval.setItemText(i, refresh_label(ms))
+
+        for i, key in enumerate(
+            ("settings.theme.system", "settings.theme.light", "settings.theme.dark")
+        ):
+            self.theme.setItemText(i, tr(key))
+        theme_idx = self.theme.findData(str(self.config.get("theme", "system")))
+        if theme_idx >= 0:
+            self.theme.blockSignals(True)
+            self.theme.setCurrentIndex(theme_idx)
+            self.theme.blockSignals(False)
 
         idx = self.language.findData(get_language())
         if idx >= 0:

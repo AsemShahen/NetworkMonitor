@@ -9,6 +9,7 @@ RUNTIME="$BUILD_DIR/runtime"
 APPDIR="$BUILD_DIR/AppDir"
 TOOL="$BUILD_DIR/appimagetool-x86_64.AppImage"
 OUT="$BUILD_DIR/NetworkMonitor-${VERSION}-x86_64.AppImage"
+UPDATE_INFO="${UPDATE_INFO:-gh-releases-zsync|AsemShahen|NetworkMonitor|latest|NetworkMonitor-*-x86_64.AppImage.zsync}"
 
 if [ ! -x "$RUNTIME/bin/python3" ]; then
     "$ROOT/packaging/build-runtime.sh"
@@ -65,6 +66,19 @@ if [ ! -x "$TOOL" ]; then
     chmod +x "$TOOL"
 fi
 
-ARCH=x86_64 "$TOOL" --appimage-extract-and-run --no-appstream "$APPDIR" "$OUT"
+ARCH=x86_64 "$TOOL" --appimage-extract-and-run --no-appstream \
+    -u "$UPDATE_INFO" "$APPDIR" "$OUT"
 chmod +x "$OUT"
+
+# appimagetool can place the .zsync file in the current directory instead of
+# next to the AppImage.  Normalize it so the release workflow always finds it.
+if [ ! -s "$OUT.zsync" ] && [ -s "$(basename "$OUT").zsync" ]; then
+    mv "$(basename "$OUT").zsync" "$OUT.zsync"
+fi
+if [ ! -s "$OUT.zsync" ]; then
+    echo "error: appimagetool did not generate $OUT.zsync (zsyncmake is required)" >&2
+    exit 1
+fi
 echo "Built: $OUT"
+echo "Update information: $UPDATE_INFO"
+echo "Built: $OUT.zsync"

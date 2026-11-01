@@ -41,6 +41,7 @@ class ConfigStore:
 
     DEFAULTS = {
         "language": "en",
+        "theme": "system",
         "refresh_ms": 30000,
         "engine": "auto",
         "unit_auto": True,
@@ -68,6 +69,8 @@ class ConfigStore:
                 pass
         if self.data.get("language") not in ("en", "ar"):
             self.data["language"] = "en"
+        if self.data.get("theme") not in ("system", "light", "dark"):
+            self.data["theme"] = "system"
         valid = set(REFRESH_CHOICES)
         try:
             if int(self.data.get("refresh_ms", 30000)) not in valid:

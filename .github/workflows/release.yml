@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to build (for example 1.0.3)"
+        description: "Version to build (for example 1.0.4)"
         required: true
-        default: "1.0.3"
+        default: "1.0.4"
 
 permissions:
   contents: write
@@ -45,7 +45,7 @@ jobs:
       - name: Install packaging tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm binutils desktop-file-utils file python3-packaging apt-utils gnupg
+          sudo apt-get install -y rpm binutils desktop-file-utils file python3-packaging apt-utils gnupg zsync
           sudo apt-get install -y createrepo-c || sudo apt-get install -y createrepo
           # Qt's xcb platform plugin needs these on the build host so the
           # AppImage can bundle them for minimal systems.
@@ -83,8 +83,20 @@ jobs:
           sha256sum \
             network-monitor_*.deb \
             network-monitor-*.rpm \
-            NetworkMonitor-*.AppImage > SHA256SUMS
+            NetworkMonitor-*.AppImage \
+            NetworkMonitor-*.AppImage.zsync > SHA256SUMS
           cat SHA256SUMS
+
+      - name: Verify AppImage update information
+        run: |
+          APPIMAGE="$(ls build/NetworkMonitor-*.AppImage)"
+          INFO="$("$APPIMAGE" --appimage-updateinfo)"
+          echo "$INFO"
+          case "$INFO" in
+            gh-releases-zsync\|AsemShahen\|NetworkMonitor\|latest\|*) ;;
+            *) echo "Invalid or missing AppImage update information"; exit 1 ;;
+          esac
+          test -s "$APPIMAGE.zsync"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -94,6 +106,7 @@ jobs:
             build/network-monitor_*.deb
             build/network-monitor-*.rpm
             build/NetworkMonitor-*.AppImage
+            build/NetworkMonitor-*.AppImage.zsync
             build/SHA256SUMS
           if-no-files-found: error
 
@@ -109,6 +122,7 @@ jobs:
             build/network-monitor_*.deb
             build/network-monitor-*.rpm
             build/NetworkMonitor-*.AppImage
+            build/NetworkMonitor-*.AppImage.zsync
             build/SHA256SUMS
 
       - name: Remove build tool from release assets
@@ -118,10 +132,8 @@ jobs:
         run: |
           gh release delete-asset "${{ env.TAG_NAME }}" appimagetool-x86_64.AppImage -y || true
 
-      # Repository signing is gated until the existing GPG secret is restored.
-      # The live gh-pages repository remains on v1.0.1; see docs/REPOSITORIES.md.
-      # Set the repository variable PUBLISH_SIGNED_REPOSITORY=true after fixing
-      # the secret to re-enable automatic repository publication.
+      # Repository signing is enabled by PUBLISH_SIGNED_REPOSITORY=true.
+      # The live gh-pages repository is updated from the official release assets.
       - name: Check package repository signing key
         id: repo_key
         if: startsWith(github.ref, 'refs/tags/') && vars.PUBLISH_SIGNED_REPOSITORY == 'true'

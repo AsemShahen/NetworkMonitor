@@ -6,6 +6,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 
 from .controller import Controller
+from .gui import theme
 from .gui.icons import get_app_icon
 from .gui.language import apply_language
 from .gui.main_window import MainWindow
@@ -22,6 +23,7 @@ def run() -> None:
 
     controller = Controller()
     set_language(str(controller.config.get("language", "en")))
+    theme.apply(app, str(controller.config.get("theme", "system")))
     app.setApplicationDisplayName(tr("app.title"))
     apply_language(app)
 

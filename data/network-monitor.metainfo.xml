@@ -36,6 +36,7 @@
     <binary>network-monitor</binary>
   </provides>
   <releases>
+    <release version="1.0.4" date="2026-11-01"/>
     <release version="1.0.3" date="2026-10-28"/>
   </releases>
   <content_rating type="oars-1.1"/>

@@ -4,12 +4,19 @@ import time
 from collections import deque
 
 import pyqtgraph as pg
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 from . import theme
 from ..i18n import tr
 
 pg.setConfigOptions(antialias=True)
+
+
+def _brush(color: str, alpha: int):
+    value = QColor(color)
+    value.setAlpha(alpha)
+    return pg.mkBrush(value)
 
 
 class ChartView(QWidget):
@@ -41,7 +48,7 @@ class ChartView(QWidget):
             symbolSize=4,
             symbolBrush=pg.mkBrush(theme.DOWN),
             fillLevel=0,
-            brush=pg.mkBrush(56, 189, 248, 38),
+            brush=_brush(theme.DOWN, 38),
             name=tr("chart.down"),
         )
         self.curve_up = self.plot.plot(
@@ -51,12 +58,12 @@ class ChartView(QWidget):
             symbolSize=4,
             symbolBrush=pg.mkBrush(theme.UP),
             fillLevel=0,
-            brush=pg.mkBrush(52, 211, 153, 30),
+            brush=_brush(theme.UP, 30),
             name=tr("chart.up"),
         )
 
         self.legend = self.plot.addLegend(offset=(-10, 10))
-        self.legend.setLabelTextColor(theme.TEXT)
+        self.apply_theme()
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)
@@ -65,6 +72,21 @@ class ChartView(QWidget):
         now = time.time()
         self.plot.setYRange(0, 5, padding=0)
         self.plot.setXRange(now - float(window_sec), now, padding=0)
+
+    def apply_theme(self) -> None:
+        self.plot.setBackground(theme.SURFACE)
+        self.plot.setLabel("left", "KB/s", color=theme.MUTED)
+        for axis in (self.plot.getAxis("left"), self.plot.getAxis("bottom")):
+            axis.setPen(pg.mkPen(theme.BORDER))
+            axis.setTextPen(pg.mkPen(theme.MUTED))
+
+        self.curve_down.setPen(pg.mkPen(theme.DOWN, width=2))
+        self.curve_down.setSymbolBrush(pg.mkBrush(theme.DOWN))
+        self.curve_down.setBrush(_brush(theme.DOWN, 38))
+        self.curve_up.setPen(pg.mkPen(theme.UP, width=2))
+        self.curve_up.setSymbolBrush(pg.mkBrush(theme.UP))
+        self.curve_up.setBrush(_brush(theme.UP, 30))
+        self.legend.setLabelTextColor(theme.TEXT)
 
     def add_point(self, down_bps: float, up_bps: float, ts: float | None = None) -> None:
         ts = time.time() if ts is None else ts

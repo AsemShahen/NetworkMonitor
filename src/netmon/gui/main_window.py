@@ -27,12 +27,12 @@ from PySide6.QtWidgets import (
 
 from ..config import REFRESH_CHOICES
 from ..i18n import get_language, is_rtl, refresh_label, set_language, tr
+from . import theme
 from .blocked_tab import BlockedTab
 from .chart_view import ChartView
 from .icons import get_app_icon
 from .language import apply_language
 from .settings_tab import SettingsTab
-from .theme import THEME
 from .traffic_table import TrafficFilterProxy, TrafficModel, TrafficTable
 from .widgets import Badge, StatCard
 from .worker import Worker
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(tr("app.window_title"))
         self.setWindowIcon(get_app_icon())
         self.setMinimumSize(1180, 780)
-        self.setStyleSheet(THEME + self._group_title_style())
+        self.setStyleSheet(theme.stylesheet() + self._group_title_style())
 
         self._build()
         self._wire()
@@ -257,6 +257,7 @@ class MainWindow(QMainWindow):
             lambda v: self.controller.config.set("apply_on_start", bool(v))
         )
         self.settings_tab.language_changed.connect(self._on_language_changed)
+        self.settings_tab.theme_changed.connect(self._on_theme_changed)
         self.settings_tab.reset_totals_requested.connect(self._reset_totals)
         self.settings_tab.apply_blocklist_requested.connect(self.apply_blocklist)
 
@@ -299,6 +300,16 @@ class MainWindow(QMainWindow):
         self.proxy.set_hide_idle(not self.include_idle)
         self.refresh()
 
+    # ----------------------------------------------------------------- theme
+    def _on_theme_changed(self, mode: str) -> None:
+        self.controller.config.set("theme", mode)
+        theme.apply(QApplication.instance(), mode)
+        self.setStyleSheet(theme.stylesheet() + self._group_title_style())
+        self.chart_live.apply_theme()
+        self.chart_full.apply_theme()
+        self.table.viewport().update()
+        self.blocked_tab.table.viewport().update()
+
     # --------------------------------------------------------------- language
     def _on_language_changed(self, code: str) -> None:
         if code == get_language():
@@ -317,7 +328,7 @@ class MainWindow(QMainWindow):
         return "\nQGroupBox::title { subcontrol-position: top left; left: 16px; right: auto; }\n"
 
     def retranslate(self) -> None:
-        self.setStyleSheet(THEME + self._group_title_style())
+        self.setStyleSheet(theme.stylesheet() + self._group_title_style())
         self.setWindowTitle(tr("app.window_title"))
         self.header_title.setText(tr("app.title"))
         self.header_subtitle.setText(tr("app.subtitle"))

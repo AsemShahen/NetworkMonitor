@@ -31,8 +31,11 @@ repository and tests the newest AppImage from its GitHub Releases page.
   catalog's language policy.
 - The app reads `/proc` and can show its main window without an Internet
   connection.
-- The catalog may warn that the default theme is dark. That is a warning, not a
-  failure.
+- Since 1.0.4 the default theme follows the system color scheme. Light is used
+  when the system is not dark; dark is used only when the system reports dark
+  mode or the user selects it in Settings.
+- Since 1.0.4 the AppImage embeds `gh-releases-zsync` update information and
+  ships a matching `.zsync` asset next to the AppImage.
 - The AppImage targets glibc 2.34+; the oldest supported Ubuntu LTS is newer
   than that, so it should pass the glibc check.
 - Prefer the repository URL over a direct `.AppImage` URL. Use the direct URL

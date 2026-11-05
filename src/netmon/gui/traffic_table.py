@@ -64,12 +64,19 @@ class TrafficModel(QAbstractTableModel):
             if key == "name":
                 return str(row.get("name") or "—")
             if key == "pid":
+                pids = row.get("pids") or [row.get("pid")]
+                if len(pids) > 1:
+                    return f"{row.get('pid', '')} (+{len(pids) - 1})"
                 return str(row.get("pid", ""))
             if key == "exe":
                 return "\u202a" + short_path(str(row.get("exe") or ""), 72) + "\u202c"
             if key == "down_bps":
+                if row.get("has_unmeasured") and not row.get("tcp_sockets"):
+                    return "\u202a" + tr("status.speed_unavailable") + "\u202c"
                 return "\u202a" + fmt_rate(row.get("down_bps", 0)) + "\u202c"
             if key == "up_bps":
+                if row.get("has_unmeasured") and not row.get("tcp_sockets"):
+                    return "\u202a" + tr("status.speed_unavailable") + "\u202c"
                 return "\u202a" + fmt_rate(row.get("up_bps", 0)) + "\u202c"
             if key == "down_total":
                 return "\u202a" + fmt_bytes(row.get("down_total", 0)) + "\u202c"
@@ -112,6 +119,17 @@ class TrafficModel(QAbstractTableModel):
                 parts.append(tr("table.tooltip.path", path="\u202a" + exe + "\u202c"))
             if cmd:
                 parts.append(tr("table.tooltip.cmd", cmd=cmd[:400]))
+            app_key = row.get("app_key") or ""
+            if app_key:
+                parts.append(tr("table.tooltip.app", app=app_key))
+            cgroup = row.get("cgroup") or ""
+            if cgroup:
+                parts.append(tr("table.tooltip.cgroup", cgroup=cgroup))
+            pids = row.get("pids") or []
+            if len(pids) > 1:
+                parts.append(tr("table.tooltip.pids", pids=", ".join(str(p) for p in pids)))
+            if row.get("has_unmeasured"):
+                parts.append(tr("table.tooltip.udp"))
             return "\n".join(parts)
 
         return None
@@ -162,7 +180,7 @@ class TrafficFilterProxy(QSortFilterProxyModel):
         if not self._needle:
             return True
         hay = " ".join(
-            str(row.get(k, "")) for k in ("name", "exe", "cmdline", "pid")
+            str(row.get(k, "")) for k in ("name", "exe", "cmdline", "pid", "app_key", "cgroup")
         ).lower()
         return self._needle in hay
 

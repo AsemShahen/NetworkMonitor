@@ -5,12 +5,12 @@
   <project_license>GPL-3.0-or-later</project_license>
   <name>Network Monitor</name>
   <name xml:lang="ar">مراقب الشبكة</name>
-  <summary>Per-application network monitor with blocking</summary>
-  <summary xml:lang="ar">مراقب حركة الإنترنت لكل تطبيق مع إمكانية الحظر</summary>
+  <summary>Netlink-based per-application network monitor with monthly usage and blocking</summary>
+  <summary xml:lang="ar">مراقب حركة الإنترنت لكل تطبيق عبر Netlink مع استهلاك شهري وإمكانية الحظر</summary>
   <description>
-    <p>Network Monitor shows live download and upload speeds for every application, active connections, executable paths, and session totals. It can block selected applications with cgroup v2 and nftables through a polkit-authenticated helper.</p>
+    <p>Network Monitor shows accurate live download and upload speeds for every application using native Netlink counters, active connections, executable paths, session totals, and monthly/daily usage. It can block selected applications with cgroup v2 and nftables through a polkit-authenticated helper.</p>
     <p>The interface is available in English and Arabic, with full RTL support.</p>
-    <p xml:lang="ar">يعرض مراقب الشبكة سرعات التنزيل والرفع اللحظية لكل تطبيق، والاتصالات النشطة، ومسارات الملفات التنفيذية، وإجماليات الجلسة. ويمكنه حظر التطبيقات المحددة عبر cgroup v2 وnftables من خلال مساعد محمي بمصادقة polkit.</p>
+    <p xml:lang="ar">يعرض مراقب الشبكة سرعات التنزيل والرفع اللحظية الدقيقة لكل تطبيق عبر عدّادات Netlink الأصلية، والاتصالات النشطة، ومسارات الملفات التنفيذية، وإجماليات الجلسة، والاستهلاك الشهري واليومي. ويمكنه حظر التطبيقات المحددة عبر cgroup v2 وnftables من خلال مساعد محمي بمصادقة polkit.</p>
     <p xml:lang="ar">الواجهة متاحة بالإنجليزية والعربية مع دعم كامل للكتابة من اليمين إلى اليسار.</p>
   </description>
   <launchable type="desktop-id">network-monitor.desktop</launchable>
@@ -36,6 +36,7 @@
     <binary>network-monitor</binary>
   </provides>
   <releases>
+    <release version="1.0.5" date="2026-11-05"/>
     <release version="1.0.4" date="2026-11-01"/>
     <release version="1.0.3" date="2026-10-28"/>
   </releases>

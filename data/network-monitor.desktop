@@ -2,8 +2,8 @@
 Type=Application
 Name=Network Monitor
 Name[ar]=مراقب الشبكة
-Comment=Per-application network monitor with blocking
-Comment[ar]=مراقب حركة الإنترنت لكل تطبيق مع إمكانية الحظر
+Comment=Netlink-based per-application network monitor with usage and blocking
+Comment[ar]=مراقب حركة الإنترنت لكل تطبيق عبر Netlink مع استهلاك وإمكانية الحظر
 GenericName=Network Monitor
 GenericName[en_US]=Network Monitor
 Exec=network-monitor

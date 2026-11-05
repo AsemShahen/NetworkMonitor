@@ -1,15 +1,22 @@
 # Install Network Monitor
 
 Network Monitor runs on Linux with cgroup v2 and glibc 2.34 or newer. The
-release packages bundle Python, Qt/PySide6, pyqtgraph, and numpy. The privileged
-helper uses the system `python3`.
+release packages bundle Python, Qt/PySide6, pyqtgraph, numpy, and pyroute2. The
+privileged helper uses the system `python3`.
 
 ## Requirements
 
 - A modern Debian/Ubuntu or Fedora/RHEL system with cgroup v2.
-- `iproute2` (`ss`) for accurate per-process counters.
+- `pyroute2` for native Netlink counters. It is bundled in the release
+  packages; source installs need `python3 -m pip install pyroute2`.
+- `iproute2` (`ss`) is an optional fallback and is recommended.
 - `nftables` and `polkit` (`pkexec`) for blocking.
 - A Wayland or X11 desktop.
+
+Without Netlink or `ss`, Network Monitor still discovers connections from
+`/proc/net` but cannot show byte counters. UDP/QUIC sockets are always shown as
+“speed unavailable” because the kernel does not expose reliable byte counters
+for them.
 
 Install the host tools:
 
@@ -53,10 +60,12 @@ Download from <https://github.com/AsemShahen/NetworkMonitor/releases>:
 - `network-monitor-<version>-1.x86_64.rpm`
 - `NetworkMonitor-<version>-x86_64.AppImage`
 - `SHA256SUMS`
+- `SHA256SUMS.asc`
 
 Verify the download:
 
 ```bash
+gpg --verify SHA256SUMS.asc SHA256SUMS
 sha256sum -c SHA256SUMS
 ```
 
@@ -105,7 +114,42 @@ network-monitor
 
 The script installs to `/opt/network-monitor`, adds a launcher in
 `/usr/local/bin/network-monitor`, installs the helper and polkit policy, and
-adds desktop icons.
+adds desktop icons. If `build/runtime` exists, `install.sh` copies it into
+`/opt/network-monitor/runtime`; otherwise the app uses the system Python.
+
+To get the same bundled runtime as the packages (including `pyroute2`), run:
+
+```bash
+./packaging/build-runtime.sh
+./install.sh
+```
+
+When no bundled runtime is available, install the interface dependencies in
+the system Python environment:
+
+```bash
+python3 -m pip install --user PySide6 pyqtgraph numpy pyroute2
+```
+
+Packaged releases do not need this step because the runtime is bundled.
+
+## Verify the installation
+
+Open **Settings → Diagnostics**. A working setup shows:
+
+```text
+Engine: netlink — ready
+Netlink: available
+Sockets: … (TCP …, UDP …)
+```
+
+If Netlink is unavailable, install `pyroute2` or keep `iproute2` installed so
+the `ss` fallback can provide counters. The final `/proc/net` mode lists
+connections but reports that byte counters are unavailable.
+
+Monthly and daily usage is stored in
+`~/.local/share/network-monitor/usage.db` and is counted only while Network
+Monitor is running.
 
 ## Verify the signing key
 

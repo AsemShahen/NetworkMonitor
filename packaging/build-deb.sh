@@ -98,12 +98,12 @@ Maintainer: AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemsh
 Homepage: https://github.com/AsemShahen/NetworkMonitor
 Depends: pkexec | policykit-1, nftables, iproute2, python3, libc6 (>= 2.34), libstdc++6, libgl1, libegl1, libopengl0, libxkbcommon0, libxkbcommon-x11-0, libdbus-1-3, libfontconfig1, libfreetype6, libglib2.0-0, libx11-6, libx11-xcb1, libxext6, libxrender1, libxi6, libsm6, libice6, libxcb1, libxcb-util1, libxcb-cursor0, libxcb-icccm4, libxcb-image0, libxcb-keysyms1, libxcb-randr0, libxcb-render0, libxcb-render-util0, libxcb-shape0, libxcb-shm0, libxcb-sync1, libxcb-glx0, libxcb-dri2-0, libxcb-dri3-0, libxcb-present0, libxcb-xfixes0, libxcb-xinerama0, libxcb-xkb1
 Recommends: fonts-noto-core
-Description: Per-application network monitor with blocking
- Network Monitor shows live download and upload speeds for every
- application, active connections, executable paths, and session totals.
- It can block selected applications with cgroup v2 and nftables through
- a polkit-authenticated helper. The interface is available in English and
- Arabic.
+Description: Netlink-based per-application network monitor with blocking
+ Network Monitor shows accurate live download and upload speeds for every
+ application using native Netlink counters, active connections, executable
+ paths, session totals, and monthly/daily usage. It can block selected
+ applications with cgroup v2 and nftables through a polkit-authenticated
+ helper. The interface is available in English and Arabic.
 CONTROL
 
 dpkg-deb --build --root-owner-group "$PKG" "$OUT"

@@ -26,6 +26,7 @@ REFRESH_CHOICES = [5000, 10000, 30000, 60000, 300000]
 CONFIG_FILE = CONFIG_DIR / "config.json"
 BLOCKLIST_FILE = DATA_DIR / "blocklist.json"
 TOTALS_FILE = DATA_DIR / "totals.json"
+USAGE_DB = DATA_DIR / "usage.db"
 
 
 def _atomic_write(path: Path, data) -> None:
@@ -49,6 +50,12 @@ class ConfigStore:
         "show_idle": False,
         "apply_on_start": False,
         "autostart": False,
+        "minimize_to_tray": False,
+        "keep_usage": True,
+        "group_cgroups": True,
+        "recent_seconds": 300,
+        "usage_retention_months": 24,
+        "usage_retention_days": 90,
         "first_run": True,
         "confirm_block": True,
     }
@@ -206,13 +213,22 @@ def install_autostart(enabled: bool) -> str:
         return ""
     autostart.mkdir(parents=True, exist_ok=True)
     import shutil as _sh
-    exe = _sh.which("network-monitor") or str(Path.home() / ".local" / "bin" / "network-monitor")
+
+    candidates = (
+        os.environ.get("APPIMAGE"),
+        _sh.which("network-monitor"),
+        str(Path(__file__).resolve().parents[2] / "network-monitor"),
+    )
+    exe = next((value for value in candidates if value and Path(value).is_file()), "")
+    if not exe:
+        exe = str(Path.home() / ".local" / "bin" / "network-monitor")
+    exec_path = '"' + exe.replace("\\", "\\\\").replace('"', '\\"') + '"'
     desktop = (
         "[Desktop Entry]\n"
         "Type=Application\n"
         'Name=Network Monitor\n'
         'Name[ar]=مراقب الشبكة\n'
-        f"Exec={exe}\n"
+        f"Exec={exec_path} --hidden\n"
         "X-GNOME-Autostart-enabled=true\n"
     )
     target.write_text(desktop, encoding="utf-8")

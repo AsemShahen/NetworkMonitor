@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import os
 import platform
 import shutil
@@ -20,12 +21,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QSplitter,
     QStatusBar,
+    QSystemTrayIcon,
     QTabWidget,
     QVBoxLayout,
     QWidget,
 )
 
-from ..config import REFRESH_CHOICES
+from ..config import REFRESH_CHOICES, install_autostart
 from ..i18n import get_language, is_rtl, refresh_label, set_language, tr
 from . import theme
 from .blocked_tab import BlockedTab
@@ -34,6 +36,7 @@ from .icons import get_app_icon
 from .language import apply_language
 from .settings_tab import SettingsTab
 from .traffic_table import TrafficFilterProxy, TrafficModel, TrafficTable
+from .usage_tab import UsageTab
 from .widgets import Badge, StatCard
 from .worker import Worker
 
@@ -44,6 +47,8 @@ class MainWindow(QMainWindow):
         self.controller = controller
         self.include_idle = bool(controller.config.get("show_idle", False))
         self._busy = False
+        self._really_quit = False
+        self._tray_hint_shown = False
         self._last_summary: dict = {}
         self._pending_success = ""
         self._pending_silent = False
@@ -90,6 +95,8 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.addTab(self._build_live_tab(), tr("tab.live"))
         self.tabs.addTab(self._build_chart_tab(), tr("tab.chart"))
+        self.usage_tab = UsageTab(self.controller)
+        self.tabs.addTab(self.usage_tab, tr("tab.usage"))
         self.blocked_tab = BlockedTab()
         self.tabs.addTab(self.blocked_tab, tr("tab.blocked"))
         self.settings_tab = SettingsTab(self.controller.config)
@@ -99,8 +106,6 @@ class MainWindow(QMainWindow):
         self.status = QStatusBar()
         self.setStatusBar(self.status)
         self.status.showMessage(tr("app.ready"))
-
-        from PySide6.QtWidgets import QSystemTrayIcon
 
         from .tray import Tray
 
@@ -162,12 +167,16 @@ class MainWindow(QMainWindow):
         self.card_count = StatCard(
             tr("card.count.title"), "0", tr("card.count.hint"), "count"
         )
+        self.card_month = StatCard(
+            tr("card.month.title"), "0 B", tr("card.month.hint", down="0 B", up="0 B"), "month"
+        )
         self._card_titles = (
             (self.card_down, "card.down.title"),
             (self.card_up, "card.up.title"),
             (self.card_total_down, "card.total_down.title"),
             (self.card_total_up, "card.total_up.title"),
             (self.card_count, "card.count.title"),
+            (self.card_month, "card.month.title"),
         )
         for card in (
             self.card_down,
@@ -175,6 +184,7 @@ class MainWindow(QMainWindow):
             self.card_total_down,
             self.card_total_up,
             self.card_count,
+            self.card_month,
         ):
             row.addWidget(card, 1)
         return row
@@ -260,6 +270,13 @@ class MainWindow(QMainWindow):
         self.settings_tab.theme_changed.connect(self._on_theme_changed)
         self.settings_tab.reset_totals_requested.connect(self._reset_totals)
         self.settings_tab.apply_blocklist_requested.connect(self.apply_blocklist)
+        self.settings_tab.keep_usage_changed.connect(self._on_keep_usage_changed)
+        self.settings_tab.group_cgroups_changed.connect(self._on_group_cgroups_changed)
+        self.settings_tab.autostart_changed.connect(self._on_autostart_changed)
+        self.settings_tab.minimize_to_tray_changed.connect(self._on_minimize_to_tray_changed)
+
+        self.usage_tab.export_requested.connect(self.export_usage)
+        self.usage_tab.reset_requested.connect(self._reset_usage)
 
         self.blocked_tab.unblock_requested.connect(self._unblock_slug)
         self.blocked_tab.export_requested.connect(self._export_blocklist)
@@ -307,6 +324,7 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(theme.stylesheet() + self._group_title_style())
         self.chart_live.apply_theme()
         self.chart_full.apply_theme()
+        self.usage_tab.apply_theme()
         self.table.viewport().update()
         self.blocked_tab.table.viewport().update()
 
@@ -344,7 +362,7 @@ class MainWindow(QMainWindow):
         for i, ms in enumerate(REFRESH_CHOICES):
             self.interval_combo.setItemText(i, refresh_label(ms))
 
-        for i, key in enumerate(("tab.live", "tab.chart", "tab.blocked", "tab.settings")):
+        for i, key in enumerate(("tab.live", "tab.chart", "tab.usage", "tab.blocked", "tab.settings")):
             self.tabs.setTabText(i, tr(key))
 
         for card, key in self._card_titles:
@@ -354,6 +372,7 @@ class MainWindow(QMainWindow):
         self.model.retranslate()
         self.chart_live.retranslate()
         self.chart_full.retranslate()
+        self.usage_tab.retranslate()
         self.blocked_tab.retranslate()
         self.settings_tab.retranslate()
         self.tray.retranslate()
@@ -369,6 +388,7 @@ class MainWindow(QMainWindow):
             self.card_total_down.set_hint(tr("card.total.hint"))
             self.card_total_up.set_hint(tr("card.total.hint"))
             self.card_count.set_hint(tr("card.count.hint"))
+            self.card_month.set_hint(tr("card.month.hint", down="0 B", up="0 B"))
 
     # ---------------------------------------------------------------- refresh
     def refresh(self) -> None:
@@ -391,8 +411,25 @@ class MainWindow(QMainWindow):
         self.card_total_up.set_value(fmt_bytes(summary["up_total"]), tr("card.total.hint"))
         self.card_count.set_value(
             str(summary["active"]),
-            tr("card.count.value_hint", active=summary["active"], count=summary["count"]),
+            tr(
+                "card.count.value_hint",
+                active=summary["active"],
+                count=summary["count"],
+                processes=summary.get("processes", summary["count"]),
+            ),
         )
+        month_down = int(summary.get("month_down", 0))
+        month_up = int(summary.get("month_up", 0))
+        self.card_month.set_value(
+            fmt_bytes(month_down + month_up),
+            tr(
+                "card.month.hint",
+                down=fmt_bytes(month_down),
+                up=fmt_bytes(month_up),
+            ),
+        )
+        if self.tabs.currentWidget() is self.usage_tab:
+            self.usage_tab.refresh()
 
         ts = None
         self.chart_live.add_point(summary["down_bps"], summary["up_bps"], ts)
@@ -405,12 +442,14 @@ class MainWindow(QMainWindow):
         state = tr("status.engine.ready" if ok else "status.engine.limited")
         self.engine_badge.set_state(tr("status.engine", state=state), ok)
         self.settings_tab.set_engine_text(summary.get("source", "—"), ok, summary.get("error"))
+        self.settings_tab.set_diagnostics(summary.get("diagnostics") or {})
 
         err = summary.get("error")
         msg = tr(
             "status.summary",
             active=summary.get("active", 0),
             count=summary.get("count", 0),
+            processes=summary.get("processes", summary.get("count", 0)),
             seconds=int(self.controller.config.get("refresh_ms", 30000)) // 1000,
         )
         if err:
@@ -422,6 +461,7 @@ class MainWindow(QMainWindow):
         self.engine_badge.set_state(tr("status.engine_error"), False)
         self.status.showMessage(tr("status.error", message=message))
         self.settings_tab.set_engine_text("—", False, message)
+        self.settings_tab.set_diagnostics({"error": message})
 
     # ----------------------------------------------------------------- actions
     def _selected_row(self) -> dict | None:
@@ -631,19 +671,29 @@ class MainWindow(QMainWindow):
     def _on_tab_changed(self, index: int) -> None:
         if self.tabs.widget(index) is self.blocked_tab:
             self._update_blocked_tab()
+        elif self.tabs.widget(index) is self.usage_tab:
+            self.usage_tab.refresh_months()
+            self.usage_tab.refresh()
 
     # -------------------------------------------------------------------- misc
     def _env_text(self) -> str:
-        ss = shutil.which("ss")
+        from ..collectors.traffic import find_ss
+
+        ss = find_ss()
         nft = shutil.which("nft")
         cgroup2 = os.path.exists("/sys/fs/cgroup/cgroup.controllers")
+        try:
+            netlink = importlib.util.find_spec("pyroute2") is not None
+        except (ImportError, ValueError):
+            netlink = False
         available = tr("env.available")
         unavailable = tr("env.unavailable")
         return tr(
             "env.text",
             python=platform.python_version(),
             qt=QtCore.qVersion(),
-            ss=available if ss else unavailable,
+            netlink=available if netlink else unavailable,
+            ss=ss or unavailable,
             nft=available if nft else unavailable,
             cgroup=available if cgroup2 else unavailable,
         )
@@ -658,5 +708,82 @@ class MainWindow(QMainWindow):
         self.controller.shutdown()
 
     def closeEvent(self, event) -> None:  # noqa: N802
+        if (
+            not self._really_quit
+            and bool(self.controller.config.get("minimize_to_tray", False))
+            and self.tray.isVisible()
+        ):
+            event.ignore()
+            self.hide()
+            if not self._tray_hint_shown:
+                self.tray.showMessage(
+                    tr("tray.hidden_title"),
+                    tr("tray.hidden"),
+                    QSystemTrayIcon.Information,
+                    3000,
+                )
+                self._tray_hint_shown = True
+            return
         self.shutdown()
         super().closeEvent(event)
+
+    def quit_from_tray(self) -> None:
+        self._really_quit = True
+        self.close()
+
+    def show_usage_tab(self) -> None:
+        self.showNormal()
+        self.activateWindow()
+        self.tabs.setCurrentWidget(self.usage_tab)
+
+    def _on_keep_usage_changed(self, value: bool) -> None:
+        self.controller.config.set("keep_usage", bool(value))
+        self.usage_tab.refresh()
+
+    def _on_group_cgroups_changed(self, value: bool) -> None:
+        self.controller.config.set("group_cgroups", bool(value))
+        self.refresh()
+
+    def _on_autostart_changed(self, value: bool) -> None:
+        self.controller.config.set("autostart", bool(value))
+        try:
+            path = install_autostart(bool(value))
+        except OSError as exc:
+            QMessageBox.warning(self, tr("autostart.disabled"), str(exc))
+            return
+        if value:
+            self.status.showMessage(tr("autostart.enabled", path=path))
+        else:
+            self.status.showMessage(tr("autostart.disabled"))
+
+    def _on_minimize_to_tray_changed(self, value: bool) -> None:
+        self.controller.config.set("minimize_to_tray", bool(value))
+
+    def _reset_usage(self, month: str) -> None:
+        reply = QMessageBox.question(
+            self,
+            tr("usage.reset_title"),
+            tr("usage.reset_question", month=month),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        self.controller.reset_usage_month(month)
+        self.usage_tab.refresh_months()
+        self.usage_tab.refresh()
+        self.status.showMessage(tr("usage.reset_done", month=month))
+        self.refresh()
+
+    def export_usage(self, month: str) -> None:
+        default = str(Path.home() / f"network-usage-{month}.csv")
+        path, _ = QFileDialog.getSaveFileName(
+            self, tr("usage.export_title"), default, "CSV (*.csv)"
+        )
+        if not path:
+            return
+        try:
+            count = self.controller.export_usage(Path(path), month)
+            self.status.showMessage(tr("usage.export_done", path=path, count=count))
+        except OSError as exc:
+            QMessageBox.warning(self, tr("export.failed_title"), str(exc))

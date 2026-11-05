@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import (
+    QApplication,
     QCheckBox,
     QComboBox,
     QFrame,
@@ -27,6 +28,10 @@ class SettingsTab(QWidget):
     show_idle_changed = Signal(bool)
     keep_totals_changed = Signal(bool)
     apply_on_start_changed = Signal(bool)
+    keep_usage_changed = Signal(bool)
+    group_cgroups_changed = Signal(bool)
+    autostart_changed = Signal(bool)
+    minimize_to_tray_changed = Signal(bool)
     language_changed = Signal(str)
     theme_changed = Signal(str)
     reset_totals_requested = Signal()
@@ -42,6 +47,8 @@ class SettingsTab(QWidget):
         self._engine_ok = False
         self._engine_error: str | None = None
         self._env_value = "—"
+        self._diagnostics: dict = {}
+        self._diag_text = ""
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
@@ -113,7 +120,28 @@ class SettingsTab(QWidget):
         self.apply_on_start.toggled.connect(self._emit_apply_on_start)
         lay.addWidget(self.apply_on_start)
 
+        self.keep_usage = QCheckBox()
+        self.keep_usage.setChecked(bool(config.get("keep_usage", True)))
+        self.keep_usage.toggled.connect(self.keep_usage_changed.emit)
+        lay.addWidget(self.keep_usage)
+
+        self.group_cgroups = QCheckBox()
+        self.group_cgroups.setChecked(bool(config.get("group_cgroups", True)))
+        self.group_cgroups.toggled.connect(self.group_cgroups_changed.emit)
+        lay.addWidget(self.group_cgroups)
+
+        self.autostart = QCheckBox()
+        self.autostart.setChecked(bool(config.get("autostart", False)))
+        self.autostart.toggled.connect(self.autostart_changed.emit)
+        lay.addWidget(self.autostart)
+
+        self.minimize_to_tray = QCheckBox()
+        self.minimize_to_tray.setChecked(bool(config.get("minimize_to_tray", False)))
+        self.minimize_to_tray.toggled.connect(self.minimize_to_tray_changed.emit)
+        lay.addWidget(self.minimize_to_tray)
+
         self._add_hint(lay, "settings.hint.apply")
+        self._add_hint(lay, "settings.hint.usage")
         root.addWidget(self.group_monitor)
 
         # ----------------------------- الإجماليات والصيانة -----------------------------
@@ -139,6 +167,20 @@ class SettingsTab(QWidget):
             path="\u202a" + str(BLOCKLIST_FILE) + "\u202c",
         )
         root.addWidget(self.group_maintenance)
+
+        # -------------------------------- التشخيص --------------------------------
+        self.group_diagnostics = QGroupBox()
+        dlay = QVBoxLayout(self.group_diagnostics)
+        dlay.setSpacing(10)
+        self.diag_label = QLabel()
+        self.diag_label.setObjectName("cardHint")
+        self.diag_label.setWordWrap(True)
+        self.diag_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        dlay.addWidget(self.diag_label)
+        self.copy_diag_btn = QPushButton()
+        self.copy_diag_btn.clicked.connect(self._copy_diagnostics)
+        dlay.addWidget(self.copy_diag_btn, 0, Qt.AlignLeft)
+        root.addWidget(self.group_diagnostics)
 
         # -------------------------------- حول البرنامج --------------------------------
         self.group_about = QGroupBox()
@@ -221,6 +263,7 @@ class SettingsTab(QWidget):
     def retranslate(self) -> None:
         self.group_monitor.setTitle(tr("settings.group.monitor"))
         self.group_maintenance.setTitle(tr("settings.group.maintenance"))
+        self.group_diagnostics.setTitle(tr("settings.group.diagnostics"))
         self.group_about.setTitle(tr("settings.group.about"))
 
         for label, key in self._labels:
@@ -228,8 +271,13 @@ class SettingsTab(QWidget):
         self.show_idle.setText(tr("settings.show_idle"))
         self.keep_totals.setText(tr("settings.keep_totals"))
         self.apply_on_start.setText(tr("settings.apply_on_start"))
+        self.keep_usage.setText(tr("settings.keep_usage"))
+        self.group_cgroups.setText(tr("settings.group_cgroups"))
+        self.autostart.setText(tr("settings.autostart"))
+        self.minimize_to_tray.setText(tr("settings.minimize_to_tray"))
         self.reset_btn.setText(tr("settings.reset"))
         self.apply_btn.setText(tr("settings.reapply"))
+        self.copy_diag_btn.setText(tr("diag.copy"))
 
         for label, key, kwargs in self._hints:
             label.setText(tr(key, **kwargs))
@@ -260,6 +308,7 @@ class SettingsTab(QWidget):
             tr("settings.email", email="\u202aasemshahen5@gmail.com\u202c")
         )
         self._render_engine()
+        self._render_diagnostics()
         self.env_label.setText(self._env_value)
         self._apply_direction()
 
@@ -277,7 +326,14 @@ class SettingsTab(QWidget):
         self.author_label.setAlignment(align)
         self.email_label.setAlignment(align)
 
-        for group in (self.group_monitor, self.group_maintenance, self.group_about):
+        self.diag_label.setAlignment(align)
+        self.copy_diag_btn.setLayoutDirection(Qt.RightToLeft if rtl else Qt.LeftToRight)
+        for group in (
+            self.group_monitor,
+            self.group_maintenance,
+            self.group_diagnostics,
+            self.group_about,
+        ):
             group.setAlignment(Qt.AlignRight if rtl else Qt.AlignLeft)
 
     def _render_engine(self) -> None:
@@ -286,6 +342,68 @@ class SettingsTab(QWidget):
         if self._engine_error:
             text += f"\n{self._engine_error}"
         self.engine_label.setText(text)
+
+    def _copy_diagnostics(self) -> None:
+        QApplication.clipboard().setText(self._diag_text or self.diag_label.text())
+
+    def _render_diagnostics(self) -> None:
+        diag = self._diagnostics or {}
+        if not diag:
+            self._diag_text = tr("diag.empty")
+            self.diag_label.setText(self._diag_text)
+            return
+        available = tr("env.available")
+        unavailable = tr("env.unavailable")
+        engine = str(diag.get("engine", "—"))
+        state = tr("settings.engine.ready" if diag.get("engine_ok") else "settings.engine.limited")
+        lines = [tr("diag.engine", engine=engine, state=state)]
+        netlink_error = str(diag.get("netlink_error") or "")
+        if netlink_error:
+            netlink_error = f" — {netlink_error}"
+        lines.append(
+            tr(
+                "diag.netlink",
+                state=available if diag.get("netlink_ok") else unavailable,
+                error=netlink_error,
+            )
+        )
+        ss_path = str(diag.get("ss_path") or "")
+        if ss_path:
+            ss_error = str(diag.get("ss_error") or "")
+            if ss_error:
+                ss_error = f" — {ss_error}"
+            lines.append(
+                tr(
+                    "diag.ss",
+                    path=ss_path,
+                    state=available if diag.get("ss_ok") else unavailable,
+                    error=ss_error,
+                )
+            )
+        else:
+            lines.append(tr("diag.ss_missing"))
+        lines.append(
+            tr(
+                "diag.sockets",
+                total=int(diag.get("sockets", 0) or 0),
+                tcp=int(diag.get("tcp", 0) or 0),
+                udp=int(diag.get("udp", 0) or 0),
+            )
+        )
+        lines.append(
+            tr(
+                "diag.attributed",
+                attributed=int(diag.get("attributed", 0) or 0),
+                unattributed=int(diag.get("unattributed", 0) or 0),
+            )
+        )
+        lines.append(
+            tr("diag.udp", count=int(diag.get("udp_unmeasured", 0) or 0))
+        )
+        if diag.get("error"):
+            lines.append(tr("diag.error", error=str(diag.get("error"))))
+        self._diag_text = "\n".join(line for line in lines if line)
+        self.diag_label.setText(self._diag_text)
 
     # -------------------------------------------------------------------- setters
     def set_engine_text(self, source: str, ok: bool, error: str | None = None) -> None:
@@ -297,3 +415,7 @@ class SettingsTab(QWidget):
     def set_env_text(self, text: str) -> None:
         self._env_value = text
         self.env_label.setText(text)
+
+    def set_diagnostics(self, diag: dict) -> None:
+        self._diagnostics = dict(diag or {})
+        self._render_diagnostics()

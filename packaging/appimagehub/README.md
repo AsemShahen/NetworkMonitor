@@ -36,6 +36,9 @@ repository and tests the newest AppImage from its GitHub Releases page.
   mode or the user selects it in Settings.
 - Since 1.0.4 the AppImage embeds `gh-releases-zsync` update information and
   ships a matching `.zsync` asset next to the AppImage.
+- Since 1.0.5 the AppImage bundles `pyroute2` and uses native Netlink counters,
+  with `ss` and `/proc/net` fallbacks. It also adds monthly/daily usage and a
+  diagnostics panel.
 - The AppImage targets glibc 2.34+; the oldest supported Ubuntu LTS is newer
   than that, so it should pass the glibc check.
 - Prefer the repository URL over a direct `.AppImage` URL. Use the direct URL

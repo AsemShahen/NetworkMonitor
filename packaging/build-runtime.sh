@@ -11,6 +11,7 @@ PYTHON_RELEASE="${PYTHON_RELEASE:-20261021}"
 PYSIDE_VERSION="${PYSIDE_VERSION:-6.12.0}"
 PYQTGRAPH_VERSION="${PYQTGRAPH_VERSION:-0.14.0}"
 NUMPY_VERSION="${NUMPY_VERSION:-2.5.4}"
+PYROUTE2_VERSION="${PYROUTE2_VERSION:-0.9.7}"
 
 PYTHON_URL="https://github.com/astral-sh/python-build-standalone/releases/download/${PYTHON_RELEASE}/cpython-${PYTHON_VERSION}%2B${PYTHON_RELEASE}-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
 ARCHIVE="$BUILD_DIR/python-runtime.tar.gz"
@@ -29,18 +30,19 @@ if [ ! -x "$RUNTIME/bin/python3" ]; then
     rm -f "$ARCHIVE"
 fi
 
-if ! "$RUNTIME/bin/python3" -c "import PySide6, pyqtgraph, numpy" >/dev/null 2>&1; then
+if ! "$RUNTIME/bin/python3" -c "import PySide6, pyqtgraph, numpy, pyroute2" >/dev/null 2>&1; then
     if ! "$RUNTIME/bin/python3" -m pip --version >/dev/null 2>&1; then
         "$RUNTIME/bin/python3" -m ensurepip --upgrade >/dev/null
     fi
-    echo "Installing PySide6 ${PYSIDE_VERSION}, pyqtgraph ${PYQTGRAPH_VERSION}, numpy ${NUMPY_VERSION}..."
+    echo "Installing PySide6 ${PYSIDE_VERSION}, pyqtgraph ${PYQTGRAPH_VERSION}, numpy ${NUMPY_VERSION}, pyroute2 ${PYROUTE2_VERSION}..."
     "$RUNTIME/bin/python3" -m pip install \
         --no-cache-dir \
         --disable-pip-version-check \
         --no-warn-script-location \
         "PySide6-Essentials==${PYSIDE_VERSION}" \
         "pyqtgraph==${PYQTGRAPH_VERSION}" \
-        "numpy==${NUMPY_VERSION}"
+        "numpy==${NUMPY_VERSION}" \
+        "pyroute2==${PYROUTE2_VERSION}"
 fi
 
 # Remove build-only and unused runtime files to keep the packages reasonable.

@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "network-monitor"
-version = "1.0.0"
-description = "Per-application network monitor for Linux with cgroup v2 + nftables blocking"
+version = "1.0.5"
+description = "Netlink-based per-application network monitor for Linux with monthly usage and cgroup v2 + nftables blocking"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-or-later"}
 authors = [
     {name = "AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free", email = "asemshahen5@gmail.com"},
 ]
-dependencies = ["PySide6>=6.8", "pyqtgraph>=0.14", "numpy>=1.26"]
+dependencies = ["PySide6>=6.8", "pyqtgraph>=0.14", "numpy>=1.26", "pyroute2>=0.9.7"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: X11 Applications :: Qt",

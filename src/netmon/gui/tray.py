@@ -18,8 +18,11 @@ class Tray(QSystemTrayIcon):
         self.show_action.triggered.connect(parent.showNormal)
         self.show_action.triggered.connect(parent.activateWindow)
         self.menu.addAction(self.show_action)
+        self.usage_action = QAction(parent)
+        self.usage_action.triggered.connect(parent.show_usage_tab)
+        self.menu.addAction(self.usage_action)
         self.quit_action = QAction(parent)
-        self.quit_action.triggered.connect(parent.close)
+        self.quit_action.triggered.connect(parent.quit_from_tray)
         self.menu.addAction(self.quit_action)
         self.setContextMenu(self.menu)
         self.retranslate()
@@ -31,4 +34,5 @@ class Tray(QSystemTrayIcon):
     def retranslate(self) -> None:
         self.setToolTip(tr("app.title"))
         self.show_action.setText(tr("tray.show"))
+        self.usage_action.setText(tr("tray.usage"))
         self.quit_action.setText(tr("tray.quit"))

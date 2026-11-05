@@ -190,6 +190,9 @@ QFrame#card[accent="total-up"] {{
 QFrame#card[accent="count"] {{
     border-top: 2px solid {c['WARNING']};
 }}
+QFrame#card[accent="month"] {{
+    border-top: 2px solid {c['ACCENT']};
+}}
 
 QLabel#appTitle {{
     font-size: 20px;

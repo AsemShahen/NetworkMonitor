@@ -3,7 +3,7 @@ from __future__ import annotations
 import signal
 import sys
 
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon
 
 from .controller import Controller
 from .gui import theme
@@ -28,7 +28,11 @@ def run() -> None:
     apply_language(app)
 
     window = MainWindow(controller)
-    window.show()
+    hidden = "--hidden" in sys.argv
+    if hidden and controller.config.get("minimize_to_tray", False) and QSystemTrayIcon.isSystemTrayAvailable():
+        window.hide()
+    else:
+        window.show()
     app.aboutToQuit.connect(window.shutdown)
 
     # إنهاء نظيف عند إشارات النظام

@@ -1,17 +1,29 @@
 # Network Monitor
 
-A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubuntu and Fedora) that shows per-application download/upload speed and lets you block any application with cgroup v2 + nftables.
+A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debian/Ubuntu and Fedora) that shows accurate per-application download/upload speed using native Netlink counters, keeps monthly and daily usage statistics, and lets you block any application with cgroup v2 + nftables.
 
 ## Features
-- Live per-process download and upload rates (KB/s–MB/s).
-- Active connections, full executable paths, CPU and RSS.
-- Session totals plus top summary cards.
-- Interactive time-series chart.
-- Search, sortable columns, hide-idle filter.
+- Native Netlink per-socket counters through `pyroute2`, with an automatic `ss` fallback and a final `/proc/net` discovery mode that clearly says when byte counters are unavailable.
+- Live per-process download and upload rates (KB/s–MB/s), active connections, full executable paths, CPU, and RSS.
+- Monthly and daily usage per application, a daily download/upload chart, a searchable usage table, and CSV export.
+- Optional cgroup grouping for Flatpak, Snap, and AppImage applications so multi-process apps appear as one row.
+- Session totals, current-month card, and an interactive time-series chart.
+- Search, sortable columns, and hide-idle filter.
 - Export visible application names to a text file.
 - Real block/unblock via cgroup v2 + nftables with polkit authentication.
 - Persistent blocklist with import/export and apply-on-start.
-- English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, and desktop integration.
+- Diagnostics panel with copy-to-clipboard, showing the active engine, socket attribution, and why counters may be limited.
+- English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
+
+## New in 1.0.5
+
+- Replaced the `ss`-only measurement path with native Netlink (`NETLINK_SOCK_DIAG`) as the primary engine. This fixes applications such as LM Studio Flatpak that were visible in `ss` but fell back to `/proc/net` with no counters.
+- Added per-inode deltas, so closing one socket and opening another does not double-count or lose bytes.
+- Added monthly/daily SQLite usage storage, the Usage tab, chart, and CSV export.
+- Added diagnostics, Flatpak/Snap/AppImage grouping, recent-activity retention, and clear UDP/QUIC “speed unavailable” labels.
+- Added tray usage access, real tray quit behavior, `--hidden` startup, and optional autostart.
+
+See [docs/RELEASE_NOTES_v1.0.5.md](docs/RELEASE_NOTES_v1.0.5.md) for details.
 
 ## Screenshots
 
@@ -36,6 +48,7 @@ Prebuilt packages are published on **GitHub Releases**:
 - **Fedora/RHEL:** `network-monitor-<version>-1.x86_64.rpm`
 - **Portable:** `NetworkMonitor-<version>-x86_64.AppImage`
 - **AppImage updates:** `NetworkMonitor-<version>-x86_64.AppImage.zsync`
+- **Checksums:** `SHA256SUMS` and its detached signature `SHA256SUMS.asc`
 
 The `.deb` and `.rpm` packages install the privileged helper and the polkit policy. The AppImage contains the helper, but blocking still requires host `pkexec`, `python3`, `nftables`, and cgroup v2. The AppImage embeds `gh-releases-zsync` update information, so AppImageUpdate can use the published `.zsync` file for delta updates.
 
@@ -90,9 +103,11 @@ Output is written to `build/`. See `packaging/README_AR.md` for details and requ
 
 ## Requirements
 - Linux with cgroup v2 and glibc 2.34 or newer (the bundled Qt/PySide6 runtime requires it).
-- `iproute2` (`ss`) for accurate per-process counters.
+- `pyroute2` for native Netlink counters. It is bundled in the release packages; source installs need `python3 -m pip install pyroute2`.
+- `iproute2` (`ss`) is an optional fallback and is recommended. Without Netlink or `ss`, the app still discovers connections from `/proc/net` but cannot show byte counters.
 - `nftables` + `polkit` (`pkexec`) for blocking.
-- The app runtime (Python, PySide6, pyqtgraph, numpy) is bundled in the release packages; the privileged helper uses the system `python3`.
+- The app runtime (Python, PySide6, pyqtgraph, numpy, pyroute2) is bundled in the release packages; the privileged helper uses the system `python3`.
+- Monthly usage is counted only while Network Monitor is running. UDP/QUIC sockets have no reliable kernel byte counters, so they are shown as “speed unavailable” instead of a misleading `0 B/s`.
 
 ## Tests
 ```bash

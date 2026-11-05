@@ -59,7 +59,12 @@ network-monitor
 ## 1. المتطلبات
 - نظام ديبيان/أوبونتو أو فيدورا بنواة حديثة تدعم **cgroup v2**.
 - سطح مكتب Wayland أو X11.
-- حزم النظام التالية (لقياس السرعات والحظر):
+- `pyroute2` لعدّادات Netlink. مرفق داخل حزم الإصدار؛ وعند التثبيت من المصدر ثبّته بالأمر `python3 -m pip install pyroute2`.
+- `iproute2` (`ss`) رجوع اختياري ويُوصى به.
+- `nftables` و`polkit` للحظر.
+- عند غياب Netlink و`ss` يكتشف البرنامج الاتصالات من `/proc/net` فقط دون عدّادات بايت. مقابس UDP/QUIC تظهر دائماً «السرعة غير متاحة» لعدم توفر عدّادات موثوقة لها في النواة.
+
+حزم النظام التالية (للقياس الاحتياطي والحظر):
 
 **ديبيان/أوبونتو:**
 ```bash
@@ -72,7 +77,22 @@ sudo apt install -y iproute2 nftables polkitd pkexec libxcb-cursor0
 sudo dnf install -y iproute nftables polkit libxcb
 ```
 
-> ملاحظة: حزمة Python المحمولة `python3/` مرفقة داخل المشروع، لذلك لا يلزم تثبيت Python أو PySide6 لتشغيل الواجهة. المساعد المميز يستخدم `python3` النظام (متوفر عادةً في التوزيعات المدعومة).
+> ملاحظة: حزم الإصدار `.deb` و`.rpm` وAppImage تحوي وقت تشغيل مرفقاً (Python وPySide6 وpyqtgraph وnumpy وpyroute2)، فلا يلزم تثبيتها. إذا وُجد `build/runtime` ينسخه `install.sh` إلى `/opt/network-monitor/runtime`؛ وإلا يستخدم التثبيت من المصدر Python النظام.
+>
+> للحصول على وقت التشغيل المرفق نفسه، نفّذ قبل التثبيت:
+>
+> ```bash
+> ./packaging/build-runtime.sh
+> ./install.sh
+> ```
+>
+> وإن لم يتوفر وقت تشغيل مرفق، ثبّت المتطلبات في Python النظام:
+>
+> ```bash
+> python3 -m pip install --user PySide6 pyqtgraph numpy pyroute2
+> ```
+>
+> المساعد المميز يستخدم `python3` النظام (متوفر عادةً في التوزيعات المدعومة).
 
 ## 2. نسخ المجلد
 انسخ مجلد `Network Monitor` بالكامل إلى الجهاز المستهدف (مثلاً إلى مجلد المنزل).
@@ -110,7 +130,18 @@ sudo cp /opt/network-monitor/data/org.networkmonitor.helper.policy /usr/share/po
 ```bash
 network-monitor
 ```
-يجب أن تُفتح النافذة، ويظهر في تبويب «الإعدادات» أن `ss` و`nft` وcgroup v2 متوفرة.
+افتح **الإعدادات ← التشخيص**. الإعداد السليم يعرض:
+
+```text
+المحرك: netlink — دقيق
+Netlink: متوفر
+```
+
+إن ظهر أن Netlink غير متوفر، ثبّت `pyroute2` أو أبقِ `iproute2` مثبتاً ليعمل الرجوع إلى `ss`. أما وضع `/proc/net` الأخير فيعرض الاتصالات فقط مع رسالة أن العدّادات غير متوفرة.
+
+تُخزَّن إحصاءات الاستهلاك الشهرية واليومية في
+`~/.local/share/network-monitor/usage.db`، وتُحسب فقط أثناء تشغيل
+Network Monitor.
 
 ## 6. إلغاء التثبيت
 ```bash

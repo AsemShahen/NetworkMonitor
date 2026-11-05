@@ -12,7 +12,7 @@
 Name:           network-monitor
 Version:        %{_version}
 Release:        1%{?dist}
-Summary:        Per-application network monitor with blocking
+Summary:        Netlink-based per-application network monitor with monthly usage and blocking
 License:        GPL-3.0-or-later
 URL:            https://github.com/AsemShahen/NetworkMonitor
 BuildArch:      x86_64
@@ -22,10 +22,11 @@ Requires:       iproute
 Requires:       python3
 
 %description
-Network Monitor shows live download and upload speeds for every application,
-active connections, executable paths, and session totals. It can block
-selected applications with cgroup v2 and nftables through a polkit-authenticated
-helper. The interface is available in English and Arabic.
+Network Monitor shows accurate live download and upload speeds for every
+application using native Netlink counters, active connections, executable
+paths, session totals, and monthly/daily usage. It can block selected
+applications with cgroup v2 and nftables through a polkit-authenticated helper.
+The interface is available in English and Arabic.
 
 %install
 rm -rf %{buildroot}
@@ -64,7 +65,10 @@ fi
 /usr/share/icons/hicolor/scalable/apps/network-monitor.svg
 
 %changelog
-* Mon Oct 26 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+* Thu Nov 05 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+- Use native Netlink counters through pyroute2
+- Add monthly/daily usage, diagnostics, and autostart
+* Mon Oct 26 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.1-1
 - Add AppStream metadata
 - Use zstd compression for the bundled runtime
 * Sun Oct 25 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.0-1

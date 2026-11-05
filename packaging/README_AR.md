@@ -9,11 +9,12 @@
 - `network-monitor-<version>-1.x86_64.rpm` — لفيدورا/RHEL.
 - `NetworkMonitor-<version>-x86_64.AppImage` — حزمة محمولة.
 - `SHA256SUMS` — بصمات الملفات.
+- `SHA256SUMS.asc` — توقيع GPG منفصل للبصمات (عند إعداد مفتاح التوقيع في CI).
 
 ## البناء محليًا
 
 يتطلب البناء اتصالًا بالإنترنت في أول مرة فقط، لتنزيل Python المحمول وحزم
-PySide6/pyqtgraph/numpy. بعد ذلك يمكن إعادة استخدام `build/runtime`.
+PySide6/pyqtgraph/numpy/pyroute2. بعد ذلك يمكن إعادة استخدام `build/runtime`.
 
 ```bash
 ./packaging/build-runtime.sh
@@ -92,4 +93,5 @@ GitHub Pages:
   على النظام المضيف. إن لم تتوفر، تعمل المراقبة وتبقى عمليات الحظر غير متاحة.
 - الحزم تحوي Python وPySide6 مرفقين، لذلك حجمها أكبر من حزمة تعتمد على حزم النظام.
 - وقت التشغيل المرفق يتطلب glibc 2.34 أو أحدث (Ubuntu 22.04+ وDebian 12+ وFedora 35+).
+- وقت التشغيل المرفق يحوي `pyroute2` لعدّادات Netlink؛ ويبقى `iproute2` رجوعاً اختيارياً.
 - الترخيص: GPL-3.0-or-later، راجع ملف `LICENSE`.

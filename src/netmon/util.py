@@ -77,6 +77,8 @@ KNOWN_NAMES = {
     "discord": "Discord",
     "spotify": "Spotify",
     "steam": "Steam",
+    "lm-studio": "LM Studio",
+    "lmstudio": "LM Studio",
     "networkmanager": "NetworkManager",
     "apt": "APT",
     "dnf": "DNF",

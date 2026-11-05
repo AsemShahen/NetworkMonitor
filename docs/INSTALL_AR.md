@@ -35,6 +35,23 @@ chmod +x NetworkMonitor-<version>-x86_64.AppImage
 ./NetworkMonitor-<version>-x86_64.AppImage
 ```
 
+### التحديثات
+
+يملك الإصدار 1.0.6 وما بعده زر **الإعدادات ← تحديثات التطبيق ← التحقق من
+التحديثات**. يدعم المحدّث التثبيت اليدوي في `/opt/network-monitor` وAppImage
+و`.deb` و`.rpm` وFlatpak، ويتحقق من `SHA256SUMS` و`SHA256SUMS.asc` قبل
+التثبيت، ويستخدم `pkexec` لتثبيتات النظام.
+
+إذا كان لديك تثبيت يدوي في `/opt` من 1.0.5 أو أقدم، فثبّت 1.0.6 مرة واحدة:
+
+```bash
+tar -xzf NetworkMonitor-1.0.6-linux-x86_64.tar.gz
+sudo ./network-monitor/install.sh
+```
+
+بعد ذلك يمكن تثبيت الإصدارات اللاحقة من زر التحديث. يحتفظ المحدّث بنسخة
+احتياطية مؤرخة في `/opt` ويسترجعها تلقائياً إذا فشل التثبيت اليدوي.
+
 ### Arch Linux (AUR)
 
 اسم الحزمة `network-monitor-qt-bin` (بانتظار القبول في AUR):

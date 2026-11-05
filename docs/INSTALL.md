@@ -59,6 +59,7 @@ Download from <https://github.com/AsemShahen/NetworkMonitor/releases>:
 - `network-monitor_<version>_amd64.deb`
 - `network-monitor-<version>-1.x86_64.rpm`
 - `NetworkMonitor-<version>-x86_64.AppImage`
+- `NetworkMonitor-<version>-linux-x86_64.tar.gz` (manual `/opt` updates)
 - `SHA256SUMS`
 - `SHA256SUMS.asc`
 
@@ -86,6 +87,24 @@ chmod +x NetworkMonitor-<version>-x86_64.AppImage
 
 The AppImage bundles the application and helper. Blocking still requires host
 `pkexec`, `python3`, `nftables`, and cgroup v2.
+
+## Updates
+
+Version 1.0.6 and later have **Settings → Application updates → Check for
+updates**. The updater supports manual `/opt/network-monitor` installs,
+AppImage, `.deb`, `.rpm`, and Flatpak. It verifies `SHA256SUMS` and
+`SHA256SUMS.asc` before installing and uses `pkexec` for system installs.
+
+For a manual `/opt` install from 1.0.5 or older, install 1.0.6 once:
+
+```bash
+tar -xzf NetworkMonitor-1.0.6-linux-x86_64.tar.gz
+sudo ./network-monitor/install.sh
+```
+
+After that, later releases can be installed with the update button. The
+updater keeps a timestamped backup in `/opt` and restores it automatically if
+the manual installation fails.
 
 ## Option 5: Arch Linux (AUR)
 

@@ -13,17 +13,17 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Real block/unblock via cgroup v2 + nftables with polkit authentication.
 - Persistent blocklist with import/export and apply-on-start.
 - Diagnostics panel with copy-to-clipboard, showing the active engine, socket attribution, and why counters may be limited.
+- Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs.
 - English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
 
-## New in 1.0.5
+## New in 1.0.6
 
-- Replaced the `ss`-only measurement path with native Netlink (`NETLINK_SOCK_DIAG`) as the primary engine. This fixes applications such as LM Studio Flatpak that were visible in `ss` but fell back to `/proc/net` with no counters.
-- Added per-inode deltas, so closing one socket and opening another does not double-count or lose bytes.
-- Added monthly/daily SQLite usage storage, the Usage tab, chart, and CSV export.
-- Added diagnostics, Flatpak/Snap/AppImage grouping, recent-activity retention, and clear UDP/QUIC “speed unavailable” labels.
-- Added tray usage access, real tray quit behavior, `--hidden` startup, and optional autostart.
+- Added **Check for updates** in Settings. It checks GitHub Releases, downloads the right asset for the current installation, verifies `SHA256SUMS` and its GPG signature, and installs without opening a browser.
+- Supports manual `/opt/network-monitor` installs through a signed `NetworkMonitor-<version>-linux-x86_64.tar.gz` archive, with `pkexec`, a backup, and automatic rollback on failure.
+- Supports AppImage replacement, `.deb` through `apt-get`, `.rpm` through `dnf`/`rpm`, and Flatpak through `flatpak update`.
+- Added the first signed manual-update archive. Copies installed before 1.0.6 need one manual installation; later releases can use the button.
 
-See [docs/RELEASE_NOTES_v1.0.5.md](docs/RELEASE_NOTES_v1.0.5.md) for details.
+See [docs/RELEASE_NOTES_v1.0.6.md](docs/RELEASE_NOTES_v1.0.6.md) for details.
 
 ## Screenshots
 
@@ -46,6 +46,7 @@ Prebuilt packages are published on **GitHub Releases**:
 
 - **Debian/Ubuntu:** `network-monitor_<version>_amd64.deb`
 - **Fedora/RHEL:** `network-monitor-<version>-1.x86_64.rpm`
+- **Manual `/opt` updates:** `NetworkMonitor-<version>-linux-x86_64.tar.gz`
 - **Portable:** `NetworkMonitor-<version>-x86_64.AppImage`
 - **AppImage updates:** `NetworkMonitor-<version>-x86_64.AppImage.zsync`
 - **Checksums:** `SHA256SUMS` and its detached signature `SHA256SUMS.asc`

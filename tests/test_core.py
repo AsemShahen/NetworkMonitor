@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from datetime import datetime
@@ -13,6 +14,16 @@ from netmon.config import BlocklistStore, ConfigStore, slugify
 from netmon.controller import Controller
 from netmon.i18n import get_language, refresh_label, set_language, tr
 from netmon.models import BlockEntry
+from netmon.updater import (
+    ReleaseAsset,
+    _install_appimage,
+    check_for_update,
+    detect_install_type,
+    is_newer,
+    parse_checksums,
+    select_asset,
+    version_tuple,
+)
 from netmon.usage import UsageStore
 from netmon.util import fmt_rate, pretty_name
 
@@ -160,6 +171,111 @@ class TestFormatting(unittest.TestCase):
         self.assertEqual(pretty_name("lm-studio", "/app/lm-studio"), "LM Studio")
 
 
+class TestUpdater(unittest.TestCase):
+    def test_version_comparison(self) -> None:
+        self.assertEqual(version_tuple("v1.0.10"), (1, 0, 10))
+        self.assertTrue(is_newer("1.0.6", "1.0.5"))
+        self.assertFalse(is_newer("1.0.5", "1.0.5"))
+        self.assertFalse(is_newer("1.0.4", "1.0.5"))
+
+    def test_parse_checksums(self) -> None:
+        digest = "a" * 64
+        parsed = parse_checksums(f"{digest}  file.tar.gz\n{digest} *binary\nnot a checksum")
+        self.assertEqual(parsed["file.tar.gz"], digest)
+        self.assertEqual(parsed["binary"], digest)
+        self.assertEqual(len(parsed), 2)
+
+    def test_select_install_assets(self) -> None:
+        version = "1.0.6"
+        assets = {
+            f"NetworkMonitor-{version}-linux-x86_64.tar.gz": ReleaseAsset(
+                f"NetworkMonitor-{version}-linux-x86_64.tar.gz", "manual"
+            ),
+            f"NetworkMonitor-{version}-x86_64.AppImage": ReleaseAsset(
+                f"NetworkMonitor-{version}-x86_64.AppImage", "appimage"
+            ),
+            f"network-monitor_{version}_amd64.deb": ReleaseAsset(
+                f"network-monitor_{version}_amd64.deb", "deb"
+            ),
+            f"network-monitor-{version}-1.x86_64.rpm": ReleaseAsset(
+                f"network-monitor-{version}-1.x86_64.rpm", "rpm"
+            ),
+        }
+        self.assertTrue(select_asset(assets, version, "manual").url == "manual")
+        self.assertTrue(select_asset(assets, version, "appimage").url == "appimage")
+        self.assertTrue(select_asset(assets, version, "deb").url == "deb")
+        self.assertTrue(select_asset(assets, version, "rpm").url == "rpm")
+
+    def test_check_for_update_uses_release_assets(self) -> None:
+        version = "1.0.6"
+        assets = [
+            {
+                "name": f"NetworkMonitor-{version}-linux-x86_64.tar.gz",
+                "browser_download_url": "https://example/manual",
+                "size": 10,
+            },
+            {"name": "SHA256SUMS", "browser_download_url": "https://example/sums"},
+            {"name": "SHA256SUMS.asc", "browser_download_url": "https://example/asc"},
+        ]
+        info = check_for_update(
+            current_version="1.0.5",
+            install_type="manual",
+            release={"tag_name": f"v{version}", "assets": assets},
+        )
+        self.assertIsNotNone(info)
+        self.assertEqual(info.version, version)
+        self.assertEqual(info.asset.url, "https://example/manual")
+        self.assertEqual(info.checksums.url, "https://example/sums")
+        self.assertEqual(info.signature.url, "https://example/asc")
+
+    def test_check_for_update_returns_none_when_current(self) -> None:
+        info = check_for_update(
+            current_version="1.0.6",
+            install_type="manual",
+            release={"tag_name": "v1.0.6", "assets": []},
+        )
+        self.assertIsNone(info)
+
+    def test_embedded_update_key_is_packaged(self) -> None:
+        from netmon.updater import EXPECTED_FINGERPRINT, PUBLIC_KEY_PATH
+
+        self.assertTrue(PUBLIC_KEY_PATH.is_file())
+        self.assertIn(
+            "BEGIN PGP PUBLIC KEY BLOCK",
+            PUBLIC_KEY_PATH.read_text(encoding="utf-8", errors="replace"),
+        )
+        self.assertEqual(len(EXPECTED_FINGERPRINT), 40)
+
+    def test_detect_install_type_from_environment(self) -> None:
+        self.assertEqual(
+            detect_install_type({"FLATPAK_ID": "com.example.App"}), "flatpak"
+        )
+        self.assertEqual(
+            detect_install_type({"APPIMAGE": "/tmp/NetworkMonitor.AppImage"}),
+            "appimage",
+        )
+
+    def test_appimage_replacement_is_atomic(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "NetworkMonitor-1.0.6-x86_64.AppImage"
+            target.write_bytes(b"old")
+            target.chmod(0o755)
+            archive = Path(tmp) / "download.AppImage"
+            archive.write_bytes(b"new")
+            old = os.environ.get("APPIMAGE")
+            os.environ["APPIMAGE"] = str(target)
+            try:
+                message = _install_appimage(archive, "1.0.6")
+            finally:
+                if old is None:
+                    os.environ.pop("APPIMAGE", None)
+                else:
+                    os.environ["APPIMAGE"] = old
+            self.assertEqual(target.read_bytes(), b"new")
+            self.assertTrue(os.access(target, os.X_OK))
+            self.assertIn("1.0.6", message)
+
+
 class TestI18n(unittest.TestCase):
     def tearDown(self) -> None:
         set_language("en")
@@ -184,6 +300,13 @@ class TestI18n(unittest.TestCase):
             self.assertTrue(tr("tab.usage"))
             self.assertNotEqual(tr("usage.note", count=2), "usage.note")
             self.assertNotEqual(tr("usage.col.total"), "usage.col.total")
+
+    def test_update_labels_exist_in_both_languages(self) -> None:
+        for code in ("en", "ar"):
+            set_language(code)
+            self.assertNotEqual(tr("settings.group.updates"), "settings.group.updates")
+            self.assertNotEqual(tr("update.button"), "update.button")
+            self.assertNotEqual(tr("update.latest", version="1.0.6"), "update.latest")
 
 
 class TestStores(unittest.TestCase):

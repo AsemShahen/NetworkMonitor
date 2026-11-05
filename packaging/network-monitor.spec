@@ -66,6 +66,9 @@ fi
 
 %changelog
 * Thu Nov 05 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+- Add signed in-app updates for manual, AppImage, deb, rpm, and Flatpak installs
+- Add signed manual update tarball and backup/rollback installation
+* Thu Nov 05 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.5-1
 - Use native Netlink counters through pyroute2
 - Add monthly/daily usage, diagnostics, and autostart
 * Mon Oct 26 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.1-1

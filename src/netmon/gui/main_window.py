@@ -27,6 +27,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from .. import __version__
 from ..config import REFRESH_CHOICES, install_autostart
 from ..i18n import get_language, is_rtl, refresh_label, set_language, tr
 from . import theme
@@ -36,6 +37,7 @@ from .icons import get_app_icon
 from .language import apply_language
 from .settings_tab import SettingsTab
 from .traffic_table import TrafficFilterProxy, TrafficModel, TrafficTable
+from .update_worker import UpdateCheckThread, UpdateInstallThread
 from .usage_tab import UsageTab
 from .widgets import Badge, StatCard
 from .worker import Worker
@@ -52,6 +54,8 @@ class MainWindow(QMainWindow):
         self._last_summary: dict = {}
         self._pending_success = ""
         self._pending_silent = False
+        self._update_thread = None
+        self._install_thread = None
         self._thread = QThread(self)
         self._worker = Worker(controller)
         self._worker.moveToThread(self._thread)
@@ -274,6 +278,7 @@ class MainWindow(QMainWindow):
         self.settings_tab.group_cgroups_changed.connect(self._on_group_cgroups_changed)
         self.settings_tab.autostart_changed.connect(self._on_autostart_changed)
         self.settings_tab.minimize_to_tray_changed.connect(self._on_minimize_to_tray_changed)
+        self.settings_tab.update_requested.connect(self._check_updates)
 
         self.usage_tab.export_requested.connect(self.export_usage)
         self.usage_tab.reset_requested.connect(self._reset_usage)
@@ -648,6 +653,84 @@ class MainWindow(QMainWindow):
         except (OSError, ValueError) as exc:
             QMessageBox.warning(self, tr("import.failed_title"), str(exc))
 
+    # ---------------------------------------------------------------- updates
+    def _check_updates(self) -> None:
+        if self._update_thread is not None and self._update_thread.isRunning():
+            return
+        if self._install_thread is not None and self._install_thread.isRunning():
+            return
+        self.settings_tab.set_update_status(tr("update.checking"), busy=True)
+        self.status.showMessage(tr("update.checking"))
+        thread = UpdateCheckThread(__version__, self)
+        self._update_thread = thread
+        thread.result.connect(self._on_update_checked)
+        thread.finished.connect(thread.deleteLater)
+        thread.start()
+
+    def _on_update_checked(self, info, error: str) -> None:
+        self._update_thread = None
+        if error:
+            self.settings_tab.set_update_status(
+                tr("update.failed", message=error), busy=False
+            )
+            self.status.showMessage(tr("update.failed", message=error))
+            return
+        if info is None:
+            message = tr("update.latest", version=__version__)
+            self.settings_tab.set_update_status(message, busy=False)
+            self.status.showMessage(message)
+            return
+
+        kind = tr(f"update.type.{info.install_type}")
+        self.settings_tab.set_update_status(
+            tr("update.available", version=info.version), busy=False
+        )
+        answer = QMessageBox.question(
+            self,
+            tr("update.available_title"),
+            tr(
+                "update.available_body",
+                version=info.version,
+                type=kind,
+            ),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.Yes,
+        )
+        if answer == QMessageBox.Yes:
+            self._install_update(info)
+
+    def _install_update(self, info) -> None:
+        if self._install_thread is not None and self._install_thread.isRunning():
+            return
+        self.settings_tab.set_update_status(tr("update.downloading_checksums"), busy=True)
+        self.status.showMessage(tr("update.downloading_checksums"))
+        thread = UpdateInstallThread(info, self)
+        self._install_thread = thread
+        thread.status.connect(self._on_update_progress)
+        thread.result.connect(self._on_update_installed)
+        thread.finished.connect(thread.deleteLater)
+        thread.start()
+
+    def _on_update_progress(self, message: str) -> None:
+        self.settings_tab.set_update_status(message, busy=True)
+        self.status.showMessage(message)
+
+    def _on_update_installed(self, ok: bool, message: str) -> None:
+        self._install_thread = None
+        if ok:
+            self.settings_tab.set_update_status(message, busy=False)
+            self.status.showMessage(message)
+            QMessageBox.information(
+                self,
+                tr("update.done_title"),
+                tr("update.done_body", message=message),
+            )
+        else:
+            text = tr("update.failed", message=message)
+            self.settings_tab.set_update_status(text, busy=False)
+            self.status.showMessage(text)
+            QMessageBox.warning(self, tr("update.failed_title"), message)
+
     # ---------------------------------------------------------------- settings
     def _reset_totals(self) -> None:
         reply = QMessageBox.question(
@@ -703,6 +786,9 @@ class MainWindow(QMainWindow):
             return
         self._shut = True
         self.timer.stop()
+        for thread in (self._update_thread, self._install_thread):
+            if thread is not None and thread.isRunning():
+                thread.wait(2000)
         self._thread.quit()
         self._thread.wait(3000)
         self.controller.shutdown()

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "network-monitor"
-version = "1.0.5"
+version = "1.0.6"
 description = "Netlink-based per-application network monitor for Linux with monthly usage and cgroup v2 + nftables blocking"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -38,4 +38,5 @@ Issues = "https://github.com/AsemShahen/NetworkMonitor/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
+"netmon.resources" = ["*.asc"]
 "netmon.resources.icons" = ["*.png"]

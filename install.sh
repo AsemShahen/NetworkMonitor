@@ -12,6 +12,8 @@ sudo rm -rf "$PREFIX"
 sudo mkdir -p "$PREFIX"
 if [ -x "$ROOT/build/runtime/bin/python3" ]; then
   sudo cp -r "$ROOT/build/runtime" "$PREFIX/runtime"
+elif [ -x "$ROOT/runtime/bin/python3" ]; then
+  sudo cp -r "$ROOT/runtime" "$PREFIX/runtime"
 else
   sudo cp -r "$ROOT/python3" "$PREFIX/python3"
 fi

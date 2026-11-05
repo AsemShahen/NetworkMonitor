@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from .. import __version__
 from ..config import BLOCKLIST_FILE, CACHE_DIR, CONFIG_FILE, REFRESH_CHOICES
 from ..i18n import LANGUAGES, get_language, is_rtl, refresh_label, tr
 
@@ -36,6 +37,7 @@ class SettingsTab(QWidget):
     theme_changed = Signal(str)
     reset_totals_requested = Signal()
     apply_blocklist_requested = Signal()
+    update_requested = Signal()
 
     def __init__(self, config, parent=None):
         super().__init__(parent)
@@ -49,6 +51,8 @@ class SettingsTab(QWidget):
         self._env_value = "—"
         self._diagnostics: dict = {}
         self._diag_text = ""
+        self._update_status = tr("update.idle")
+        self._update_busy = False
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
@@ -168,6 +172,28 @@ class SettingsTab(QWidget):
         )
         root.addWidget(self.group_maintenance)
 
+        # ------------------------------ تحديثات التطبيق ------------------------------
+        self.group_updates = QGroupBox()
+        ulay = QVBoxLayout(self.group_updates)
+        ulay.setSpacing(10)
+
+        self.update_version_label = QLabel()
+        self.update_version_label.setObjectName("cardHint")
+        self.update_version_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        ulay.addWidget(self.update_version_label)
+
+        self.update_status_label = QLabel()
+        self.update_status_label.setObjectName("cardHint")
+        self.update_status_label.setWordWrap(True)
+        self.update_status_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        ulay.addWidget(self.update_status_label)
+
+        self.update_btn = QPushButton()
+        self.update_btn.setProperty("variant", "primary")
+        self.update_btn.clicked.connect(self.update_requested.emit)
+        ulay.addWidget(self.update_btn, 0, Qt.AlignLeft)
+        root.addWidget(self.group_updates)
+
         # -------------------------------- التشخيص --------------------------------
         self.group_diagnostics = QGroupBox()
         dlay = QVBoxLayout(self.group_diagnostics)
@@ -261,8 +287,11 @@ class SettingsTab(QWidget):
 
     # -------------------------------------------------------------- translation
     def retranslate(self) -> None:
+        if not self._update_busy:
+            self._update_status = tr("update.idle")
         self.group_monitor.setTitle(tr("settings.group.monitor"))
         self.group_maintenance.setTitle(tr("settings.group.maintenance"))
+        self.group_updates.setTitle(tr("settings.group.updates"))
         self.group_diagnostics.setTitle(tr("settings.group.diagnostics"))
         self.group_about.setTitle(tr("settings.group.about"))
 
@@ -278,6 +307,10 @@ class SettingsTab(QWidget):
         self.reset_btn.setText(tr("settings.reset"))
         self.apply_btn.setText(tr("settings.reapply"))
         self.copy_diag_btn.setText(tr("diag.copy"))
+        self.update_version_label.setText(tr("update.current", version=__version__))
+        self.update_status_label.setText(self._update_status)
+        self.update_btn.setText(tr("update.button"))
+        self.update_btn.setEnabled(not self._update_busy)
 
         for label, key, kwargs in self._hints:
             label.setText(tr(key, **kwargs))
@@ -325,12 +358,16 @@ class SettingsTab(QWidget):
         self.about_name.setAlignment(align)
         self.author_label.setAlignment(align)
         self.email_label.setAlignment(align)
+        self.update_version_label.setAlignment(align)
+        self.update_status_label.setAlignment(align)
 
         self.diag_label.setAlignment(align)
         self.copy_diag_btn.setLayoutDirection(Qt.RightToLeft if rtl else Qt.LeftToRight)
+        self.update_btn.setLayoutDirection(Qt.RightToLeft if rtl else Qt.LeftToRight)
         for group in (
             self.group_monitor,
             self.group_maintenance,
+            self.group_updates,
             self.group_diagnostics,
             self.group_about,
         ):
@@ -419,3 +456,13 @@ class SettingsTab(QWidget):
     def set_diagnostics(self, diag: dict) -> None:
         self._diagnostics = dict(diag or {})
         self._render_diagnostics()
+
+    def set_update_status(self, text: str, busy: bool = False) -> None:
+        self._update_status = str(text or "")
+        self._update_busy = bool(busy)
+        self.update_status_label.setText(self._update_status)
+        self.update_btn.setEnabled(not self._update_busy)
+
+    def set_update_busy(self, busy: bool) -> None:
+        self._update_busy = bool(busy)
+        self.update_btn.setEnabled(not self._update_busy)

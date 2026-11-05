@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to build (for example 1.0.5)"
+        description: "Version to build (for example 1.0.6)"
         required: true
-        default: "1.0.5"
+        default: "1.0.6"
 
 permissions:
   contents: write
@@ -77,6 +77,9 @@ jobs:
       - name: Build AppImage
         run: ./packaging/build-appimage.sh
 
+      - name: Build manual update tarball
+        run: ./packaging/build-manual.sh
+
       - name: Generate SHA256SUMS
         run: |
           cd build
@@ -84,7 +87,8 @@ jobs:
             network-monitor_*.deb \
             network-monitor-*.rpm \
             NetworkMonitor-*.AppImage \
-            NetworkMonitor-*.AppImage.zsync > SHA256SUMS
+            NetworkMonitor-*.AppImage.zsync \
+            NetworkMonitor-*-linux-x86_64.tar.gz > SHA256SUMS
           cat SHA256SUMS
 
       - name: Sign SHA256SUMS
@@ -148,6 +152,7 @@ jobs:
             build/network-monitor-*.rpm
             build/NetworkMonitor-*.AppImage
             build/NetworkMonitor-*.AppImage.zsync
+            build/NetworkMonitor-*-linux-x86_64.tar.gz
             build/SHA256SUMS
           if-no-files-found: error
 
@@ -165,6 +170,7 @@ jobs:
             build/network-monitor-*.rpm
             build/NetworkMonitor-*.AppImage
             build/NetworkMonitor-*.AppImage.zsync
+            build/NetworkMonitor-*-linux-x86_64.tar.gz
             build/SHA256SUMS
             build/SHA256SUMS.asc
 

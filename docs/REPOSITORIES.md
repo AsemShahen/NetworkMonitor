@@ -19,20 +19,20 @@ The repository contains:
 older versions remain available on GitHub Releases. This keeps the Pages site
 and git history small.
 
-## Current repository packages (v1.0.4)
+## Current repository packages (v1.0.5)
 
-The repository currently serves the official `v1.0.4` release assets, so these
+The repository currently serves the official `v1.0.5` release assets, so these
 hashes match `SHA256SUMS` and the AUR source.
 
-The `v1.0.2` and `v1.0.3` releases remain available on GitHub Releases. The
-repository now serves `v1.0.4`, signed with the new key. Existing clients trust
-the previous fingerprint below and must import the new public key before the
-next `apt update` or `dnf` refresh.
+The `v1.0.2`, `v1.0.3`, and `v1.0.4` releases remain available on GitHub
+Releases. The repository now serves `v1.0.5`, signed with the current key.
+Existing clients trust the previous fingerprint below and must import the new
+public key before the next `apt update` or `dnf` refresh.
 
-- `.deb`: `91,973,986` bytes, SHA-256
-  `c911a57dbf6898fb16c38a2510c9d0f39d726698d2b42d4d4ed36262649a8ae4`
-- `.rpm`: `92,672,601` bytes, SHA-256
-  `1f8e0327b892a4ec14edb16f060d66c15d7768a7555bb1500b8496b19d9fb2cc`
+- `.deb`: `92,308,580` bytes, SHA-256
+  `3227dbfa3ea5b49ae19ca998b9b793cef33fc74f8359e9a639a6836f6b5fd7dc`
+- `.rpm`: `93,041,921` bytes, SHA-256
+  `bef1410d3462f71a913607a08c13d1735fc432ab916461d26c382920561f2782`
 - Previous fingerprint (clients installed before 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - Current fingerprint:
@@ -62,7 +62,7 @@ sudo dnf clean all
 sudo dnf makecache
 ```
 
-The AUR package uses the official `v1.0.4` release `.deb`.
+The AUR package uses the official `v1.0.5` release `.deb`.
 
 ## One-time setup
 
@@ -129,8 +129,8 @@ Save. GitHub Pages will publish the repository at:
 Automatic repository publication from `.github/workflows/release.yml` is
 gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. The new key
 was generated on 2026-10-28; its private key and passphrase are stored locally
-and are not committed. The repository was republished with `v1.0.4` on
-2026-11-01, and both `InRelease` and `repomd.xml.asc` verify against the new
+and are not committed. The repository was republished with `v1.0.5` on
+2026-11-05, and both `InRelease` and `repomd.xml.asc` verify against the new
 fingerprint.
 
 The previous key (`4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`) is

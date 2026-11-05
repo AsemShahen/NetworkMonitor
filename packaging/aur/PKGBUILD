@@ -3,9 +3,9 @@
 # Update pkgver and sha256sums together for every release.
 pkgname=network-monitor-qt-bin
 _pkgname=network-monitor
-pkgver=1.0.4
+pkgver=1.0.5
 pkgrel=1
-pkgdesc="Per-application network monitor with blocking (Qt/PySide6 binary release)"
+pkgdesc="Netlink-based per-application network monitor with usage and blocking (Qt/PySide6 binary release)"
 arch=('x86_64')
 url="https://github.com/AsemShahen/NetworkMonitor"
 license=('GPL-3.0-or-later')
@@ -43,7 +43,7 @@ conflicts=('network-monitor' 'network-monitor-bin')
 options=('!strip' '!debug')
 install="${pkgname}.install"
 source=("${url}/releases/download/v${pkgver}/${_pkgname}_${pkgver}_amd64.deb")
-sha256sums=('c911a57dbf6898fb16c38a2510c9d0f39d726698d2b42d4d4ed36262649a8ae4')
+sha256sums=('3227dbfa3ea5b49ae19ca998b9b793cef33fc74f8359e9a639a6836f6b5fd7dc')
 makedepends=('binutils' 'zstd')
 
 package() {

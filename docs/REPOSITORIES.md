@@ -19,20 +19,24 @@ The repository contains:
 older versions remain available on GitHub Releases. This keeps the Pages site
 and git history small.
 
-## Current repository packages (v1.0.5)
+## Current repository packages (v1.0.6)
 
-The repository currently serves the official `v1.0.5` release assets, so these
+The repository currently serves the official `v1.0.6` release assets, so these
 hashes match `SHA256SUMS` and the AUR source.
 
-The `v1.0.2`, `v1.0.3`, and `v1.0.4` releases remain available on GitHub
-Releases. The repository now serves `v1.0.5`, signed with the current key.
-Existing clients trust the previous fingerprint below and must import the new
-public key before the next `apt update` or `dnf` refresh.
+The `v1.0.2`, `v1.0.3`, `v1.0.4`, and `v1.0.5` releases remain available on
+GitHub Releases. The repository now serves `v1.0.6`, signed with the current
+key. Existing clients trust the previous fingerprint below and must import the
+new public key before the next `apt update` or `dnf` refresh.
 
-- `.deb`: `92,308,580` bytes, SHA-256
-  `3227dbfa3ea5b49ae19ca998b9b793cef33fc74f8359e9a639a6836f6b5fd7dc`
-- `.rpm`: `93,041,921` bytes, SHA-256
-  `bef1410d3462f71a913607a08c13d1735fc432ab916461d26c382920561f2782`
+- `.deb`: `92,317,390` bytes, SHA-256
+  `b98f2c74377d5b0d2cdf641bddb8d3209e2b94e505ac6599e13ecd71a2e37297`
+- `.rpm`: `93,052,821` bytes, SHA-256
+  `8296f459bcd2f7f37aab18bac93cc43f6e3eba3d82859cef9088df4f569fe17a`
+- Manual update archive: `124,756,317` bytes, SHA-256
+  `be22ae33fe81e469e3c2f8ae76f5762f56f9c61fe882708bbccd3c7cd65810f9`
+- AppImage: `111,991,288` bytes, SHA-256
+  `a59ab7242d4deb327cf928aeb570776b6dd1b6b2b910cf5d61d427dbc11819d8`
 - Previous fingerprint (clients installed before 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - Current fingerprint:
@@ -62,7 +66,7 @@ sudo dnf clean all
 sudo dnf makecache
 ```
 
-The AUR package uses the official `v1.0.5` release `.deb`.
+The AUR package uses the official `v1.0.6` release `.deb`.
 
 ## One-time setup
 
@@ -129,7 +133,7 @@ Save. GitHub Pages will publish the repository at:
 Automatic repository publication from `.github/workflows/release.yml` is
 gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. The new key
 was generated on 2026-10-28; its private key and passphrase are stored locally
-and are not committed. The repository was republished with `v1.0.5` on
+and are not committed. The repository was republished with `v1.0.6` on
 2026-11-05, and both `InRelease` and `repomd.xml.asc` verify against the new
 fingerprint.
 

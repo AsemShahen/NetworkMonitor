@@ -14,7 +14,7 @@
 - **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.0.7` موقّعًا بالمفتاح الجديد)
 - **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
 - **AUR:** `network-monitor-qt-bin` (حزمة `1.0.7` المحلية جاهزة؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503، لذا إنشاء الحساب وإضافة مفتاح SSH والدفع متوقف حاليًا)
-- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> (نجح الاختبار على `v1.0.4`؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
+- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> دُمج في 2026-11-02 (نجح الاختبار على `v1.0.4`؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (منشور؛ حُدّث العنوان إلى عنوان Show HN المُعدّ)
 - **Reddit:** منشور r/linux <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> أزاله AutoModerator لأن الحساب يملك 1 من الكارما؛ ومحاولة r/linuxapps اصطدمت بحد المعدل/خطأ من Reddit، لذا لا يوجد منشور Reddit حي بعد.
 
@@ -190,7 +190,7 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [x] التحقق من `apt/dists/stable/InRelease` بالمفتاح المنشور.
 - [x] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
 - [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها (متوقف: لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا، HTTP 503).
-- [x] فتح PR في AppImageHub (ملف واحد فقط) ومتابعة تعليق الاختبار.
+- [x] فتح PR في AppImageHub (ملف واحد فقط)، ونجح الاختبار، ودُمج في 2026-11-02.
 - [x] نجاح اختبار AppImageHub على `v1.0.4` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04؛ v1.0.4 يعالج الثيم الداكن الافتراضي ويضيف معلومات تحديث `.zsync`).
 - [ ] إعادة اختبار AppImage الخاص بـ`v1.0.7` على AppImageHub بعد تغييرات جامع الخلفية.
 - [x] ظهور لقطات README على GitHub.

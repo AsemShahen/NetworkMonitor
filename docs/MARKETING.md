@@ -11,10 +11,10 @@ Do not claim a channel is live before it is.
 - **Email:** <asemshahen5@gmail.com>
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
-- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.6>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.6` signed with the new key)
+- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.7>
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.7` signed with the new key)
 - **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
-- **AUR:** `network-monitor-qt-bin` (local `1.0.6` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
+- **AUR:** `network-monitor-qt-bin` (local `1.0.7` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> (test passed on `v1.0.4`; the v1.0.3 dark-default and missing-update-information warnings are resolved)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
 - **Reddit:** r/linux post <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> was removed by AutoModerator because the account has 1 karma; an r/linuxapps retry hit Reddit's rate limit/error, so there is no live Reddit post yet.
@@ -32,8 +32,10 @@ for Debian/Ubuntu and Fedora. It uses native Netlink counters for accurate
 per-application download/upload rates, with `ss` and `/proc/net` fallbacks. It
 shows active connections, executable paths, CPU/RSS, session totals, monthly
 and daily usage with a chart and CSV export, and an interactive traffic chart.
-Blocking is real: a polkit-authenticated helper applies cgroup v2 and nftables
-rules, with a persistent blocklist and import/export.
+An optional background collector keeps usage updated while the app is closed,
+using a systemd user service with single-writer SQLite coordination. Blocking is
+real: a polkit-authenticated helper applies cgroup v2 and nftables rules, with a
+persistent blocklist and import/export.
 
 It is local-first: it reads `/proc` and does not need an account or a cloud
 service. The interface defaults to English and switches instantly to Arabic
@@ -76,12 +78,15 @@ subreddit at once.
 
 **Title:** Network Monitor: per-app bandwidth monitor with real nftables blocking
 
-I released Network Monitor 1.0.6, a GPL-3.0-or-later desktop app for Linux. It
+I released Network Monitor 1.0.7, a GPL-3.0-or-later desktop app for Linux. It
 uses native Netlink counters to show accurate per-application download/upload
 speeds, connections, executable paths, session totals, monthly/daily usage,
-and a chart. It can block apps with cgroup v2 + nftables via polkit, and the
-UI is English/Arabic with RTL support. The new in-app updater checks signed
-GitHub releases and can update manual, AppImage, deb, rpm, and Flatpak installs.
+and a chart. Version 1.0.7 adds an optional background collector that keeps
+usage updated while the app is closed, using a systemd user service with
+single-writer SQLite coordination. It can block apps with cgroup v2 + nftables
+via polkit, and the UI is English/Arabic with RTL support. The in-app updater
+checks signed GitHub releases and can update manual, AppImage, deb, rpm, and
+Flatpak installs.
 
 It is packaged as `.deb`, `.rpm`, and `.AppImage`. The source and release notes
 are here: <https://github.com/AsemShahen/NetworkMonitor>
@@ -93,10 +98,11 @@ combinations need more testing.
 
 **Title:** Per-app network monitor with blocking for Ubuntu (deb + signed repo)
 
-I published Network Monitor 1.0.6 for Ubuntu/Debian. It uses native Netlink
+I published Network Monitor 1.0.7 for Ubuntu/Debian. It uses native Netlink
 counters to show accurate per-app download/upload rates and monthly/daily
 usage, and can block selected applications with cgroup v2 + nftables through a
-polkit helper. The new in-app updater verifies signed checksums before
+polkit helper. The optional background collector keeps usage updated while the
+app is closed, and the in-app updater verifies signed checksums before
 installing. There is a `.deb` on GitHub Releases and a signed APT repository
 on GitHub Pages.
 
@@ -105,14 +111,15 @@ Install instructions and screenshots:
 
 ### r/Fedora
 
-**Title:** Network Monitor 1.0.6 RPM: per-app bandwidth, signed updates, and nftables blocking
+**Title:** Network Monitor 1.0.7 RPM: per-app bandwidth, signed updates, and nftables blocking
 
 I published a Fedora/RHEL RPM for Network Monitor, a per-application bandwidth
 monitor with real blocking through cgroup v2 + nftables and polkit. The UI is
-English/Arabic with RTL support, and the new in-app updater verifies signed
-release checksums before installing.
+English/Arabic with RTL support; the optional background collector keeps usage
+updated while the app is closed, and the in-app updater verifies signed release
+checksums before installing.
 
-RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.6>
+RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.7>
 Signed RPM repository: <https://asemshahen.github.io/NetworkMonitor/>
 
 Feedback on Fedora packaging and SELinux/nftables behavior is welcome.
@@ -135,7 +142,7 @@ to another project.
 
 **Title:** مراقب الشبكة: راقب استهلاك كل تطبيق واحظره على لينكس
 
-أصدرت Network Monitor 1.0.6، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
+أصدرت Network Monitor 1.0.7، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
 لمراقبة سرعة التنزيل والرفع لكل تطبيق على لينكس، مع حظر فعلي عبر cgroup v2
 وnftables ومصادقة polkit. الواجهة إنجليزية وعربية مع دعم كامل للاتجاه من
 اليمين إلى اليسار، والافتراضي إنجليزي. يضيف الإصدار محدّثاً داخلياً يتحقق
@@ -157,17 +164,18 @@ Send a short, factual note with a link and a screenshot to:
 - Fedora Magazine: <https://fedoramagazine.org/contribute/>
 - Ubuntu Discourse (community news): <https://discourse.ubuntu.com/>
 
-Suggested subject: `Network Monitor 1.0.6: per-app bandwidth, signed updates, and nftables blocking for Linux`
+Suggested subject: `Network Monitor 1.0.7: per-app bandwidth, signed updates, and nftables blocking for Linux`
 
 Suggested body:
 
-> Network Monitor 1.0.6 is a GPL-3.0-or-later desktop app for Linux that uses
+> Network Monitor 1.0.7 is a GPL-3.0-or-later desktop app for Linux that uses
 > native Netlink counters for accurate per-application download/upload speeds,
 > stores monthly/daily usage, and can block selected apps with cgroup v2 +
-> nftables through a polkit helper. It ships as `.deb`, `.rpm`, and `.AppImage`,
-> has a signed APT/RPM repository, and a bilingual English/Arabic UI with RTL
-> support. Screenshots and release notes:
-> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.6
+> nftables through a polkit helper. An optional background collector keeps
+> usage updated while the app is closed. It ships as `.deb`, `.rpm`, and
+> `.AppImage`, has a signed APT/RPM repository, and a bilingual English/Arabic
+> UI with RTL support. Screenshots and release notes:
+> https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.7
 
 ## SEO
 
@@ -208,7 +216,7 @@ in `docs/screenshots/` as thumbnails.
 - [ ] AUR `network-monitor-qt-bin` pushed and visible (blocked: no AUR account yet and registration temporarily closed, HTTP 503).
 - [x] AppImageHub PR opened (one file only) and test comment reviewed.
 - [x] AppImageHub test passes on `v1.0.4` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 was built on Ubuntu 22.04; v1.0.4 resolves the dark default and adds `.zsync` update information).
-- [ ] Re-test the `v1.0.6` AppImage on AppImageHub after the updater changes.
+- [ ] Re-test the `v1.0.7` AppImage on AppImageHub after the background collector changes.
 - [x] README screenshots render on GitHub.
 - [x] Release notes mention the signed repository, AUR, and AppImageHub status.
 - [x] Post Show HN: <https://news.ycombinator.com/item?id=50268737>

@@ -22,7 +22,9 @@ class Controller:
         self.config = ConfigStore()
         self.blocklist = BlocklistStore()
         self.totals = TotalsStore()
-        self.usage = UsageStore()
+        self.usage = UsageStore(
+            writer=not bool(self.config.get("background_collector", False))
+        )
         self._last_totals_save = time.time()
         self._last_usage_prune = time.time()
         self._recent: dict[str, float] = {}
@@ -32,6 +34,8 @@ class Controller:
         self._prune_usage()
 
     def _prune_usage(self) -> None:
+        if not self.usage.is_writer:
+            return
         try:
             months = int(self.config.get("usage_retention_months", 24))
             days = int(self.config.get("usage_retention_days", 90))
@@ -338,6 +342,18 @@ class Controller:
 
     def reset_usage_month(self, month: str) -> None:
         self.usage.reset_month(month)
+
+    def set_usage_writer(self, enabled: bool, timeout: float = 0.0) -> bool:
+        """Hand the single usage writer role between the UI and collector."""
+        if enabled:
+            # The collector may have counted traffic since our last sample.
+            # Start a new baseline so the first write after takeover does not
+            # double-count the same bytes.
+            if not self.usage.is_writer:
+                self.traffic.reset_baseline()
+            return self.usage.acquire_writer(timeout=timeout)
+        self.usage.release_writer()
+        return True
 
     def export_usage(self, path, month: str) -> int:
         return self.usage.export_csv(path, month)

@@ -27,6 +27,7 @@ CONFIG_FILE = CONFIG_DIR / "config.json"
 BLOCKLIST_FILE = DATA_DIR / "blocklist.json"
 TOTALS_FILE = DATA_DIR / "totals.json"
 USAGE_DB = DATA_DIR / "usage.db"
+COLLECTOR_STATUS_FILE = DATA_DIR / "collector.json"
 
 
 def _atomic_write(path: Path, data) -> None:
@@ -52,6 +53,8 @@ class ConfigStore:
         "autostart": False,
         "minimize_to_tray": False,
         "keep_usage": True,
+        "background_collector": False,
+        "collector_interval_ms": 5000,
         "group_cgroups": True,
         "recent_seconds": 300,
         "usage_retention_months": 24,
@@ -84,6 +87,11 @@ class ConfigStore:
                 self.data["refresh_ms"] = 30000
         except (TypeError, ValueError):
             self.data["refresh_ms"] = 30000
+        try:
+            interval = int(self.data.get("collector_interval_ms", 5000))
+        except (TypeError, ValueError):
+            interval = 5000
+        self.data["collector_interval_ms"] = max(1000, min(60000, interval))
 
     def save(self) -> None:
         _atomic_write(self.path, self.data)

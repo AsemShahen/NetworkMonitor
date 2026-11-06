@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "network-monitor"
-version = "1.0.6"
+version = "1.0.7"
 description = "Netlink-based per-application network monitor for Linux with monthly usage and cgroup v2 + nftables blocking"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 [project.scripts]
-network-monitor = "netmon.app:run"
+network-monitor = "netmon.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/AsemShahen/NetworkMonitor"

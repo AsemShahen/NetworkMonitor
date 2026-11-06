@@ -28,6 +28,8 @@ from PySide6.QtWidgets import (
 )
 
 from .. import __version__
+from .. import collector_service
+from ..collector_status import read_collector_status
 from ..config import REFRESH_CHOICES, install_autostart
 from ..i18n import get_language, is_rtl, refresh_label, set_language, tr
 from . import theme
@@ -56,6 +58,7 @@ class MainWindow(QMainWindow):
         self._pending_silent = False
         self._update_thread = None
         self._install_thread = None
+        self._collector_changing = False
         self._thread = QThread(self)
         self._worker = Worker(controller)
         self._worker.moveToThread(self._thread)
@@ -79,6 +82,12 @@ class MainWindow(QMainWindow):
         self._apply_interval()
         self._update_blocked_tab()
         self.timer.start()
+
+        self._collector_timer = QTimer(self)
+        self._collector_timer.timeout.connect(self._refresh_collector_status)
+        self._collector_timer.start(3000)
+        self.settings_tab.set_collector_available(collector_service.available())
+        QTimer.singleShot(700, self._init_collector)
 
         QTimer.singleShot(600, self.refresh)
         QTimer.singleShot(1800, self.refresh)
@@ -275,6 +284,9 @@ class MainWindow(QMainWindow):
         self.settings_tab.reset_totals_requested.connect(self._reset_totals)
         self.settings_tab.apply_blocklist_requested.connect(self.apply_blocklist)
         self.settings_tab.keep_usage_changed.connect(self._on_keep_usage_changed)
+        self.settings_tab.background_collector_changed.connect(
+            self._on_background_collector_changed
+        )
         self.settings_tab.group_cgroups_changed.connect(self._on_group_cgroups_changed)
         self.settings_tab.autostart_changed.connect(self._on_autostart_changed)
         self.settings_tab.minimize_to_tray_changed.connect(self._on_minimize_to_tray_changed)
@@ -786,6 +798,8 @@ class MainWindow(QMainWindow):
             return
         self._shut = True
         self.timer.stop()
+        if hasattr(self, "_collector_timer"):
+            self._collector_timer.stop()
         for thread in (self._update_thread, self._install_thread):
             if thread is not None and thread.isRunning():
                 thread.wait(2000)
@@ -822,6 +836,126 @@ class MainWindow(QMainWindow):
         self.activateWindow()
         self.tabs.setCurrentWidget(self.usage_tab)
 
+    # ------------------------------------------------------- background collector
+    def _collector_enabled(self) -> bool:
+        return bool(self.controller.config.get("background_collector", False))
+
+    def _set_background_checkbox(self, checked: bool) -> None:
+        box = self.settings_tab.background_collector
+        box.blockSignals(True)
+        box.setChecked(bool(checked))
+        box.blockSignals(False)
+
+    def _init_collector(self) -> None:
+        available = collector_service.available()
+        self.settings_tab.set_collector_available(available)
+        if not self._collector_enabled():
+            self._refresh_collector_status()
+            return
+        if not available:
+            self._revert_collector_to_ui(tr("collector.status.unavailable"), silent=True)
+            return
+        # The controller starts in read-only mode when the collector is enabled.
+        # Make sure the generated unit still points at this installation (an
+        # AppImage path or a package update may have changed).
+        self._start_collector(silent=True)
+
+    def _start_collector(self, silent: bool = False) -> bool:
+        try:
+            collector_service.enable()
+        except Exception as exc:  # noqa: BLE001
+            self._revert_collector_to_ui(str(exc), silent=silent)
+            return False
+        self.controller.config.set("background_collector", True)
+        self._set_background_checkbox(True)
+        self.settings_tab.set_collector_status("starting")
+        self.status.showMessage(tr("collector.enabled"))
+        QTimer.singleShot(1200, self._refresh_collector_status)
+        return True
+
+    def _revert_collector_to_ui(self, reason: str, silent: bool = False) -> None:
+        self.controller.config.set("background_collector", False)
+        self._set_background_checkbox(False)
+        acquired = self.controller.set_usage_writer(True, timeout=1.0)
+        self.settings_tab.set_collector_status("error", error=reason)
+        if not acquired:
+            self.settings_tab.set_collector_status("error", error=tr("collector.lock_failed"))
+        if not silent:
+            message = reason if acquired else tr("collector.lock_failed")
+            QMessageBox.warning(
+                self,
+                tr("collector.failed_title"),
+                tr("collector.failed", message=message),
+            )
+
+    def _refresh_collector_status(self) -> None:
+        if self._collector_changing:
+            return
+        status = read_collector_status()
+        state = str(status.get("state") or "unknown")
+        age = float(status.get("age", 0.0) or 0.0)
+        if state == "running" and not status.get("running"):
+            state = "stopped"
+        if state in {"starting", "blocked"} and age > 60.0:
+            state = "stopped"
+        updated = float(status.get("updated", 0.0) or 0.0)
+        error = str(status.get("error") or "")
+        self.settings_tab.set_collector_status(state, updated=updated, error=error)
+
+    def _on_background_collector_changed(self, value: bool) -> None:
+        if self._collector_changing:
+            return
+        self._collector_changing = True
+        self.settings_tab.set_collector_busy(True)
+        try:
+            if value:
+                if not collector_service.available():
+                    self._set_background_checkbox(False)
+                    self.settings_tab.set_collector_status(
+                        "error", error=tr("collector.status.unavailable")
+                    )
+                    QMessageBox.warning(
+                        self,
+                        tr("collector.failed_title"),
+                        tr("collector.failed", message=tr("collector.status.unavailable")),
+                    )
+                    return
+                # Release the UI lock before systemd starts the collector.
+                self.controller.set_usage_writer(False)
+                self._start_collector()
+            else:
+                try:
+                    collector_service.disable()
+                except Exception as exc:  # noqa: BLE001
+                    self.controller.config.set("background_collector", True)
+                    self._set_background_checkbox(True)
+                    self.settings_tab.set_collector_status("error", error=str(exc))
+                    QMessageBox.warning(
+                        self,
+                        tr("collector.failed_title"),
+                        tr("collector.failed", message=str(exc)),
+                    )
+                    return
+                acquired = self.controller.set_usage_writer(True, timeout=4.0)
+                self.controller.config.set("background_collector", False)
+                self._set_background_checkbox(False)
+                if acquired:
+                    self.settings_tab.set_collector_status("stopped")
+                    self.status.showMessage(tr("collector.disabled"))
+                else:
+                    self.settings_tab.set_collector_status(
+                        "error", error=tr("collector.lock_failed")
+                    )
+                    QMessageBox.warning(
+                        self,
+                        tr("collector.failed_title"),
+                        tr("collector.failed", message=tr("collector.lock_failed")),
+                    )
+        finally:
+            self.settings_tab.set_collector_busy(False)
+            self._collector_changing = False
+            self._refresh_collector_status()
+
     def _on_keep_usage_changed(self, value: bool) -> None:
         self.controller.config.set("keep_usage", bool(value))
         self.usage_tab.refresh()
@@ -855,7 +989,32 @@ class MainWindow(QMainWindow):
         )
         if reply != QMessageBox.Yes:
             return
-        self.controller.reset_usage_month(month)
+        if self.controller.usage.is_writer:
+            self.controller.reset_usage_month(month)
+        else:
+            if not self._collector_enabled() or not collector_service.available():
+                QMessageBox.warning(
+                    self,
+                    tr("collector.failed_title"),
+                    tr("collector.failed", message=tr("collector.lock_failed")),
+                )
+                return
+            try:
+                collector_service.disable()
+                if not self.controller.set_usage_writer(True, timeout=4.0):
+                    self._revert_collector_to_ui(tr("collector.lock_failed"))
+                    return
+            except Exception as exc:  # noqa: BLE001
+                self._revert_collector_to_ui(str(exc))
+                return
+            try:
+                self.controller.reset_usage_month(month)
+            finally:
+                self.controller.set_usage_writer(False)
+                try:
+                    collector_service.enable()
+                except Exception as exc:  # noqa: BLE001
+                    self._revert_collector_to_ui(str(exc))
         self.usage_tab.refresh_months()
         self.usage_tab.refresh()
         self.status.showMessage(tr("usage.reset_done", month=month))

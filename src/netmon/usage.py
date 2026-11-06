@@ -2,13 +2,17 @@ from __future__ import annotations
 
 """SQLite storage for monthly and daily per-application usage.
 
-The GUI and a future headless collector can read the same database.  WAL mode
-and a process-local lock keep the current single-process writer safe while the
-UI reads from the main thread.
+The GUI and the background collector read the same database.  WAL mode lets
+readers run while a writer is active, and an advisory file lock elects exactly
+one process to perform usage writes.  The lock is held for the lifetime of the
+elected writer so two copies of the UI, or the UI and the collector, can never
+double-count the same traffic.
 """
 
 import calendar
 import csv
+import fcntl
+import os
 import sqlite3
 import threading
 import time
@@ -19,61 +23,178 @@ from .config import USAGE_DB
 
 
 class UsageStore:
-    def __init__(self, path: Path = USAGE_DB):
+    def __init__(self, path: Path = USAGE_DB, writer: bool = True):
         self.path = Path(path)
         self._lock = threading.RLock()
         self.last_error: str | None = None
         self._conn: sqlite3.Connection | None = None
+        self._lock_path = self.path.with_name(self.path.name + ".lock")
+        self._lock_fd: int | None = None
+        self._initialized = False
+        self.is_writer = False
+        self.writer_desired = bool(writer)
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
         except OSError as exc:
             self.last_error = str(exc)
             return
+        if self.writer_desired:
+            self.acquire_writer(timeout=0.0)
         self._connect()
+        self._initialized = True
+
+    def acquire_writer(self, timeout: float = 0.0) -> bool:
+        """Try to become the single usage writer.
+
+        The lock is a non-blocking ``flock`` on ``usage.db.lock``.  It is held
+        until :meth:`release_writer` or :meth:`close`, so the GUI can hand the
+        writer role to the background collector without either process writing
+        at the same time.
+        """
+        with self._lock:
+            self.writer_desired = True
+            if self.is_writer:
+                return True
+        deadline = time.monotonic() + max(0.0, timeout)
+        while True:
+            try:
+                fd = os.open(self._lock_path, os.O_CREAT | os.O_RDWR, 0o600)
+            except OSError as exc:
+                self.last_error = str(exc)
+                return False
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                os.close(fd)
+                if time.monotonic() >= deadline:
+                    return False
+                time.sleep(0.1)
+                continue
+            except OSError as exc:
+                os.close(fd)
+                self.last_error = str(exc)
+                return False
+            # Publish the writer role while holding the in-process lock.  A
+            # worker thread may be inside add_interval(), and it must never see
+            # is_writer=True before query_only has been turned off.
+            with self._lock:
+                self._lock_fd = fd
+                # A reader connection is opened with query_only=ON.  Turn
+                # writes back on only after this process has won the file lock.
+                if self._initialized and not self._enable_write():
+                    self.release_writer(relinquish=False)
+                    return False
+                self.is_writer = True
+            return True
+
+    def release_writer(self, relinquish: bool = True) -> None:
+        """Release the writer lock so another process can take over."""
+        # Wait for an in-flight transaction before handing the file lock to
+        # the collector.  add_interval() re-checks is_writer under this lock.
+        with self._lock:
+            fd = self._lock_fd
+            self._lock_fd = None
+            self.is_writer = False
+            if relinquish:
+                self.writer_desired = False
+            if self._conn is not None:
+                try:
+                    self._conn.execute("PRAGMA query_only=ON")
+                except sqlite3.Error:
+                    pass
+            if fd is None:
+                return
+            try:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            except OSError:
+                pass
+            try:
+                os.close(fd)
+            except OSError:
+                pass
+
+    def _ensure_writer(self, timeout: float = 0.0) -> bool:
+        if self.is_writer:
+            return True
+        if not self.writer_desired:
+            return False
+        return self.acquire_writer(timeout=timeout)
+
+    def _init_schema(self) -> None:
+        assert self._conn is not None
+        self._conn.execute("PRAGMA journal_mode=WAL")
+        self._conn.execute("PRAGMA synchronous=NORMAL")
+        self._conn.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS apps (
+                app_key TEXT PRIMARY KEY,
+                name TEXT NOT NULL DEFAULT '',
+                exe TEXT NOT NULL DEFAULT '',
+                first_seen REAL NOT NULL DEFAULT 0,
+                last_seen REAL NOT NULL DEFAULT 0
+            );
+            CREATE TABLE IF NOT EXISTS monthly (
+                month TEXT NOT NULL,
+                app_key TEXT NOT NULL,
+                down INTEGER NOT NULL DEFAULT 0,
+                up INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (month, app_key)
+            );
+            CREATE TABLE IF NOT EXISTS daily (
+                day TEXT NOT NULL,
+                app_key TEXT NOT NULL,
+                down INTEGER NOT NULL DEFAULT 0,
+                up INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (day, app_key)
+            );
+            CREATE INDEX IF NOT EXISTS idx_monthly_month ON monthly(month);
+            CREATE INDEX IF NOT EXISTS idx_daily_day ON daily(day);
+            """
+        )
+        self._conn.commit()
 
     def _connect(self) -> None:
         try:
-            self._conn = sqlite3.connect(
+            conn = sqlite3.connect(
                 str(self.path),
                 timeout=5.0,
                 check_same_thread=False,
             )
-            self._conn.row_factory = sqlite3.Row
+            conn.row_factory = sqlite3.Row
+            self._conn = conn
             with self._lock:
-                self._conn.execute("PRAGMA journal_mode=WAL")
-                self._conn.execute("PRAGMA synchronous=NORMAL")
-                self._conn.execute("PRAGMA busy_timeout=5000")
-                self._conn.executescript(
-                    """
-                    CREATE TABLE IF NOT EXISTS apps (
-                        app_key TEXT PRIMARY KEY,
-                        name TEXT NOT NULL DEFAULT '',
-                        exe TEXT NOT NULL DEFAULT '',
-                        first_seen REAL NOT NULL DEFAULT 0,
-                        last_seen REAL NOT NULL DEFAULT 0
-                    );
-                    CREATE TABLE IF NOT EXISTS monthly (
-                        month TEXT NOT NULL,
-                        app_key TEXT NOT NULL,
-                        down INTEGER NOT NULL DEFAULT 0,
-                        up INTEGER NOT NULL DEFAULT 0,
-                        PRIMARY KEY (month, app_key)
-                    );
-                    CREATE TABLE IF NOT EXISTS daily (
-                        day TEXT NOT NULL,
-                        app_key TEXT NOT NULL,
-                        down INTEGER NOT NULL DEFAULT 0,
-                        up INTEGER NOT NULL DEFAULT 0,
-                        PRIMARY KEY (day, app_key)
-                    );
-                    CREATE INDEX IF NOT EXISTS idx_monthly_month ON monthly(month);
-                    CREATE INDEX IF NOT EXISTS idx_daily_day ON daily(day);
-                    """
-                )
-                self._conn.commit()
+                conn.execute("PRAGMA busy_timeout=5000")
+                if self.is_writer:
+                    self._init_schema()
+                else:
+                    # Do not run DDL at startup while another process owns the
+                    # writer role.  Only bootstrap a brand-new database, then
+                    # make this connection read-only.
+                    try:
+                        needs_schema = self.path.stat().st_size == 0
+                    except OSError:
+                        needs_schema = True
+                    if needs_schema:
+                        self._init_schema()
+                    conn.execute("PRAGMA query_only=ON")
         except (OSError, sqlite3.Error) as exc:
             self.last_error = str(exc)
             self._conn = None
+
+    def _enable_write(self) -> bool:
+        """Re-enable writes after this process acquires the writer lock."""
+        if self._conn is None:
+            self._connect()
+            if self._conn is None:
+                return False
+        try:
+            with self._lock:
+                self._conn.execute("PRAGMA query_only=OFF")
+                self._init_schema()
+            return True
+        except (OSError, sqlite3.Error) as exc:
+            self.last_error = str(exc)
+            return False
 
     @staticmethod
     def _segments(start: float, end: float) -> list[tuple[float, float]]:
@@ -121,6 +242,8 @@ class UsageStore:
     ) -> None:
         if not app_key or (down <= 0 and up <= 0):
             return
+        if not self._ensure_writer():
+            return
         if self._conn is None:
             return
         segments = self._segments(start, end)
@@ -148,6 +271,11 @@ class UsageStore:
             monthly[month_key][1] += d_up
         try:
             with self._lock, self._conn:
+                # The UI may have released the writer role while this sample
+                # was being attributed.  Never write after the collector has
+                # taken over.
+                if not self.is_writer:
+                    return
                 now = max(start, end) or time.time()
                 self._conn.execute(
                     """
@@ -285,16 +413,22 @@ class UsageStore:
         return values
 
     def reset_month(self, month: str) -> None:
+        if not self._ensure_writer():
+            return
         if self._conn is None:
             return
         try:
             with self._lock, self._conn:
+                if not self.is_writer:
+                    return
                 self._conn.execute("DELETE FROM monthly WHERE month = ?", (month,))
                 self._conn.execute("DELETE FROM daily WHERE day LIKE ?", (f"{month}-%",))
         except sqlite3.Error as exc:
             self.last_error = str(exc)
 
     def prune(self, months: int = 24, days: int = 90) -> None:
+        if not self._ensure_writer():
+            return
         if self._conn is None:
             return
         today = date.today()
@@ -303,6 +437,8 @@ class UsageStore:
         cutoff_day = (today - timedelta(days=max(1, days))).isoformat()
         try:
             with self._lock, self._conn:
+                if not self.is_writer:
+                    return
                 self._conn.execute("DELETE FROM monthly WHERE month < ?", (cutoff_month,))
                 self._conn.execute("DELETE FROM daily WHERE day < ?", (cutoff_day,))
         except sqlite3.Error as exc:
@@ -354,3 +490,4 @@ class UsageStore:
                     self._conn.close()
                 finally:
                     self._conn = None
+        self.release_writer(relinquish=False)

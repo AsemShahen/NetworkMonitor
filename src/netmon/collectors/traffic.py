@@ -292,6 +292,17 @@ class TrafficEngine:
         self.last_error: str | None = None
         self.last_diagnostics: dict = {}
 
+    def reset_baseline(self) -> None:
+        """Forget per-socket counters so the next sample starts a new baseline.
+
+        This is used when the GUI takes over usage writing from the background
+        collector.  Without it, the first GUI sample would include traffic that
+        the collector already recorded.
+        """
+        self._prev.clear()
+        self._last_ts = 0.0
+        self._last_source = ""
+
     @property
     def available(self) -> bool:
         if self._last_source:

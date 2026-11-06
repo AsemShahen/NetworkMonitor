@@ -6,14 +6,24 @@ import tempfile
 import unittest
 from datetime import datetime
 from pathlib import Path
+from unittest import mock
 
+from netmon import collector_service
+from netmon.collector import Collector, aggregate_sample
+from netmon.collector_status import read_collector_status, write_collector_status
 from netmon.collectors.net_conn import SocketRecord, app_key_for, cgroup_app_key
 from netmon.collectors.netlink import NetlinkBackend
-from netmon.collectors.traffic import TrafficEngine, parse_ss, parse_ss_sockets
+from netmon.collectors.traffic import (
+    NetCounters,
+    SampleResult,
+    TrafficEngine,
+    parse_ss,
+    parse_ss_sockets,
+)
 from netmon.config import BlocklistStore, ConfigStore, slugify
 from netmon.controller import Controller
 from netmon.i18n import get_language, refresh_label, set_language, tr
-from netmon.models import BlockEntry
+from netmon.models import BlockEntry, ProcInfo
 from netmon.updater import (
     ReleaseAsset,
     _install_appimage,
@@ -308,6 +318,23 @@ class TestI18n(unittest.TestCase):
             self.assertNotEqual(tr("update.button"), "update.button")
             self.assertNotEqual(tr("update.latest", version="1.0.6"), "update.latest")
 
+    def test_collector_labels_exist_in_both_languages(self) -> None:
+        for code in ("en", "ar"):
+            set_language(code)
+            self.assertNotEqual(tr("settings.group.collector"), "settings.group.collector")
+            self.assertNotEqual(
+                tr("settings.background_collector"),
+                "settings.background_collector",
+            )
+            self.assertNotEqual(
+                tr("collector.status.running", time="12:00"),
+                "collector.status.running",
+            )
+            self.assertNotEqual(
+                tr("collector.status.error", message="x"),
+                "collector.status.error",
+            )
+
 
 class TestStores(unittest.TestCase):
     def test_config_roundtrip(self) -> None:
@@ -321,6 +348,8 @@ class TestStores(unittest.TestCase):
             again = ConfigStore(path)
             self.assertEqual(again.get("refresh_ms"), 5000)
             self.assertTrue(again.get("keep_usage"))
+            self.assertFalse(again.get("background_collector"))
+            self.assertEqual(again.get("collector_interval_ms"), 5000)
             self.assertTrue(again.get("group_cgroups"))
             self.assertEqual(again.get("recent_seconds"), 300)
             self.assertFalse(again.get("minimize_to_tray"))
@@ -441,6 +470,144 @@ class TestUsageStore(unittest.TestCase):
         self.assertEqual(base["down_total"], 100)
         self.assertEqual(base["up_total"], 10)
         self.assertEqual(base["process_count"], 2)
+
+
+class TestCollectorService(unittest.TestCase):
+    def test_generated_unit_and_launcher(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            unit_path = Path(tmp) / "user" / collector_service.UNIT_NAME
+            wrapper_path = Path(tmp) / "data" / "collector-launcher.sh"
+            with (
+                mock.patch.object(collector_service, "UNIT_PATH", unit_path),
+                mock.patch.object(collector_service, "WRAPPER_PATH", wrapper_path),
+                mock.patch.object(
+                    collector_service,
+                    "_launcher_command",
+                    return_value=["/opt/network-monitor/network-monitor", "--collector"],
+                ),
+                mock.patch.object(collector_service, "_systemctl", return_value=None),
+            ):
+                result = collector_service.install_unit()
+            self.assertEqual(result, unit_path)
+            unit = unit_path.read_text(encoding="utf-8")
+            self.assertIn('ExecStart="', unit)
+            self.assertIn("WantedBy=default.target", unit)
+            wrapper = wrapper_path.read_text(encoding="utf-8")
+            self.assertIn("exec /opt/network-monitor/network-monitor --collector", wrapper)
+            self.assertTrue(os.access(wrapper_path, os.X_OK))
+
+
+class TestUsageWriterElection(unittest.TestCase):
+    def test_only_one_writer_and_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "usage.db"
+            first = UsageStore(path)
+            second = UsageStore(path)
+            try:
+                self.assertTrue(first.is_writer)
+                self.assertFalse(second.is_writer)
+                start = datetime(2024, 5, 1, 12, 0, 0).timestamp()
+                first.add_interval("exe:/one", "One", "/one", 100, 10, start, start + 5)
+                second.add_interval("exe:/two", "Two", "/two", 200, 20, start, start + 5)
+                self.assertEqual(first.month_totals("2024-05"), (100, 10))
+            finally:
+                first.close()
+            try:
+                self.assertTrue(second.acquire_writer(timeout=1.0))
+                start = datetime(2024, 5, 1, 12, 1, 0).timestamp()
+                second.add_interval("exe:/two", "Two", "/two", 200, 20, start, start + 5)
+                self.assertEqual(second.month_totals("2024-05"), (300, 30))
+            finally:
+                second.close()
+
+    def test_reader_does_not_write_or_reset(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "usage.db"
+            writer = UsageStore(path)
+            reader = UsageStore(path, writer=False)
+            try:
+                start = datetime(2024, 6, 1, 12, 0, 0).timestamp()
+                writer.add_interval("exe:/app", "App", "/app", 50, 5, start, start + 5)
+                reader.add_interval("exe:/app", "App", "/app", 500, 50, start, start + 5)
+                reader.reset_month("2024-06")
+                self.assertEqual(writer.month_totals("2024-06"), (50, 5))
+            finally:
+                reader.close()
+                writer.close()
+
+
+class TestCollectorAggregation(unittest.TestCase):
+    def test_aggregate_sample_groups_pids_by_application(self) -> None:
+        sample = SampleResult(
+            counters={
+                990001: NetCounters(pid=990001, name="waterfox"),
+                990002: NetCounters(pid=990002, name="waterfox"),
+            },
+            down_bytes={990001: 100, 990002: 200},
+            up_bytes={990001: 10, 990002: 20},
+            active_pids={990001, 990002},
+            dt=5.0,
+            source="netlink",
+        )
+        procs = {
+            990001: ProcInfo(pid=990001, name="waterfox", exe="/usr/bin/waterfox"),
+            990002: ProcInfo(pid=990002, name="waterfox", exe="/usr/bin/waterfox"),
+        }
+        rows = aggregate_sample(sample, procs)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["app_key"], "exe:/usr/bin/waterfox")
+        self.assertEqual(rows[0]["down"], 300)
+        self.assertEqual(rows[0]["up"], 30)
+
+    def test_collect_once_writes_monthly_usage(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            store = UsageStore(Path(tmp) / "usage.db")
+            try:
+                collector = Collector(store, interval_ms=1000)
+                collector.config = ConfigStore(Path(tmp) / "config.json")
+                sample = SampleResult(
+                    counters={990001: NetCounters(pid=990001, name="waterfox")},
+                    down_bytes={990001: 300},
+                    up_bytes={990001: 30},
+                    active_pids={990001},
+                    dt=5.0,
+                    source="netlink",
+                )
+                collector.traffic = mock.Mock()
+                collector.traffic.poll.return_value = sample
+                collector.traffic.describe.return_value = "test"
+                collector.scanner = mock.Mock()
+                collector.scanner.scan.return_value = [
+                    ProcInfo(
+                        pid=990001,
+                        name="waterfox",
+                        exe="/usr/bin/waterfox",
+                    )
+                ]
+                details = collector.collect_once()
+                month = datetime.now().strftime("%Y-%m")
+                self.assertEqual(details["written"], 1)
+                self.assertEqual(store.month_totals(month), (300, 30))
+            finally:
+                store.close()
+
+    def test_status_file_heartbeat_and_blocked_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "collector.json"
+            write_collector_status("running", path=path, interval_ms=5000)
+            status = read_collector_status(path)
+            self.assertTrue(status["running"])
+            self.assertEqual(status["state"], "running")
+            write_collector_status(
+                "blocked",
+                path=path,
+                interval_ms=5000,
+                error="writer busy",
+            )
+            status = read_collector_status(path)
+            self.assertFalse(status["running"])
+            self.assertEqual(status["state"], "blocked")
+            self.assertEqual(status["error"], "writer busy")
 
 
 if __name__ == "__main__":

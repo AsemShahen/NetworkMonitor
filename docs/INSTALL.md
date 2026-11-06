@@ -106,6 +106,27 @@ After that, later releases can be installed with the update button. The
 updater keeps a timestamped backup in `/opt` and restores it automatically if
 the manual installation fails.
 
+## Background collection (optional)
+
+Version 1.0.7 adds **Settings → Background collection → Collect monthly usage
+while Network Monitor is closed**. It installs and enables a systemd user
+service in `~/.config/systemd/user/network-monitor-collector.service`; no root
+access is needed.
+
+The service uses the same
+`~/.local/share/network-monitor/usage.db` as the application. A single-writer
+`flock` on `usage.db.lock` prevents the GUI and collector from writing usage at
+the same time. The application hands the writer role to the collector when the
+service starts and takes it back when the service is disabled.
+
+Status is written to `~/.local/share/network-monitor/collector.json`. Enable or
+disable collection from the same Settings checkbox; disabling it returns usage
+counting to the GUI only while the application is open.
+
+The feature requires a working systemd user session. If systemd is unavailable,
+the setting is disabled and the application continues counting while it is
+open.
+
 ## Option 5: Arch Linux (AUR)
 
 The AUR package name is `network-monitor-qt-bin` (submission pending). It
@@ -167,8 +188,9 @@ the `ss` fallback can provide counters. The final `/proc/net` mode lists
 connections but reports that byte counters are unavailable.
 
 Monthly and daily usage is stored in
-`~/.local/share/network-monitor/usage.db` and is counted only while Network
-Monitor is running.
+`~/.local/share/network-monitor/usage.db`. It is counted while Network Monitor
+is running, or continuously when the optional background collector is enabled
+in Settings.
 
 ## Verify the signing key
 

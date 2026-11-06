@@ -6,6 +6,7 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Native Netlink per-socket counters through `pyroute2`, with an automatic `ss` fallback and a final `/proc/net` discovery mode that clearly says when byte counters are unavailable.
 - Live per-process download and upload rates (KB/s–MB/s), active connections, full executable paths, CPU, and RSS.
 - Monthly and daily usage per application, a daily download/upload chart, a searchable usage table, and CSV export.
+- Optional background collector that keeps monthly and daily usage updated while the app is closed, using a systemd user service with single-writer SQLite coordination.
 - Optional cgroup grouping for Flatpak, Snap, and AppImage applications so multi-process apps appear as one row.
 - Session totals, current-month card, and an interactive time-series chart.
 - Search, sortable columns, and hide-idle filter.
@@ -16,14 +17,15 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs.
 - English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
 
-## New in 1.0.6
+## New in 1.0.7
 
-- Added **Check for updates** in Settings. It checks GitHub Releases, downloads the right asset for the current installation, verifies `SHA256SUMS` and its GPG signature, and installs without opening a browser.
-- Supports manual `/opt/network-monitor` installs through a signed `NetworkMonitor-<version>-linux-x86_64.tar.gz` archive, with `pkexec`, a backup, and automatic rollback on failure.
-- Supports AppImage replacement, `.deb` through `apt-get`, `.rpm` through `dnf`/`rpm`, and Flatpak through `flatpak update`.
-- Added the first signed manual-update archive. Copies installed before 1.0.6 need one manual installation; later releases can use the button.
+- Added **Settings → Background collection**. An optional systemd user service keeps monthly and daily usage updating after the window is closed. It is disabled by default and needs no root access.
+- The GUI and collector share one SQLite database with an advisory single-writer lock. The writer role is handed off without double-counting traffic, and the GUI resets its baseline when it takes over.
+- Added collector status, enable/disable, startup restoration, and generated service units for manual `/opt`, `.deb`, `.rpm`, AppImage, and Flatpak installations.
+- Signed in-app updates remain available from **Settings → Application updates**.
 
-See [docs/RELEASE_NOTES_v1.0.6.md](docs/RELEASE_NOTES_v1.0.6.md) for details.
+See [docs/RELEASE_NOTES_v1.0.7.md](docs/RELEASE_NOTES_v1.0.7.md) for details.
+Previous release: [docs/RELEASE_NOTES_v1.0.6.md](docs/RELEASE_NOTES_v1.0.6.md).
 
 ## Screenshots
 
@@ -108,7 +110,7 @@ Output is written to `build/`. See `packaging/README_AR.md` for details and requ
 - `iproute2` (`ss`) is an optional fallback and is recommended. Without Netlink or `ss`, the app still discovers connections from `/proc/net` but cannot show byte counters.
 - `nftables` + `polkit` (`pkexec`) for blocking.
 - The app runtime (Python, PySide6, pyqtgraph, numpy, pyroute2) is bundled in the release packages; the privileged helper uses the system `python3`.
-- Monthly usage is counted only while Network Monitor is running. UDP/QUIC sockets have no reliable kernel byte counters, so they are shown as “speed unavailable” instead of a misleading `0 B/s`.
+- Monthly usage is counted while Network Monitor is running, or continuously when the optional background collector is enabled. UDP/QUIC sockets have no reliable kernel byte counters, so they are shown as “speed unavailable” instead of a misleading `0 B/s`.
 
 ## Tests
 ```bash

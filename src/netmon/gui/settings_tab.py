@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import (
     QApplication,
@@ -30,6 +32,7 @@ class SettingsTab(QWidget):
     keep_totals_changed = Signal(bool)
     apply_on_start_changed = Signal(bool)
     keep_usage_changed = Signal(bool)
+    background_collector_changed = Signal(bool)
     group_cgroups_changed = Signal(bool)
     autostart_changed = Signal(bool)
     minimize_to_tray_changed = Signal(bool)
@@ -53,6 +56,11 @@ class SettingsTab(QWidget):
         self._diag_text = ""
         self._update_status = tr("update.idle")
         self._update_busy = False
+        self._collector_available = True
+        self._collector_busy = False
+        self._collector_state = "unknown"
+        self._collector_updated = 0.0
+        self._collector_error = ""
 
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
@@ -147,6 +155,29 @@ class SettingsTab(QWidget):
         self._add_hint(lay, "settings.hint.apply")
         self._add_hint(lay, "settings.hint.usage")
         root.addWidget(self.group_monitor)
+
+        # ------------------------------ الجمع في الخلفية ------------------------------
+        self.group_collector = QGroupBox()
+        clay = QVBoxLayout(self.group_collector)
+        clay.setSpacing(10)
+
+        self.background_collector = QCheckBox()
+        self.background_collector.setChecked(
+            bool(config.get("background_collector", False))
+        )
+        self.background_collector.toggled.connect(
+            self.background_collector_changed.emit
+        )
+        clay.addWidget(self.background_collector)
+
+        self.collector_status_label = QLabel()
+        self.collector_status_label.setObjectName("cardHint")
+        self.collector_status_label.setWordWrap(True)
+        self.collector_status_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        clay.addWidget(self.collector_status_label)
+
+        self._add_hint(clay, "settings.hint.collector")
+        root.addWidget(self.group_collector)
 
         # ----------------------------- الإجماليات والصيانة -----------------------------
         self.group_maintenance = QGroupBox()
@@ -290,6 +321,7 @@ class SettingsTab(QWidget):
         if not self._update_busy:
             self._update_status = tr("update.idle")
         self.group_monitor.setTitle(tr("settings.group.monitor"))
+        self.group_collector.setTitle(tr("settings.group.collector"))
         self.group_maintenance.setTitle(tr("settings.group.maintenance"))
         self.group_updates.setTitle(tr("settings.group.updates"))
         self.group_diagnostics.setTitle(tr("settings.group.diagnostics"))
@@ -301,6 +333,7 @@ class SettingsTab(QWidget):
         self.keep_totals.setText(tr("settings.keep_totals"))
         self.apply_on_start.setText(tr("settings.apply_on_start"))
         self.keep_usage.setText(tr("settings.keep_usage"))
+        self.background_collector.setText(tr("settings.background_collector"))
         self.group_cgroups.setText(tr("settings.group_cgroups"))
         self.autostart.setText(tr("settings.autostart"))
         self.minimize_to_tray.setText(tr("settings.minimize_to_tray"))
@@ -342,6 +375,7 @@ class SettingsTab(QWidget):
         )
         self._render_engine()
         self._render_diagnostics()
+        self._render_collector_status()
         self.env_label.setText(self._env_value)
         self._apply_direction()
 
@@ -360,12 +394,14 @@ class SettingsTab(QWidget):
         self.email_label.setAlignment(align)
         self.update_version_label.setAlignment(align)
         self.update_status_label.setAlignment(align)
+        self.collector_status_label.setAlignment(align)
 
         self.diag_label.setAlignment(align)
         self.copy_diag_btn.setLayoutDirection(Qt.RightToLeft if rtl else Qt.LeftToRight)
         self.update_btn.setLayoutDirection(Qt.RightToLeft if rtl else Qt.LeftToRight)
         for group in (
             self.group_monitor,
+            self.group_collector,
             self.group_maintenance,
             self.group_updates,
             self.group_diagnostics,
@@ -452,6 +488,57 @@ class SettingsTab(QWidget):
     def set_env_text(self, text: str) -> None:
         self._env_value = text
         self.env_label.setText(text)
+
+    def set_collector_available(self, available: bool) -> None:
+        self._collector_available = bool(available)
+        self.background_collector.setEnabled(
+            self._collector_available and not self._collector_busy
+        )
+        self._render_collector_status()
+
+    def set_collector_busy(self, busy: bool) -> None:
+        self._collector_busy = bool(busy)
+        self.background_collector.setEnabled(
+            self._collector_available and not self._collector_busy
+        )
+
+    def set_collector_status(
+        self,
+        state: str,
+        updated: float = 0.0,
+        error: str = "",
+    ) -> None:
+        self._collector_state = str(state or "unknown")
+        self._collector_updated = float(updated or 0.0)
+        self._collector_error = str(error or "")
+        self._render_collector_status()
+
+    def _render_collector_status(self) -> None:
+        if not self._collector_available:
+            text = tr("collector.status.unavailable")
+        elif self._collector_state == "running":
+            timestamp = self._collector_updated
+            when = (
+                datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+                if timestamp > 0
+                else "—"
+            )
+            text = tr("collector.status.running", time=when)
+        elif self._collector_state == "starting":
+            text = tr("collector.status.starting")
+        elif self._collector_state == "blocked":
+            text = tr("collector.status.blocked")
+        elif self._collector_state == "error":
+            text = tr(
+                "collector.status.error",
+                message=self._collector_error or "—",
+            )
+        elif self._collector_state == "stopped":
+            text = tr("collector.status.stopped")
+        else:
+            text = tr("collector.status.unknown")
+        self.collector_status_label.setText(text)
+        self.collector_status_label.setToolTip(self._collector_error)
 
     def set_diagnostics(self, diag: dict) -> None:
         self._diagnostics = dict(diag or {})

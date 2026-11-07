@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QTableView,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -315,26 +316,47 @@ class UsageTab(QWidget):
             cards.addWidget(card, 1)
         outer.addLayout(cards)
 
-        self.chart = UsageChart()
-        self.chart.setMinimumHeight(180)
-        outer.addWidget(self.chart, 2)
+        self.model = UsageModel()
+        self.proxy = UsageFilterProxy()
+        self.proxy.setSourceModel(self.model)
 
+        self.views = QTabWidget()
+        self.views.setObjectName("usageViews")
+        self.views.setDocumentMode(True)
+        self.views.setUsesScrollButtons(False)
+
+        table_page = QWidget()
+        table_layout = QVBoxLayout(table_page)
+        table_layout.setContentsMargins(0, 10, 0, 0)
+        table_layout.setSpacing(8)
         tools = QHBoxLayout()
         tools.setSpacing(8)
         self.filter = QLineEdit()
         self.filter.setClearButtonEnabled(True)
         self.filter.textChanged.connect(lambda text: self.proxy.set_needle(text))
         tools.addWidget(self.filter, 1)
-        outer.addLayout(tools)
-
-        self.model = UsageModel()
-        self.proxy = UsageFilterProxy()
-        self.proxy.setSourceModel(self.model)
+        table_layout.addLayout(tools)
         self.table = UsageTable()
         self.table.setModel(self.proxy)
         self.table.apply_column_widths()
         self.table.sortByColumn(3, Qt.DescendingOrder)
-        outer.addWidget(self.table, 3)
+        table_layout.addWidget(self.table, 1)
+        self.views.addTab(table_page, "")
+
+        chart_page = QWidget()
+        chart_layout = QVBoxLayout(chart_page)
+        chart_layout.setContentsMargins(0, 10, 0, 0)
+        chart_layout.setSpacing(8)
+        self.chart_note = QLabel()
+        self.chart_note.setObjectName("cardHint")
+        self.chart_note.setWordWrap(True)
+        chart_layout.addWidget(self.chart_note)
+        self.chart = UsageChart()
+        self.chart.setMinimumHeight(220)
+        chart_layout.addWidget(self.chart, 1)
+        self.views.addTab(chart_page, "")
+
+        outer.addWidget(self.views, 1)
 
         self.hint = QLabel()
         self.hint.setObjectName("cardHint")
@@ -401,7 +423,10 @@ class UsageTab(QWidget):
         self.title.setText(tr("tab.usage"))
         self.export_btn.setText(tr("usage.export"))
         self.reset_btn.setText(tr("usage.reset"))
+        self.views.setTabText(0, tr("usage.tab.table"))
+        self.views.setTabText(1, tr("usage.tab.chart"))
         self.filter.setPlaceholderText(tr("usage.search"))
+        self.chart_note.setText(tr("usage.chart.note"))
         self.card_down.set_title(tr("usage.card.down"))
         self.card_up.set_title(tr("usage.card.up"))
         self.card_total.set_title(tr("usage.card.total"))
@@ -420,6 +445,7 @@ class UsageTab(QWidget):
         align = _leading()
         self.title.setAlignment(align)
         self.hint.setAlignment(align)
+        self.chart_note.setAlignment(align)
         self.card_down.set_rtl(rtl)
         self.card_up.set_rtl(rtl)
         self.card_total.set_rtl(rtl)

@@ -264,6 +264,13 @@ QTabBar::tab:selected {{
     background: {c['ACCENT']};
     font-weight: 700;
 }}
+QTabWidget#usageViews::pane {{
+    border: none;
+    background: transparent;
+}}
+QTabWidget#usageViews QTabBar::tab {{
+    padding: 7px 16px;
+}}
 
 QTableView {{
     background: {c['SURFACE']};

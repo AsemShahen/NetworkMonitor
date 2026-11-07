@@ -310,6 +310,9 @@ class TestI18n(unittest.TestCase):
             self.assertTrue(tr("tab.usage"))
             self.assertNotEqual(tr("usage.note", count=2), "usage.note")
             self.assertNotEqual(tr("usage.col.total"), "usage.col.total")
+            self.assertNotEqual(tr("usage.tab.table"), "usage.tab.table")
+            self.assertNotEqual(tr("usage.tab.chart"), "usage.tab.chart")
+            self.assertNotEqual(tr("usage.chart.note"), "usage.chart.note")
 
     def test_update_labels_exist_in_both_languages(self) -> None:
         for code in ("en", "ar"):

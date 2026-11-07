@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network Monitor packages</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; line-height: 1.6; max-width: 58rem; margin: 2rem auto; padding: 0 1rem; }
+    pre { overflow-x: auto; padding: 1rem; background: #f4f4f4; border-radius: .4rem; }
+    code { font-family: ui-monospace, monospace; }
+    @media (prefers-color-scheme: dark) { pre { background: #222; } }
+  </style>
+</head>
+<body>
+  <h1>Network Monitor packages</h1>
+  <p>Signed package repository for <a href="https://github.com/AsemShahen/NetworkMonitor">Network Monitor</a>.</p>
+  <p>GPG fingerprint: <code>D53CB321C38875CCA82128CC77EED1C545319AE8</code></p>
+
+  <h2>Debian / Ubuntu</h2>
+  <pre><code>sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc | sudo gpg --dearmor --yes -o /etc/apt/keyrings/network-monitor.gpg
+echo "deb [signed-by=/etc/apt/keyrings/network-monitor.gpg] https://asemshahen.github.io/NetworkMonitor/apt stable main" | sudo tee /etc/apt/sources.list.d/network-monitor.list
+sudo apt update
+sudo apt install network-monitor</code></pre>
+
+  <h2>Fedora / RHEL</h2>
+  <pre><code>sudo curl -fsSL https://asemshahen.github.io/NetworkMonitor/rpm/network-monitor.repo -o /etc/yum.repos.d/network-monitor.repo
+sudo dnf install network-monitor</code></pre>
+
+  <p><a href="https://github.com/AsemShahen/NetworkMonitor/releases">GitHub Releases</a></p>
+</body>
+</html>

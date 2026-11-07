@@ -1,0 +1,39 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64
+Codename: stable
+Components: main
+Date: Sat, 07 Nov 2026 05:43:54 +0000
+Description: Network Monitor packages
+Label: Network Monitor
+Origin: Network Monitor
+Suite: stable
+MD5Sum:
+ 758e9af312a7acdd7967ddfdb2c12e63             1671 main/binary-amd64/Packages
+ 88a4bad65cc7f9f9155c5e86612a451d              965 main/binary-amd64/Packages.gz
+SHA1:
+ 01a1e30835893d1b8c6490354cca928378087879             1671 main/binary-amd64/Packages
+ 09aa863835d1a2b2ceb8edccaec0704a2819ff51              965 main/binary-amd64/Packages.gz
+SHA256:
+ 9dbc796f671c77149a9dd833dc9d9148a4cf5591d8e6b0e50a1f7a23f9f5a0cd             1671 main/binary-amd64/Packages
+ 949a66755abfad34a38a8324bab97d3eec0e6a95c2ed706baeeeed4bbc1aa494              965 main/binary-amd64/Packages.gz
+SHA512:
+ 942c8974f6418e2ad2091d9213366fc693e69ffffc6709f272ce72d628c82e8366588f1e09904004284295f67e02e38a2fb192080dc477f9fc5fc13fa9badb51             1671 main/binary-amd64/Packages
+ e5214f0525c662620f0a331e8cce773479af68c492e5ed46159dc6f4dd054cd52644bfcb461abc10efc88f9466e8b195ddc52735daf296737432989e608db58e              965 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE1TyzIcOIdcyoISjMd+7RxUUxmugFAmruupoACgkQd+7RxUUx
+mugMpA//cvZ7GVcr0NvjUAHLbCHjXovFUj0h83oF4kX0ZSeUbqx7UeOei3Sneoqd
+4kz6TIZ23TxRGdVdY98MoYbcnV/ZHIrgEQyaJxaym1AeI9o9f/DKPQCPd0Caguhc
+T4VRjg7NISuVps15DHCu5ZY/vNKL5+74IUtJJ2zwBRJzTto293hsLlVUYKMqNz3Z
+aLmOXtI3/ynHufsBrVa+tbs483SfL7eOJPgx4QnbDeg1vKTtbMS/yYQGd2blnk9c
+4wGb5BO9LQZ/DAUdToXzsGXVvKYlAzZ4ozethH/+tC5FJWOZSXDxutWlv6hvdjOf
+Sr5uN3uvWgOC3s8UjKkWncpManpHkriHkj8AZDncPomqQBaLuSpShrfvat/XYofP
+u3AgSbHd0CUtZMyiOexVDIa88cWSfkINxRT0RGYFgucBZJQm7FMeES0/jbbpMm4i
+tbszIL8y/LVbs44EnJ6D7cD78BOIdodSicjPqpbWyT1lqtrw0l0hZweAuk69w3kV
+kPbNwjqVJ64NyDAKYBuZMspHcyf9E0dAY7brK0qjz/NK7jnGJrDf/AW+5v44qI7H
+Phc2zYqZtyUJL146hkp84sT2aB8iv0EU7QQzaBI5qOo5BgLaDju9pvmwKgauoqie
+Bw0a60gVvGQ4tPzFWkxLA7LwxWUMHvmnP59KEwFfWm4Ouj7UCL8=
+=7VVw
+-----END PGP SIGNATURE-----

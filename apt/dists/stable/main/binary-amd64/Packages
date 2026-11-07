@@ -1,0 +1,23 @@
+Package: network-monitor
+Architecture: amd64
+Version: 1.0.9
+Priority: optional
+Section: net
+Maintainer: AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com>
+Installed-Size: 374836
+Depends: pkexec | policykit-1, nftables, iproute2, python3, libc6 (>= 2.34), libstdc++6, libgl1, libegl1, libopengl0, libxkbcommon0, libxkbcommon-x11-0, libdbus-1-3, libfontconfig1, libfreetype6, libglib2.0-0, libx11-6, libx11-xcb1, libxext6, libxrender1, libxi6, libsm6, libice6, libxcb1, libxcb-util1, libxcb-cursor0, libxcb-icccm4, libxcb-image0, libxcb-keysyms1, libxcb-randr0, libxcb-render0, libxcb-render-util0, libxcb-shape0, libxcb-shm0, libxcb-sync1, libxcb-glx0, libxcb-dri2-0, libxcb-dri3-0, libxcb-present0, libxcb-xfixes0, libxcb-xinerama0, libxcb-xkb1
+Recommends: fonts-noto-core
+Filename: pool/main/n/network-monitor/network-monitor_1.0.9_amd64.deb
+Size: 92325004
+MD5sum: daa25ab0754d27bf5607356a57de7438
+SHA1: 7bf6d21ed7081017802d28435aa6090f995f2a0e
+SHA256: 8760479b63e6909d5d0b32747eb541cf4e54e7bc13addd26ac4c9a46d7c08167
+SHA512: 2fe89224de809b9d2ac022587fd8a9c9e3b3cec7e303137a07a9dde6429acc638e4ae708c92b1a088d06df6ea039e1fc3f6cc20b7c8e83482bdb3ca3ccc4ec7d
+Homepage: https://github.com/AsemShahen/NetworkMonitor
+Description: Netlink-based per-application network monitor with blocking
+ Network Monitor shows accurate live download and upload speeds for every
+ application using native Netlink counters, active connections, executable
+ paths, session totals, and monthly/daily usage. It can block selected
+ applications with cgroup v2 and nftables through a polkit-authenticated
+ helper. The interface is available in English and Arabic.
+

@@ -1,0 +1,9 @@
+[network-monitor]
+name=Network Monitor
+baseurl=https://asemshahen.github.io/NetworkMonitor/rpm/x86_64
+enabled=1
+# Package integrity is covered by the signed repomd.xml metadata.
+gpgcheck=0
+repo_gpgcheck=1
+gpgkey=https://asemshahen.github.io/NetworkMonitor/keys/network-monitor.asc
+metadata_expire=6h

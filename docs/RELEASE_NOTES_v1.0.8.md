@@ -70,6 +70,15 @@ gpg --verify SHA256SUMS.asc SHA256SUMS
 sha256sum -c SHA256SUMS
 ```
 
+## Package repositories and catalog
+
+- The signed APT/RPM repository serves `1.0.8` with verified `InRelease` and
+  `repomd.xml.asc` metadata.
+- The local AUR `network-monitor-qt-bin` metadata is updated for `1.0.8`;
+  publishing it still depends on AUR account access.
+- The AppImageHub catalog entry from the merged one-file PR remains live, and
+  the `1.0.8` AppImage keeps the same `gh-releases-zsync` update information.
+
 ## Notes
 
 - The table remains the default inner tab when the Usage tab is opened.
@@ -147,6 +156,15 @@ sudo ./network-monitor/install.sh
 gpg --verify SHA256SUMS.asc SHA256SUMS
 sha256sum -c SHA256SUMS
 ```
+
+### المستودعات والكتالوج
+
+- يخدم مستودع APT/RPM الموقّع الإصدار `1.0.8` مع بيانات `InRelease`
+  و`repomd.xml.asc` التي جرى التحقق منها.
+- حُدّثت بيانات AUR المحلية للحزمة `network-monitor-qt-bin` إلى `1.0.8`؛
+  ولا يزال نشرها يعتمد على الوصول إلى حساب AUR.
+- يبقى إدراج AppImageHub من طلب الدمج السابق حيًا، ويحتفظ AppImage الإصدار
+  `1.0.8` بمعلومات تحديث `gh-releases-zsync` نفسها.
 
 ### ملاحظات
 

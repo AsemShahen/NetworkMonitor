@@ -1,6 +1,6 @@
 pkgbase = network-monitor-qt-bin
 	pkgdesc = Netlink-based per-application network monitor with usage and blocking (Qt/PySide6 binary release)
-	pkgver = 1.0.7
+	pkgver = 1.0.8
 	pkgrel = 1
 	url = https://github.com/AsemShahen/NetworkMonitor
 	install = network-monitor-qt-bin.install
@@ -40,7 +40,7 @@ pkgbase = network-monitor-qt-bin
 	conflicts = network-monitor-bin
 	options = !strip
 	options = !debug
-	source = https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.7/network-monitor_1.0.7_amd64.deb
-	sha256sums = 7bcbd5cff93345ac2f46eca63629d4693cab0282e75e9d317591d23ef584fbd4
+	source = https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.8/network-monitor_1.0.8_amd64.deb
+	sha256sums = 588f70c63495a10a13f2d867321f5d15710e5063631dd047718ff9802abb1243
 
 pkgname = network-monitor-qt-bin

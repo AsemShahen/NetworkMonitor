@@ -14,18 +14,19 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Real block/unblock via cgroup v2 + nftables with polkit authentication.
 - Persistent blocklist with import/export and apply-on-start.
 - Diagnostics panel with copy-to-clipboard, showing the active engine, socket attribution, and why counters may be limited.
-- Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs.
+- Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs. Official distribution packages defer to the distribution package manager instead of replacing themselves.
 - English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
 
-## New in 1.0.8
+## New in 1.0.9
 
-- The **Usage** tab now has two inner tabs: **Table** first and **Chart** second. The daily chart no longer overlaps the usage table when the window is short.
-- Monthly summary cards stay visible above both tabs. Search and filtering remain in the **Table** tab, and the chart keeps its daily download/upload view in the **Chart** tab.
-- English and Arabic labels, RTL alignment, and the existing light/dark styling cover the new tabs.
-- No database, background collector, blocking, or updater behavior changed in this release.
+- Added official Debian and Fedora source packaging that uses distribution-provided Python, PySide6, pyqtgraph, pyroute2, and NumPy packages instead of the bundled runtime.
+- Official distribution packages install a `distro-managed` marker, so the in-app updater directs users to `apt` or `dnf` instead of replacing a distribution package with a GitHub package.
+- Added AppStream screenshots and developer metadata, a manual page, and Debian/Fedora container builds in CI.
+- The GitHub `.deb`, `.rpm`, AppImage, and manual `/opt` update paths keep their existing signed-update behavior.
+- The Debian and Fedora packages are prepared in this source tree; official repository submission still requires maintainer accounts and human review.
 
-See [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md) for details.
-Previous release: [docs/RELEASE_NOTES_v1.0.7.md](docs/RELEASE_NOTES_v1.0.7.md).
+See [docs/RELEASE_NOTES_v1.0.9.md](docs/RELEASE_NOTES_v1.0.9.md) for details.
+Previous release: [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md).
 
 ## Screenshots
 

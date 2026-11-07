@@ -42,10 +42,10 @@ chmod +x NetworkMonitor-<version>-x86_64.AppImage
 و`.deb` و`.rpm` وFlatpak، ويتحقق من `SHA256SUMS` و`SHA256SUMS.asc` قبل
 التثبيت، ويستخدم `pkexec` لتثبيتات النظام.
 
-إذا كان لديك تثبيت يدوي في `/opt` من 1.0.5 أو أقدم، فثبّت 1.0.8 مرة واحدة:
+إذا كان لديك تثبيت يدوي في `/opt` من 1.0.5 أو أقدم، فثبّت 1.0.9 مرة واحدة:
 
 ```bash
-tar -xzf NetworkMonitor-1.0.8-linux-x86_64.tar.gz
+tar -xzf NetworkMonitor-1.0.9-linux-x86_64.tar.gz
 sudo ./network-monitor/install.sh
 ```
 

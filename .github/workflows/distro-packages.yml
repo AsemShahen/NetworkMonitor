@@ -61,8 +61,8 @@ jobs:
               git tar gzip
             git config --global --add safe.directory /src
             rpmdev-setuptree
-            git archive --prefix=NetworkMonitor-1.0.8/ --format=tar.gz \
-              -o "$HOME/rpmbuild/SOURCES/network-monitor-1.0.8.tar.gz" HEAD
+            git archive --prefix=NetworkMonitor-1.0.9/ --format=tar.gz \
+              -o "$HOME/rpmbuild/SOURCES/network-monitor-1.0.9.tar.gz" HEAD
             cp packaging/fedora/network-monitor.spec "$HOME/rpmbuild/SPECS/"
             rpmbuild -ba --nodeps "$HOME/rpmbuild/SPECS/network-monitor.spec"
             desktop-file-validate data/network-monitor.desktop

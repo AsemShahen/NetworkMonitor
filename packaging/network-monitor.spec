@@ -65,6 +65,10 @@ fi
 /usr/share/icons/hicolor/scalable/apps/network-monitor.svg
 
 %changelog
+* Sat Nov 07 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.9-1
+- Add distribution-managed install detection for official packages
+- Add Debian and Fedora source packaging metadata and validation
+- Add AppStream screenshots, developer metadata, and a man page
 * Sat Nov 07 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.8-1
 - Split the Usage tab into separate Table and Chart inner tabs
 - Keep monthly summary cards visible above both Usage views

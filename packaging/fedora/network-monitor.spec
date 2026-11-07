@@ -9,7 +9,7 @@ small PolicyKit-authenticated helper. The interface is available in English
 and Arabic and supports right-to-left layouts.}
 
 Name:           network-monitor
-Version:        1.0.8
+Version:        1.0.9
 Release:        1%{?dist}
 Summary:        Per-application network monitor with usage tracking and blocking
 License:        GPL-3.0-or-later
@@ -110,6 +110,10 @@ fi
 %{_mandir}/man1/network-monitor.1*
 
 %changelog
+* Sat Nov 07 2026 Asem Shahen <asemshahen5@gmail.com> - 1.0.9-1
+- Update to the upstream 1.0.9 release
+- Defer in-app updates to the Fedora package manager
+- Use distribution-provided Python and Qt dependencies
 * Sat Nov 07 2026 Asem Shahen <asemshahen5@gmail.com> - 1.0.8-1
 - Initial Fedora package from the upstream 1.0.8 release
 - Use distribution-provided Python and Qt dependencies

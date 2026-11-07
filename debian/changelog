@@ -1,3 +1,12 @@
+network-monitor (1.0.9-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Defer in-app updates to the distribution package manager.
+  * Refresh AppStream metadata, screenshots, and the manual page.
+  * Keep using distribution-provided Python, Qt, pyroute2, and NumPy packages.
+
+ -- Asem Shahen <asemshahen5@gmail.com>  Sat, 07 Nov 2026 13:00:00 +0300
+
 network-monitor (1.0.8-1) unstable; urgency=medium
 
   * Initial Debian packaging from the upstream 1.0.8 release.

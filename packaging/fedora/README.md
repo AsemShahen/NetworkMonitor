@@ -12,8 +12,8 @@ sudo dnf install rpm-build rpmdevtools python3-devel pyproject-rpm-macros \
   python3-pyside6 python3-pyqtgraph python3-pyroute2 python3-numpy \
   desktop-file-utils libappstream-glib nftables iproute polkit git
 rpmdev-setuptree
-git archive --prefix=NetworkMonitor-1.0.8/ \
-  --format=tar.gz -o ~/rpmbuild/SOURCES/network-monitor-1.0.8.tar.gz HEAD
+git archive --prefix=NetworkMonitor-1.0.9/ \
+  --format=tar.gz -o ~/rpmbuild/SOURCES/network-monitor-1.0.9.tar.gz HEAD
 cp packaging/fedora/network-monitor.spec ~/rpmbuild/SPECS/
 rpmbuild -ba ~/rpmbuild/SPECS/network-monitor.spec
 ```

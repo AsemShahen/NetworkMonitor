@@ -255,11 +255,12 @@ class TestUpdater(unittest.TestCase):
                 self.assertEqual(detect_install_type({}), "distro")
 
         info = check_for_update(
-            current_version="1.0.7",
+            current_version="1.0.8",
             install_type="distro",
-            release={"tag_name": "v1.0.8", "assets": []},
+            release={"tag_name": "v1.0.9", "assets": []},
         )
         self.assertIsNotNone(info)
+        self.assertEqual(info.version, "1.0.9")
         self.assertEqual(info.install_type, "distro")
         self.assertIsNone(info.asset)
 

@@ -95,10 +95,10 @@ updates**. The updater supports manual `/opt/network-monitor` installs,
 AppImage, `.deb`, `.rpm`, and Flatpak. It verifies `SHA256SUMS` and
 `SHA256SUMS.asc` before installing and uses `pkexec` for system installs.
 
-For a manual `/opt` install from 1.0.5 or older, install 1.0.7 once:
+For a manual `/opt` install from 1.0.5 or older, install 1.0.8 once:
 
 ```bash
-tar -xzf NetworkMonitor-1.0.7-linux-x86_64.tar.gz
+tar -xzf NetworkMonitor-1.0.8-linux-x86_64.tar.gz
 sudo ./network-monitor/install.sh
 ```
 

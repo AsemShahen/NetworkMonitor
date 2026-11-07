@@ -65,7 +65,11 @@ fi
 /usr/share/icons/hicolor/scalable/apps/network-monitor.svg
 
 %changelog
-* Fri Nov 06 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - %{_version}-1
+* Sat Nov 07 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.8-1
+- Split the Usage tab into separate Table and Chart inner tabs
+- Keep monthly summary cards visible above both Usage views
+- Add English and Arabic tab labels with RTL support
+* Fri Nov 06 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.7-1
 - Add optional background collector systemd user service
 - Coordinate SQLite usage writes with a single-writer lock and safe handoff
 - Add collector status, enable/disable controls, and generated service units

@@ -36,6 +36,7 @@
     <binary>network-monitor</binary>
   </provides>
   <releases>
+    <release version="1.0.8" date="2026-11-07"/>
     <release version="1.0.7" date="2026-11-06"/>
     <release version="1.0.6" date="2026-11-05"/>
     <release version="1.0.5" date="2026-11-05"/>

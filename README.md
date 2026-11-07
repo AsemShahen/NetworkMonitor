@@ -5,7 +5,7 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 ## Features
 - Native Netlink per-socket counters through `pyroute2`, with an automatic `ss` fallback and a final `/proc/net` discovery mode that clearly says when byte counters are unavailable.
 - Live per-process download and upload rates (KB/s–MB/s), active connections, full executable paths, CPU, and RSS.
-- Monthly and daily usage per application, a daily download/upload chart, a searchable usage table, and CSV export.
+- Monthly and daily usage per application, with separate Table and Chart tabs, a searchable usage table, and CSV export.
 - Optional background collector that keeps monthly and daily usage updated while the app is closed, using a systemd user service with single-writer SQLite coordination.
 - Optional cgroup grouping for Flatpak, Snap, and AppImage applications so multi-process apps appear as one row.
 - Session totals, current-month card, and an interactive time-series chart.
@@ -17,15 +17,15 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs.
 - English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
 
-## New in 1.0.7
+## New in 1.0.8
 
-- Added **Settings → Background collection**. An optional systemd user service keeps monthly and daily usage updating after the window is closed. It is disabled by default and needs no root access.
-- The GUI and collector share one SQLite database with an advisory single-writer lock. The writer role is handed off without double-counting traffic, and the GUI resets its baseline when it takes over.
-- Added collector status, enable/disable, startup restoration, and generated service units for manual `/opt`, `.deb`, `.rpm`, AppImage, and Flatpak installations.
-- Signed in-app updates remain available from **Settings → Application updates**.
+- The **Usage** tab now has two inner tabs: **Table** first and **Chart** second. The daily chart no longer overlaps the usage table when the window is short.
+- Monthly summary cards stay visible above both tabs. Search and filtering remain in the **Table** tab, and the chart keeps its daily download/upload view in the **Chart** tab.
+- English and Arabic labels, RTL alignment, and the existing light/dark styling cover the new tabs.
+- No database, background collector, blocking, or updater behavior changed in this release.
 
-See [docs/RELEASE_NOTES_v1.0.7.md](docs/RELEASE_NOTES_v1.0.7.md) for details.
-Previous release: [docs/RELEASE_NOTES_v1.0.6.md](docs/RELEASE_NOTES_v1.0.6.md).
+See [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md) for details.
+Previous release: [docs/RELEASE_NOTES_v1.0.7.md](docs/RELEASE_NOTES_v1.0.7.md).
 
 ## Screenshots
 

@@ -25,7 +25,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            dpkg-dev debhelper dh-python python3-all \
+            build-essential dpkg-dev debhelper dh-python python3-all \
             python3-setuptools python3-wheel python3-pytest \
             desktop-file-utils appstream lintian dput gnupg
 

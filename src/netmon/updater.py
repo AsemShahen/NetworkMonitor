@@ -36,6 +36,7 @@ REPOSITORY = "AsemShahen/NetworkMonitor"
 RELEASES_API = f"https://api.github.com/repos/{REPOSITORY}/releases/latest"
 RELEASES_PAGE = f"https://github.com/{REPOSITORY}/releases"
 MANUAL_TARGET = Path("/opt/network-monitor")
+DISTRO_MARKER = Path("/usr/share/network-monitor/distro-managed")
 EXPECTED_FINGERPRINT = "D53CB321C38875CCA82128CC77EED1C545319AE8"
 PUBLIC_KEY_PATH = Path(__file__).resolve().parent / "resources" / "network-monitor-public.asc"
 
@@ -140,8 +141,14 @@ def _rpm_installed() -> bool:
     return _command_ok(["rpm", "-q", "network-monitor"])
 
 
+def _distro_managed() -> bool:
+    """Return whether this copy is maintained by a distribution repository."""
+
+    return DISTRO_MARKER.is_file()
+
+
 def detect_install_type(env: dict[str, str] | None = None) -> str:
-    """Return one of flatpak/appimage/deb/rpm/manual/source."""
+    """Return one of flatpak/appimage/distro/deb/rpm/manual/source."""
 
     environment = env if env is not None else os.environ
     in_flatpak = bool(environment.get("FLATPAK_ID"))
@@ -157,6 +164,9 @@ def detect_install_type(env: dict[str, str] | None = None) -> str:
             appimage = candidate
     if appimage:
         return "appimage"
+
+    if _distro_managed():
+        return "distro"
 
     if _dpkg_installed():
         return "deb"
@@ -310,7 +320,7 @@ def check_for_update(
 
     assets = _release_assets(data)
     asset = select_asset(assets, latest, kind)
-    if kind != "flatpak" and asset is None:
+    if kind not in ("flatpak", "distro") and asset is None:
         raise UpdateError(
             tr(
                 "update.error.asset",
@@ -318,7 +328,7 @@ def check_for_update(
                 type=tr(f"update.type.{kind}"),
             )
         )
-    if kind != "flatpak" and (
+    if kind not in ("flatpak", "distro") and (
         assets.get("SHA256SUMS") is None or assets.get("SHA256SUMS.asc") is None
     ):
         raise UpdateError(tr("update.error.signature_missing"))
@@ -672,6 +682,8 @@ def download_and_install(
     if kind == "flatpak":
         _report(progress, tr("update.installing"))
         return _install_flatpak(info.version)
+    if kind == "distro":
+        raise UpdateError(tr("update.error.distro"))
 
     if info.checksums is None or info.signature is None:
         raise UpdateError(tr("update.error.signature_missing"))

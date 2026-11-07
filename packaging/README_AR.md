@@ -3,6 +3,10 @@
 هذه الحزم مخصّصة للنشر عبر **GitHub Releases**، وليست حزم Flatpak. تحتفظ الحزم
 بالوظائف الكاملة: المراقبة لكل تطبيق، والحظر عبر cgroup v2 وnftables وpolkit.
 
+للتغليف الرسمي في Debian وFedora، راجع `debian/` و`packaging/fedora/` و
+[`docs/PUBLISHING_CHANNELS_AR.md`](../docs/PUBLISHING_CHANNELS_AR.md). تلك
+الحزم تستخدم مكتبات النظام ولا تستخدم وقت التشغيل المضمّن هنا.
+
 ## المخرجات
 
 - `network-monitor_<version>_amd64.deb` — لدبيان/أوبونتو.

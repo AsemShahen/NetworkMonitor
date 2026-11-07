@@ -1,0 +1,42 @@
+Source: network-monitor
+Section: net
+Priority: optional
+Maintainer: Asem Shahen <asemshahen5@gmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ dh-python,
+ python3-all,
+ python3-setuptools,
+ python3-wheel,
+ python3-pytest <!nocheck>,
+ desktop-file-utils,
+ appstream,
+Standards-Version: 4.7.0
+Homepage: https://github.com/AsemShahen/NetworkMonitor
+Vcs-Git: https://github.com/AsemShahen/NetworkMonitor.git
+Vcs-Browser: https://github.com/AsemShahen/NetworkMonitor
+Rules-Requires-Root: no
+
+Package: network-monitor
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-pyside6.qtcore,
+ python3-pyside6.qtgui,
+ python3-pyside6.qtwidgets,
+ python3-pyqtgraph,
+ python3-pyroute2,
+ python3-numpy,
+ nftables,
+ iproute2,
+ pkexec | policykit-1,
+Description: per-application network monitor with usage tracking and blocking
+ Network Monitor shows live download and upload speeds for each application
+ using native Linux Netlink counters, with automatic fallbacks when Netlink is
+ unavailable. It lists active connections, executable paths, session totals,
+ and monthly and daily usage with CSV export.
+ .
+ Selected applications can be blocked with cgroup v2 and nftables through a
+ small PolicyKit-authenticated helper. The interface is available in English
+ and Arabic and supports right-to-left layouts.

@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import os
 import signal
 import sys
+
+# Distribution packages may have both PyQt5 and PySide6 installed because
+# pyqtgraph pulls in a Qt binding. Force pyqtgraph to use the same binding as
+# the application before any GUI module imports it.
+os.environ["PYQTGRAPH_QT_LIB"] = "PySide6"
 
 from PySide6.QtWidgets import QApplication, QSystemTrayIcon
 

@@ -1,0 +1,10 @@
+network-monitor (1.0.8-1) unstable; urgency=medium
+
+  * Initial Debian packaging from the upstream 1.0.8 release.
+  * Use the distribution-provided PySide6, pyqtgraph, pyroute2, and NumPy
+    packages instead of the upstream bundled runtime.
+  * Install the PolicyKit policy and privileged blocking helper.
+  * Mark distribution-managed installations so the in-app updater asks the
+    user to update through the package manager.
+
+ -- Asem Shahen <asemshahen5@gmail.com>  Sat, 07 Nov 2026 12:00:00 +0300

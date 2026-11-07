@@ -1,0 +1,15 @@
+This package uses the distribution Python, PySide6, pyqtgraph, pyroute2, and
+NumPy packages. It does not use the bundled runtime from the GitHub release
+archives.
+
+Build a binary package with:
+
+    dpkg-buildpackage -b -uc -us
+
+The package installs /usr/share/network-monitor/distro-managed so the in-app
+updater does not replace a distribution-managed installation with a GitHub
+package. Users should update through apt.
+
+For an official Debian upload, build a signed source package and publish it
+through Debian Mentors or ask a Debian Developer to sponsor it. The source
+package name is `network-monitor`.

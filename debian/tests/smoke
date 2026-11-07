@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+python3 - <<'PY'
+import netmon
+
+assert netmon.__version__
+PY
+
+test -x /usr/libexec/network-monitor/network-monitor-helper
+test -f /usr/share/polkit-1/actions/org.networkmonitor.helper.policy
+test -f /usr/share/network-monitor/distro-managed
+test -f /usr/share/applications/network-monitor.desktop
+test -f /usr/share/metainfo/network-monitor.metainfo.xml

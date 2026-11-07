@@ -693,6 +693,17 @@ class MainWindow(QMainWindow):
             self.status.showMessage(message)
             return
 
+        if info.install_type == "distro":
+            message = tr("update.distro_managed", version=info.version)
+            self.settings_tab.set_update_status(message, busy=False)
+            self.status.showMessage(message)
+            QMessageBox.information(
+                self,
+                tr("update.available_title"),
+                message,
+            )
+            return
+
         kind = tr(f"update.type.{info.install_type}")
         self.settings_tab.set_update_status(
             tr("update.available", version=info.version), busy=False

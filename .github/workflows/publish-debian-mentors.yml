@@ -90,7 +90,9 @@ jobs:
           DSC="$(ls ../network-monitor_${VERSION}-1.dsc)"
           gpg --verify "$CHANGES"
           gpg --verify "$DSC"
-          lintian --fail-on error "$CHANGES"
+          # Ubuntu's lintian does not know Debian's "unstable" suite.
+          lintian --fail-on error \
+            --suppress-tags bad-distribution-in-changes-file "$CHANGES"
 
           cat > "$HOME/.dput.cf" <<'EOF'
           [mentors]

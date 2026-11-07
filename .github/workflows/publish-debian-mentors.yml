@@ -73,6 +73,17 @@ jobs:
           chmod 700 "$HOME/gpg-bin/gpg"
           export PATH="$HOME/gpg-bin:$PATH"
 
+          # 3.0 (quilt) source packages need an upstream tarball. Export
+          # the release tag without Debian packaging or repository metadata.
+          ORIG_DIR="$(mktemp -d)"
+          mkdir -p "$ORIG_DIR/network-monitor-${VERSION}"
+          git archive --format=tar HEAD | tar -x -C "$ORIG_DIR/network-monitor-${VERSION}"
+          rm -rf "$ORIG_DIR/network-monitor-${VERSION}/debian" \
+                 "$ORIG_DIR/network-monitor-${VERSION}/.github"
+          tar -C "$ORIG_DIR" -czf "../network-monitor_${VERSION}.orig.tar.gz" \
+            "network-monitor-${VERSION}"
+          rm -rf "$ORIG_DIR"
+
           dpkg-buildpackage -S -sa -k"$KEY_ID"
           CHANGES="$(ls ../network-monitor_${VERSION}-1_source.changes)"
           DSC="$(ls ../network-monitor_${VERSION}-1.dsc)"

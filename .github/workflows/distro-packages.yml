@@ -66,5 +66,9 @@ jobs:
             cp packaging/fedora/network-monitor.spec "$HOME/rpmbuild/SPECS/"
             rpmbuild -ba --nodeps "$HOME/rpmbuild/SPECS/network-monitor.spec"
             desktop-file-validate data/network-monitor.desktop
-            appstreamcli validate --no-net data/network-monitor.metainfo.xml || test $? -eq 3
+            if command -v appstream-util >/dev/null 2>&1; then
+              appstream-util validate-relax data/network-monitor.metainfo.xml
+            else
+              appstreamcli validate --no-net data/network-monitor.metainfo.xml || test $? -eq 3
+            fi
           '

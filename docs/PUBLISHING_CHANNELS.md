@@ -46,6 +46,10 @@ These channels are the closest route to listing inside GNOME Software, KDE
 Discover, and Ubuntu App Center because those stores read the distribution
 repositories.
 
+Note: the current AppStream ID is `network-monitor.desktop`, which is not a
+reverse-DNS ID. Fedora accepts relaxed validation, but the ID must become
+something like `com.networkmonitor.app.desktop` before a Flathub submission.
+
 ## Phase 2: Snap Store
 
 The full application needs `/proc`, cgroup v2, and nftables access. The nearest

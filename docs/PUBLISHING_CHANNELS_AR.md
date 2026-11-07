@@ -42,6 +42,10 @@
 هذه القنوات هي الأقرب لتظهر داخل GNOME Software وKDE Discover وUbuntu App
 Center لأنها تقرأ مستودعات التوزيعة الرسمية.
 
+ملاحظة: معرّف AppStream الحالي هو `network-monitor.desktop` وليس معرّفًا
+عكسيًا (reverse-DNS). تقبل Fedora التحقق المتساهل، لكن يجب تغييره إلى معرّف
+مثل `com.networkmonitor.app.desktop` قبل التقديم إلى Flathub.
+
 ## المرحلة 2: Snap Store
 
 الحزمة الكاملة تحتاج وصولًا إلى `/proc` وcgroup v2 وnftables. لذلك الخيار

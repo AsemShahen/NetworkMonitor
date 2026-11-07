@@ -71,7 +71,11 @@ install -Dm644 /dev/null \
 %check
 %pyproject_check_import netmon
 desktop-file-validate %{buildroot}%{_datadir}/applications/network-monitor.desktop
-appstreamcli validate --no-net %{buildroot}%{_datadir}/metainfo/network-monitor.metainfo.xml
+if command -v appstream-util >/dev/null 2>&1; then
+    appstream-util validate-relax %{buildroot}%{_datadir}/metainfo/network-monitor.metainfo.xml
+else
+    appstreamcli validate --no-net %{buildroot}%{_datadir}/metainfo/network-monitor.metainfo.xml || test $? -eq 3
+fi
 
 %post
 if command -v update-desktop-database >/dev/null 2>&1; then

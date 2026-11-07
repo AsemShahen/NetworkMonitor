@@ -83,6 +83,7 @@ jobs:
           tar -C "$ORIG_DIR" -czf "../network-monitor_${VERSION}.orig.tar.gz" \
             "network-monitor-${VERSION}"
           rm -rf "$ORIG_DIR"
+          rm -rf .github
 
           dpkg-buildpackage -S -sa -k"$KEY_ID"
           CHANGES="$(ls ../network-monitor_${VERSION}-1_source.changes)"

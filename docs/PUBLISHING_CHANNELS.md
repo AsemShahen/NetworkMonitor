@@ -8,7 +8,7 @@ Do not describe a channel as live until the responsible service accepts it.
 
 | Channel | Type | Status | Remaining work |
 |---|---|---|---|
-| GitHub Releases | direct release | `v1.0.8` published | none |
+| GitHub Releases | direct release | `v1.0.9` published | none |
 | AppImageHub | app catalog | published | none |
 | Signed APT/RPM repository on GitHub Pages | third-party signed repository | live | none |
 | AUR | community repository | files ready, not published | AUR account and SSH key |
@@ -30,8 +30,9 @@ instead of the bundled runtime:
 - `.github/workflows/distro-packages.yml` builds both packages in Debian and
   Fedora containers.
 
-After pushing, run the `distro-packages` workflow and check the AppStream and
-desktop-file validation output.
+The `distro-packages` workflow builds both packages in Debian and Fedora
+containers. The 1.0.9 run passed for both jobs, including the AppStream and
+desktop-file checks.
 
 ### Required user actions
 

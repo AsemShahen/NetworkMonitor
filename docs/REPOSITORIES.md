@@ -19,26 +19,26 @@ The repository contains:
 older versions remain available on GitHub Releases. This keeps the Pages site
 and git history small.
 
-## Current repository packages (v1.0.8)
+## Current repository packages (v1.0.9)
 
-The repository currently serves the official `v1.0.8` release assets, so these
+The repository currently serves the official `v1.0.9` release assets, so these
 hashes match `SHA256SUMS` and the AUR source.
 
-The `v1.0.2` through `v1.0.7` releases remain available on GitHub Releases. The
-repository now serves `v1.0.8`, signed with the current key. Existing clients
+The `v1.0.2` through `v1.0.8` releases remain available on GitHub Releases. The
+repository now serves `v1.0.9`, signed with the current key. Existing clients
 trust the previous fingerprint below and must import the new public key before
 the next `apt update` or `dnf` refresh.
 
-- `.deb`: `92,323,438` bytes, SHA-256
-  `588f70c63495a10a13f2d867321f5d15710e5063631dd047718ff9802abb1243`
-- `.rpm`: `93,059,902` bytes, SHA-256
-  `59c53f356d57b03515dcc0f98ace433129d90cb6d9fe8054e6062f5238fed3a8`
-- Manual update archive: `124,772,523` bytes, SHA-256
-  `47e88e505f665d228e732d03a9cd99cf7f27c2225e5a3c58c22a46b3be0e0d3b`
+- `.deb`: `92,325,004` bytes, SHA-256
+  `8760479b63e6909d5d0b32747eb541cf4e54e7bc13addd26ac4c9a46d7c08167`
+- `.rpm`: `93,059,893` bytes, SHA-256
+  `3539e3851957a1bd41f13fd62a42b480e6d751f646339fc74bd3d004f1307f5b`
+- Manual update archive: `124,779,870` bytes, SHA-256
+  `5cd760739169d178168800cd7ceda65f1351352ec4cf5b1710bc2afb4deda08d`
 - AppImage: `111,995,384` bytes, SHA-256
-  `8b0b6571e0f62f54c916b43b5bf52c4881d637058e94e98f20543522d6bc07af`
+  `f5cb1739504ab5db79abd86a041943891ade4ff69941d98db5d267c1c5d2d309`
 - AppImage zsync: `191,645` bytes, SHA-256
-  `64713b4544753fb9288ea6655b5046832ddb28ce5d9ed7169d11238fe13f549b`
+  `9d4908dde05c64f2dfeb2186f4930090d4b55e08fbe5f4c4233856da971f05ee`
 - Previous fingerprint (clients installed before 2026-10-28):
   `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE`
 - Current fingerprint:
@@ -68,7 +68,7 @@ sudo dnf clean all
 sudo dnf makecache
 ```
 
-The AUR package uses the official `v1.0.8` release `.deb`.
+The AUR package uses the official `v1.0.9` release `.deb`.
 
 ## One-time setup
 
@@ -135,7 +135,7 @@ Save. GitHub Pages will publish the repository at:
 Automatic repository publication from `.github/workflows/release.yml` is
 gated by the repository variable `PUBLISH_SIGNED_REPOSITORY=true`. The new key
 was generated on 2026-10-28; its private key and passphrase are stored locally
-and are not committed. The repository was republished with `v1.0.8` on
+and are not committed. The repository was republished with `v1.0.9` on
 2026-11-07, and both `InRelease` and `repomd.xml.asc` verify against the new
 fingerprint.
 

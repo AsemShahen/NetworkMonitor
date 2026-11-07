@@ -1,0 +1,41 @@
+.TH NETWORK-MONITOR 1 "2026-11-07" "Network Monitor 1.0.8" "User Commands"
+.SH NAME
+network-monitor \- per-application network monitor for Linux
+.SH SYNOPSIS
+.B network-monitor
+.RB [ \-\-hidden ]
+.SH DESCRIPTION
+.B Network Monitor
+shows live download and upload speeds for each application by reading native
+Netlink counters.  It lists active connections, executable paths, session
+totals, and monthly and daily usage.  Selected applications can be blocked with
+cgroup v2 and nftables through a polkit-authenticated helper.
+.PP
+The interface is available in English and Arabic and supports right-to-left
+layouts.
+.SH OPTIONS
+.TP
+.B \-\-hidden
+Start minimized to the system tray when tray support is available and the
+minimize-to-tray option is enabled.
+.TP
+.B \-\-collector
+Run the headless usage collector instead of the graphical interface.
+.SH FILES
+.TP
+.I ~/.config/network-monitor/config.json
+User preferences.
+.TP
+.I ~/.local/share/network-monitor/usage.db
+Monthly and daily usage database.
+.TP
+.I ~/.local/share/network-monitor/blocklist.json
+Persistent blocklist.
+.TP
+.I /usr/share/polkit-1/actions/org.networkmonitor.helper.policy
+PolicyKit action used by the privileged blocking helper.
+.SH SEE ALSO
+.BR nft (8),
+.BR pkexec (1)
+.SH AUTHOR
+AL-Asem Software By Asem Shahen.

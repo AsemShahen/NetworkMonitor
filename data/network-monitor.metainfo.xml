@@ -13,11 +13,30 @@
     <p xml:lang="ar">يعرض مراقب الشبكة سرعات التنزيل والرفع اللحظية الدقيقة لكل تطبيق عبر عدّادات Netlink الأصلية، والاتصالات النشطة، ومسارات الملفات التنفيذية، وإجماليات الجلسة، والاستهلاك الشهري واليومي. ويمكنه حظر التطبيقات المحددة عبر cgroup v2 وnftables من خلال مساعد محمي بمصادقة polkit.</p>
     <p xml:lang="ar">الواجهة متاحة بالإنجليزية والعربية مع دعم كامل للكتابة من اليمين إلى اليسار.</p>
   </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/live-english.png</image>
+      <caption>Live per-application traffic and connections</caption>
+      <caption xml:lang="ar">الرصد المباشر لحركة كل تطبيق واتصالاته</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/chart.png</image>
+      <caption>Interactive traffic chart</caption>
+      <caption xml:lang="ar">مخطط حركة تفاعلي</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/blocked-apps.png</image>
+      <caption>Blocked applications</caption>
+      <caption xml:lang="ar">التطبيقات المحظورة</caption>
+    </screenshot>
+  </screenshots>
   <launchable type="desktop-id">network-monitor.desktop</launchable>
   <url type="homepage">https://github.com/AsemShahen/NetworkMonitor</url>
   <url type="bugtracker">https://github.com/AsemShahen/NetworkMonitor/issues</url>
   <url type="vcs-browser">https://github.com/AsemShahen/NetworkMonitor</url>
-  <developer_name>AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free</developer_name>
+  <developer id="io.github.asemshahen">
+    <name>AL-Asem Software By Asem Shahen</name>
+  </developer>
   <categories>
     <category>Network</category>
     <category>Monitor</category>

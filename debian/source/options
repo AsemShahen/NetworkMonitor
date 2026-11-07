@@ -1,0 +1,15 @@
+tar-ignore = .git
+tar-ignore = .github
+tar-ignore = .pytest_cache
+tar-ignore = build
+tar-ignore = dist
+tar-ignore = python3
+tar-ignore = *.AppImage
+tar-ignore = *.zsync
+tar-ignore = *.egg-info
+tar-ignore = *.pyc
+tar-ignore = __pycache__
+tar-ignore = network-monitor-private.asc
+tar-ignore = network-monitor-passphrase.txt
+tar-ignore = *.private.asc
+tar-ignore = *.secret.asc

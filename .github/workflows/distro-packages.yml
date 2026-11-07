@@ -1,0 +1,74 @@
+name: distro-packages
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'debian/**'
+      - 'packaging/fedora/**'
+      - 'src/**'
+      - 'data/**'
+      - 'pyproject.toml'
+      - '.github/workflows/distro-packages.yml'
+  pull_request:
+    paths:
+      - 'debian/**'
+      - 'packaging/fedora/**'
+      - 'src/**'
+      - 'data/**'
+      - 'pyproject.toml'
+      - '.github/workflows/distro-packages.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  debian:
+    name: Debian package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and validate
+        run: |
+          docker run --rm -v "$PWD:/src:rw" -w /src debian:trixie bash -lc '
+            set -eux
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update
+            apt-get install -y --no-install-recommends \
+              build-essential debhelper dh-python python3-all \
+              python3-setuptools python3-wheel python3-build python3-installer \
+              python3-pytest desktop-file-utils appstream lintian
+            dpkg-buildpackage -b -uc -us
+            lintian --fail-on error ../network-monitor_*.changes
+            desktop-file-validate data/network-monitor.desktop
+            appstreamcli validate --no-net data/network-monitor.metainfo.xml || test $? -eq 3
+          '
+
+  fedora:
+    name: Fedora package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and validate
+        run: |
+          docker run --rm -v "$PWD:/src:rw" -w /src fedora:latest bash -lc '
+            set -eux
+            dnf -y install \
+              rpm-build rpmdevtools python3-devel pyproject-rpm-macros \
+              python3-setuptools python3-wheel python3-build python3-installer python3-pip \
+              python3-pyside6 python3-pyqtgraph python3-pyroute2 python3-numpy \
+              desktop-file-utils appstream libappstream-glib nftables iproute polkit \
+              git tar gzip
+            git config --global --add safe.directory /src
+            rpmdev-setuptree
+            git archive --prefix=NetworkMonitor-1.0.8/ --format=tar.gz \
+              -o "$HOME/rpmbuild/SOURCES/network-monitor-1.0.8.tar.gz" HEAD
+            cp packaging/fedora/network-monitor.spec "$HOME/rpmbuild/SPECS/"
+            rpmbuild -ba --nodeps "$HOME/rpmbuild/SPECS/network-monitor.spec"
+            desktop-file-validate data/network-monitor.desktop
+            if command -v appstream-util >/dev/null 2>&1; then
+              appstream-util validate-relax data/network-monitor.metainfo.xml
+            else
+              appstreamcli validate --no-net data/network-monitor.metainfo.xml || test $? -eq 3
+            fi
+          '

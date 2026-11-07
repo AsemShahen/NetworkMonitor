@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest import mock
 
 from netmon import collector_service
+from netmon import updater as updater_module
 from netmon.collector import Collector, aggregate_sample
 from netmon.collector_status import read_collector_status, write_collector_status
 from netmon.collectors.net_conn import SocketRecord, app_key_for, cgroup_app_key
@@ -246,6 +247,22 @@ class TestUpdater(unittest.TestCase):
         )
         self.assertIsNone(info)
 
+    def test_distro_package_detection_and_update_notice(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            marker = Path(tmp) / "distro-managed"
+            marker.write_text("", encoding="utf-8")
+            with mock.patch.object(updater_module, "DISTRO_MARKER", marker):
+                self.assertEqual(detect_install_type({}), "distro")
+
+        info = check_for_update(
+            current_version="1.0.7",
+            install_type="distro",
+            release={"tag_name": "v1.0.8", "assets": []},
+        )
+        self.assertIsNotNone(info)
+        self.assertEqual(info.install_type, "distro")
+        self.assertIsNone(info.asset)
+
     def test_embedded_update_key_is_packaged(self) -> None:
         from netmon.updater import EXPECTED_FINGERPRINT, PUBLIC_KEY_PATH
 
@@ -320,6 +337,11 @@ class TestI18n(unittest.TestCase):
             self.assertNotEqual(tr("settings.group.updates"), "settings.group.updates")
             self.assertNotEqual(tr("update.button"), "update.button")
             self.assertNotEqual(tr("update.latest", version="1.0.6"), "update.latest")
+            self.assertNotEqual(
+                tr("update.distro_managed", version="1.0.9"),
+                "update.distro_managed",
+            )
+            self.assertNotEqual(tr("update.error.distro"), "update.error.distro")
 
     def test_collector_labels_exist_in_both_languages(self) -> None:
         for code in ("en", "ar"):

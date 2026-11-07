@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME = network-monitor
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	PYTHONPATH=src python3 -m pytest -q tests
+	desktop-file-validate data/network-monitor.desktop
+	appstreamcli validate --no-net data/network-monitor.metainfo.xml || test $$? -eq 3
+endif
+
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/network-monitor
+	install -Dm755 bin/network-monitor-helper \
+		debian/network-monitor/usr/libexec/network-monitor/network-monitor-helper
+	install -Dm644 data/org.networkmonitor.helper.policy \
+		debian/network-monitor/usr/share/polkit-1/actions/org.networkmonitor.helper.policy
+	install -Dm644 data/network-monitor.desktop \
+		debian/network-monitor/usr/share/applications/network-monitor.desktop
+	install -Dm644 data/network-monitor.metainfo.xml \
+		debian/network-monitor/usr/share/metainfo/network-monitor.metainfo.xml
+	install -Dm644 data/network-monitor.svg \
+		debian/network-monitor/usr/share/icons/hicolor/scalable/apps/network-monitor.svg
+	for size in 64 128 256 512; do \
+		install -Dm644 "data/network-monitor-$$size.png" \
+			"debian/network-monitor/usr/share/icons/hicolor/$${size}x$${size}/apps/network-monitor.png"; \
+	done
+	install -Dm644 debian/distro-managed \
+		debian/network-monitor/usr/share/network-monitor/distro-managed

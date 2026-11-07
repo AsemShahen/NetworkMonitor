@@ -1,0 +1,48 @@
+name: Build Fedora source RPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version to package (for example 1.0.9)"
+        required: true
+        default: "1.0.9"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build source RPM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+
+      - name: Build source RPM
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -eux
+          mkdir -p build
+          docker run --rm -e VERSION -v "$PWD:/src:rw" -w /src fedora:latest bash -lc '
+            set -eux
+            dnf -y install rpm-build rpmdevtools git tar gzip
+            git config --global --add safe.directory /src
+            rpmdev-setuptree
+            git archive --prefix="NetworkMonitor-${VERSION}/" --format=tar.gz \
+              -o "$HOME/rpmbuild/SOURCES/network-monitor-${VERSION}.tar.gz" HEAD
+            cp packaging/fedora/network-monitor.spec "$HOME/rpmbuild/SPECS/"
+            rpmbuild -bs --nodeps "$HOME/rpmbuild/SPECS/network-monitor.spec"
+            cp "$HOME/rpmbuild/SRPMS/"*.src.rpm /src/build/
+          '
+          ls -lh build/*.src.rpm
+
+      - name: Upload source RPM
+        uses: actions/upload-artifact@v4
+        with:
+          name: network-monitor-src-rpm-${{ inputs.version }}
+          path: build/*.src.rpm
+          if-no-files-found: error

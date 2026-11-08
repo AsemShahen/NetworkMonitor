@@ -3,13 +3,6 @@ Upstream-Name: NetworkMonitor
 Upstream-Contact: Asem Shahen <asemshahen5@gmail.com>
 Source: https://github.com/AsemShahen/NetworkMonitor
 
-Files: data/network-monitor.metainfo.xml
-Copyright: 2026 Asem Shahen
-License: CC0-1.0
- To the extent possible under law, the author has waived all copyright and
- related or neighboring rights to this file. This work is published from:
- <https://creativecommons.org/publicdomain/zero/1.0/>.
-
 Files: *
 Copyright: 2026 Asem Shahen
 License: GPL-3+
@@ -25,3 +18,11 @@ License: GPL-3+
  .
  On Debian systems, the complete text of the GNU General Public License
  version 3 can be found in /usr/share/common-licenses/GPL-3.
+
+Files: data/network-monitor.metainfo.xml
+Copyright: 2026 Asem Shahen
+License: CC0-1.0
+ To the extent possible under law, the author has waived all copyright and
+ related or neighboring rights to this file. This work is published from:
+ <https://creativecommons.org/publicdomain/zero/1.0/>.
+

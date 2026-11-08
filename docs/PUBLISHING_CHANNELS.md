@@ -43,7 +43,8 @@ The Debian source package was accepted by Debian Mentors:
 - Sponsor status: **needs a sponsor**.
 - The package is not in the Debian archive yet.
 - The RFS email must be sent from `asemshahen5@gmail.com` to
-  `submit@bugs.debian.org`. See `docs/DEBIAN_RFS.md` for the exact template.
+  `submit@bugs.debian.org`. See `docs/DEBIAN_RFS.md` for the exact template;
+  a ready-to-send message is in `docs/DEBIAN_RFS.eml`.
 
 The Fedora review request is filed:
 

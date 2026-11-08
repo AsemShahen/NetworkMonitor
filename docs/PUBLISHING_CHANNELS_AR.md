@@ -41,7 +41,8 @@
 - حالة الرعاية: **تحتاج إلى راعٍ**.
 - الحزمة ليست في أرشيف Debian بعد.
 - يجب إرسال بريد RFS من `asemshahen5@gmail.com` إلى
-  `submit@bugs.debian.org`. القالب الكامل في `docs/DEBIAN_RFS.md`.
+  `submit@bugs.debian.org`. القالب الكامل في `docs/DEBIAN_RFS.md`، وتوجد نسخة
+  جاهزة للإرسال في `docs/DEBIAN_RFS.eml`.
 
 طلب مراجعة Fedora مفتوح:
 

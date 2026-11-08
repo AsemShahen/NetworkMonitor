@@ -1,3 +1,12 @@
+network-monitor (1.0.9-2) unstable; urgency=medium
+
+  * Add a watch file for upstream release monitoring.
+  * Declare the AppStream metadata license in debian/copyright.
+  * Build with pybuild-plugin-pyproject.
+  * Update Standards-Version to 4.7.4.
+
+ -- Asem Shahen <asemshahen5@gmail.com>  Sun, 08 Nov 2026 05:00:00 +0300
+
 network-monitor (1.0.9-1) unstable; urgency=medium
 
   * New upstream release.

@@ -9,9 +9,10 @@ Build-Depends:
  python3-setuptools,
  python3-wheel,
  python3-pytest <!nocheck>,
+ pybuild-plugin-pyproject,
  desktop-file-utils,
  appstream,
-Standards-Version: 4.7.0
+Standards-Version: 4.7.4
 Homepage: https://github.com/AsemShahen/NetworkMonitor
 Vcs-Git: https://github.com/AsemShahen/NetworkMonitor.git
 Vcs-Browser: https://github.com/AsemShahen/NetworkMonitor

@@ -10,14 +10,19 @@ The source package `network-monitor 1.0.9-3` was accepted by
 - Distribution: `unstable`
 - Sponsor status: **needs a sponsor**
 
-The package is not in the Debian archive yet. The next step is a Request for
-Sponsorship (RFS) bug against the `sponsorship-requests` pseudo-package.
+The package is not in the Debian archive yet. The Request for Sponsorship (RFS)
+was filed against the `sponsorship-requests` pseudo-package:
+
+- RFS bug: <https://bugs.debian.org/1153391>
+- Status: open, wishlist severity, waiting for a Debian sponsor.
+- Reported: 2026-11-08 02:41 UTC.
 
 ## Send the RFS email
 
-Send this message from `asemshahen5@gmail.com` to
-`submit@bugs.debian.org`. The `[ITP]` marker is required because this is a new
-package. A ready-to-send copy of the message is in `docs/DEBIAN_RFS.eml`.
+The message was sent from `asemshahen5@gmail.com` to
+`submit@bugs.debian.org` on 2026-11-08 05:38 +0300 (02:38 UTC). The `[ITP]`
+marker is required because this is a new package. A copy of the sent message is
+in `docs/DEBIAN_RFS.eml`; the canonical template follows.
 
 ```text
 From: asem shahen <asemshahen5@gmail.com>
@@ -65,10 +70,10 @@ Regards,
 
 ## After sending
 
-1. Wait for the BTS acknowledgement with the bug number.
-2. Subscribe to the `debian-mentors` mailing list and to the RFS bug.
-3. Reply to reviewer comments on the bug with a new source upload when needed.
-4. Do not close the RFS bug in `debian/changelog`; the sponsor closes it after
+1. The BTS assigned bug **#1153391**; the submitter receives replies
+   automatically.
+2. Reply to reviewer comments on the bug with a new source upload when needed.
+3. Do not close the RFS bug in `debian/changelog`; the sponsor closes it after
    the upload to the Debian archive.
 
 The Mentors page also exposes a prefilled `mailto:` link and an RFS template on
@@ -89,20 +94,24 @@ changes.
 - التوزيعة: `unstable`
 - حالة الرعاية: **تحتاج إلى راعٍ**
 
-الحزمة ليست في أرشيف Debian بعد. الخطوة التالية هي إرسال خطأ RFS إلى
-`sponsorship-requests`.
+الحزمة ليست في أرشيف Debian بعد. أُرسل طلب الرعاية (RFS) إلى
+`sponsorship-requests`:
+
+- خطأ RFS: <https://bugs.debian.org/1153391>
+- الحالة: مفتوح، بأهمية wishlist، بانتظار راعٍ من Debian.
+- تاريخ الإبلاغ: 2026-11-08 02:41 UTC.
 
 ## إرسال البريد
 
-أرسل القالب الإنجليزي أعلاه من `asemshahen5@gmail.com` إلى
-`submit@bugs.debian.org`، مع إبقاء `[ITP]` في عنوان الرسالة لأنه حزمة جديدة.
-توجد نسخة جاهزة للإرسال في `docs/DEBIAN_RFS.eml`.
+أُرسل القالب الإنجليزي أعلاه من `asemshahen5@gmail.com` إلى
+`submit@bugs.debian.org` بتاريخ 2026-11-08 05:38 +0300 (02:38 UTC)، مع إبقاء
+`[ITP]` في عنوان الرسالة لأنه حزمة جديدة. توجد نسخة من الرسالة المرسلة في
+`docs/DEBIAN_RFS.eml`.
 لا ترسل الرسالة من عنوان آخر؛ يجب أن يطابق عنوان المرسل عنوان صاحب الحزمة.
 
 ## بعد الإرسال
 
-1. انتظر رسالة الإقرار التي تحتوي رقم خطأ BTS.
-2. اشترك في قائمة `debian-mentors` وفي خطأ RFS.
-3. ردّ على ملاحظات المراجع في الخطأ، وارفع نسخة مصدر جديدة عند الطلب.
-4. لا تغلق خطأ RFS في `debian/changelog`؛ الراعي هو من يغلقه بعد الرفع إلى
+1. أنشأ BTS الخطأ رقم **1153391**، ويصل صاحب البلاغ الردود تلقائيًا.
+2. ردّ على ملاحظات المراجع في الخطأ، وارفع نسخة مصدر جديدة عند الطلب.
+3. لا تغلق خطأ RFS في `debian/changelog`؛ الراعي هو من يغلقه بعد الرفع إلى
    أرشيف Debian.

@@ -12,8 +12,8 @@ Do not describe a channel as live until the responsible service accepts it.
 | AppImageHub | app catalog | published | none |
 | Signed APT/RPM repository on GitHub Pages | third-party signed repository | live | none |
 | AUR | community repository | files ready, not published | AUR registration is temporarily closed |
-| Official Debian | distribution repository | source accepted by Mentors; needs sponsor | RFS email and Debian sponsor |
-| Official Fedora | distribution repository | review bug `2568606` filed | package reviewer and sponsor |
+| Official Debian | distribution repository | source accepted by Mentors; RFS bug `1153391` open | Debian sponsor |
+| Official Fedora | distribution repository | review bug `2568606` filed; `fedora-review?` set | package reviewer and sponsor |
 | Snap Store | app store | name `network-monitor-desktop` reserved | choose confinement architecture and pass manual review |
 | Flathub | app store | not suitable yet | sandbox redesign and Flathub policy compliance |
 
@@ -42,22 +42,24 @@ The Debian source package was accepted by Debian Mentors:
 - Package page: <https://mentors.debian.net/package/network-monitor/>
 - Sponsor status: **needs a sponsor**.
 - The package is not in the Debian archive yet.
-- The RFS email must be sent from `asemshahen5@gmail.com` to
-  `submit@bugs.debian.org`. See `docs/DEBIAN_RFS.md` for the exact template;
-  a ready-to-send message is in `docs/DEBIAN_RFS.eml`.
+- RFS bug: <https://bugs.debian.org/1153391> (open, wishlist).
+- The RFS email was sent from `asemshahen5@gmail.com` to
+  `submit@bugs.debian.org` on 2026-11-08. See `docs/DEBIAN_RFS.md` for the
+  template; the sent message is preserved in `docs/DEBIAN_RFS.eml`.
 
 The Fedora review request is filed:
 
 - Bug: <https://bugzilla.redhat.com/show_bug.cgi?id=2568606>
 - Source RPM:
   <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.9/network-monitor-1.0.9-1.fc45.src.rpm>
-- Status: `NEW`, waiting for a Fedora package reviewer and sponsor.
-- `fedora-review-service` was asked to process the public source RPM URL.
+- Status: `NEW`, with `fedora-review?` requested; waiting for a Fedora package
+  reviewer and sponsor.
+- `fedora-review-service` was triggered with the public source RPM URL.
 
 ### Required user actions
 
-1. Send the Debian RFS email from `asemshahen5@gmail.com` and monitor the BTS
-   bug. A Debian sponsor is still required.
+1. Monitor Debian RFS bug `1153391` and answer reviewer comments. A Debian
+   sponsor is still required.
 2. Monitor Fedora bug `2568606` and answer reviewer comments. A Fedora reviewer
    and sponsor are still required.
 3. The Debian Salsa account still needs manual approval before a Salsa-based

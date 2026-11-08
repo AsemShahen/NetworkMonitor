@@ -12,8 +12,8 @@
 | AppImageHub | كتالوج تطبيقات | منشور | لا شيء |
 | مستودع APT/RPM على GitHub Pages | مستودع طرف ثالث موقّع | يعمل | لا شيء |
 | AUR | مستودع مجتمعي | الملفات جاهزة، غير منشورة | تسجيل AUR مغلق مؤقتًا |
-| Debian الرسمي | مستودع توزيعة | قُبلت حزمة المصدر في Mentors وتحتاج راعيًا | إرسال RFS وراعٍ Debian |
-| Fedora الرسمي | مستودع توزيعة | طلب المراجعة `2568606` مفتوح | مراجع وراعٍ Fedora |
+| Debian الرسمي | مستودع توزيعة | قُبلت حزمة المصدر في Mentors وخطأ RFS رقم `1153391` مفتوح | راعٍ Debian |
+| Fedora الرسمي | مستودع توزيعة | طلب المراجعة `2568606` مفتوح وتم تعيين `fedora-review?` | مراجع وراعٍ Fedora |
 | Snap Store | متجر تطبيقات | حُجز الاسم `network-monitor-desktop` | اختيار آلية العزل واجتياز المراجعة اليدوية |
 | Flathub | متجر تطبيقات | غير مناسب حاليًا | إعادة تصميم العزل وسياسة Flathub |
 
@@ -40,21 +40,22 @@
 - صفحة الحزمة: <https://mentors.debian.net/package/network-monitor/>
 - حالة الرعاية: **تحتاج إلى راعٍ**.
 - الحزمة ليست في أرشيف Debian بعد.
-- يجب إرسال بريد RFS من `asemshahen5@gmail.com` إلى
-  `submit@bugs.debian.org`. القالب الكامل في `docs/DEBIAN_RFS.md`، وتوجد نسخة
-  جاهزة للإرسال في `docs/DEBIAN_RFS.eml`.
+- خطأ RFS: <https://bugs.debian.org/1153391> (مفتوح، بأهمية wishlist).
+- أُرسل بريد RFS من `asemshahen5@gmail.com` إلى `submit@bugs.debian.org`
+  بتاريخ 2026-11-08. القالب في `docs/DEBIAN_RFS.md`، والرسالة المرسلة محفوظة
+  في `docs/DEBIAN_RFS.eml`.
 
 طلب مراجعة Fedora مفتوح:
 
 - الخطأ: <https://bugzilla.redhat.com/show_bug.cgi?id=2568606>
 - حزمة المصدر:
   <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.9/network-monitor-1.0.9-1.fc45.src.rpm>
-- الحالة: `NEW`، بانتظار مراجع وراعٍ من Fedora.
-- طُلب من `fedora-review-service` معالجة رابط حزمة المصدر العام.
+- الحالة: `NEW`، وتم تعيين `fedora-review?`، بانتظار مراجع وراعٍ من Fedora.
+- تم تحفيز `fedora-review-service` باستخدام رابط حزمة المصدر العام.
 
 ### المطلوب منك
 
-1. إرسال بريد RFS لـDebian من `asemshahen5@gmail.com` ومتابعة خطأ BTS. ما زال
+1. متابعة خطأ RFS لـDebian رقم `1153391` والرد على ملاحظات المراجع. ما زال
    مطلوبًا راعٍ Debian.
 2. متابعة خطأ Fedora رقم `2568606` والرد على ملاحظات المراجع. ما زال مطلوبًا
    مراجع وراعٍ Fedora.

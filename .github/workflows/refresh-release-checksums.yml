@@ -1,0 +1,82 @@
+name: Refresh release checksums
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag whose SHA256SUMS should be regenerated"
+        required: true
+        default: "v1.0.9"
+
+permissions:
+  contents: write
+
+jobs:
+  checksums:
+    name: Regenerate and sign SHA256SUMS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download current release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          mkdir -p release
+          gh release download "$TAG" --dir release --clobber
+
+      - name: Regenerate SHA256SUMS
+        run: |
+          cd release
+          rm -f SHA256SUMS SHA256SUMS.asc
+          sha256sum \
+            network-monitor_*.deb \
+            network-monitor-*.x86_64.rpm \
+            NetworkMonitor-*.AppImage \
+            NetworkMonitor-*.AppImage.zsync \
+            NetworkMonitor-*-linux-x86_64.tar.gz \
+            network-monitor-*.src.rpm > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Sign SHA256SUMS
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          test -n "$GPG_PRIVATE_KEY"
+          export GNUPGHOME="$(mktemp -d)"
+          trap 'rm -rf "$GNUPGHOME"' EXIT
+          KEY_FILE="$(mktemp)"
+          chmod 600 "$KEY_FILE"
+          GPG_PRIVATE_KEY="$GPG_PRIVATE_KEY" python3 - "$KEY_FILE" <<'PY'
+          import json
+          import os
+          import sys
+
+          value = os.environ.get("GPG_PRIVATE_KEY", "")
+          if value.startswith('"') and value.endswith('"'):
+              try:
+                  value = json.loads(value)
+              except ValueError:
+                  pass
+          value = value.replace("\\r\\n", "\n").replace("\\n", "\n")
+          if not value.endswith("\n"):
+              value += "\n"
+          with open(sys.argv[1], "w", encoding="utf-8") as handle:
+              handle.write(value)
+          PY
+          gpg --batch --import "$KEY_FILE"
+          rm -f "$KEY_FILE"
+          GPG_KEY_ID="$(gpg --batch --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^fpr:/ {print $10; exit}')"
+          test -n "$GPG_KEY_ID"
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase "${GPG_PASSPHRASE:-}" \
+            --local-user "$GPG_KEY_ID" \
+            --armor --detach-sign --output release/SHA256SUMS.asc release/SHA256SUMS
+          gpg --verify release/SHA256SUMS.asc release/SHA256SUMS
+
+      - name: Upload refreshed checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          gh release upload "$TAG" release/SHA256SUMS release/SHA256SUMS.asc --clobber

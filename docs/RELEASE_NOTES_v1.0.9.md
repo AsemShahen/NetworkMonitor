@@ -34,9 +34,11 @@ installations no longer try to replace themselves with a GitHub package.
 ## Important status
 
 The Debian and Fedora packaging is prepared and passes CI, but it is **not yet
-in the official Debian or Fedora repositories**. Uploading it requires a
-Debian Salsa/Mentors account and a sponsor, and a Fedora account plus a package
-review request. See `docs/PUBLISHING_CHANNELS.md` for the current status.
+in the official Debian or Fedora repositories**. The Debian source package is
+on Mentors and the RFS is open as Debian bug `1153391`; a sponsor is still
+required. The Fedora review request is bug `2568606` with `fedora-review?`
+requested; a reviewer and sponsor are still required. See
+`docs/PUBLISHING_CHANNELS.md` for the current status.
 
 Flathub and Snap Store publication are not part of this release. Flathub needs
 a sandbox-compatible design and a submission authored by the user; Snap Store
@@ -131,8 +133,10 @@ Network Monitor 1.0.9 إصدار تغليف وتوزيع. لا تتغير واج
 ### حالة مهمة
 
 تغليف Debian وFedora جاهز ويجتاز CI، لكنه **ليس بعد في مستودعات Debian أو
-Fedora الرسمية**. يتطلب الرفع حساب Debian Salsa/Mentors وراعياً، وحساب Fedora
-وطلب مراجعة حزمة. راجع `docs/PUBLISHING_CHANNELS_AR.md` للحالة الحالية.
+Fedora الرسمية**. حزمة المصدر لـDebian موجودة في Mentors وطلب RFS مفتوح برقم
+`1153391`، وما زال مطلوباً راعٍ. طلب مراجعة Fedora مفتوح برقم `2568606` وتم
+تعيين `fedora-review?`، وما زال مطلوباً مراجع وراعٍ. راجع
+`docs/PUBLISHING_CHANNELS_AR.md` للحالة الحالية.
 
 النشر على Flathub وSnap Store ليس جزءاً من هذا الإصدار. يحتاج Flathub إلى
 تصميم متوافق مع العزل وطلب يكتبه المستخدم، ويحتاج Snap Store إلى قرار بين

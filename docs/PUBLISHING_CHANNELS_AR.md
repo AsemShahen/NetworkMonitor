@@ -11,10 +11,10 @@
 | GitHub Releases | إصدار مباشر | منشور `v1.0.9` | لا شيء |
 | AppImageHub | كتالوج تطبيقات | منشور | لا شيء |
 | مستودع APT/RPM على GitHub Pages | مستودع طرف ثالث موقّع | يعمل | لا شيء |
-| AUR | مستودع مجتمعي | الملفات جاهزة، غير منشورة | حساب AUR وتسجيل مفتاح SSH |
-| Debian الرسمي | مستودع توزيعة | تغليف `debian/` جاهز تقنيًا | حساب Debian Mentors وراعٍ |
-| Fedora الرسمي | مستودع توزيعة | `packaging/fedora/` جاهز تقنيًا | حساب FAS وطلب مراجعة |
-| Snap Store | متجر تطبيقات | لم يبدأ | حساب Snapcraft ومراجعة يدوية |
+| AUR | مستودع مجتمعي | الملفات جاهزة، غير منشورة | تسجيل AUR مغلق مؤقتًا |
+| Debian الرسمي | مستودع توزيعة | قُبلت حزمة المصدر في Mentors وتحتاج راعيًا | إرسال RFS وراعٍ Debian |
+| Fedora الرسمي | مستودع توزيعة | طلب المراجعة `2568606` مفتوح | مراجع وراعٍ Fedora |
+| Snap Store | متجر تطبيقات | حُجز الاسم `network-monitor-desktop` | اختيار آلية العزل واجتياز المراجعة اليدوية |
 | Flathub | متجر تطبيقات | غير مناسب حاليًا | إعادة تصميم العزل وسياسة Flathub |
 
 ## المرحلة 1: Debian وFedora
@@ -32,13 +32,34 @@
 نجح تشغيل الإصدار 1.0.9 في الوظيفتين، بما في ذلك فحص AppStream وملف سطح
 المكتب.
 
+### حالة الإرسال الحالية
+
+قُبلت حزمة المصدر في Debian Mentors:
+
+- الرفع: `network-monitor 1.0.9-1` بتاريخ 2026-11-07 13:37 UTC.
+- صفحة الحزمة: <https://mentors.debian.net/package/network-monitor/>
+- حالة الرعاية: **تحتاج إلى راعٍ**.
+- الحزمة ليست في أرشيف Debian بعد.
+- يجب إرسال بريد RFS من `asemshahen5@gmail.com` إلى
+  `submit@bugs.debian.org`. القالب الكامل في `docs/DEBIAN_RFS.md`.
+
+طلب مراجعة Fedora مفتوح:
+
+- الخطأ: <https://bugzilla.redhat.com/show_bug.cgi?id=2568606>
+- حزمة المصدر:
+  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.9/network-monitor-1.0.9-1.fc45.src.rpm>
+- الحالة: `NEW`، بانتظار مراجع وراعٍ من Fedora.
+- طُلب من `fedora-review-service` معالجة رابط حزمة المصدر العام.
+
 ### المطلوب منك
 
-1. إنشاء حساب على <https://salsa.debian.org> وحساب على
-   <https://mentors.debian.net>.
-2. بناء حزمة مصدر موقّعة ورفعها إلى Debian Mentors، أو طلب راعٍ Debian.
-3. إنشاء حساب Fedora على <https://accounts.fedoraproject.org> ثم فتح
-   `Review Request` في Bugzilla بعد بناء `src.rpm`.
+1. إرسال بريد RFS لـDebian من `asemshahen5@gmail.com` ومتابعة خطأ BTS. ما زال
+   مطلوبًا راعٍ Debian.
+2. متابعة خطأ Fedora رقم `2568606` والرد على ملاحظات المراجع. ما زال مطلوبًا
+   مراجع وراعٍ Fedora.
+3. حساب Debian Salsa ما زال يحتاج موافقة يدوية قبل استخدامه لمستودع حزم.
+4. تسجيل AUR مغلق مؤقتًا؛ أعد المحاولة لاحقًا وارفع `packaging/aur/` عند
+   إعادة فتحه.
 
 هذه القنوات هي الأقرب لتظهر داخل GNOME Software وKDE Discover وUbuntu App
 Center لأنها تقرأ مستودعات التوزيعة الرسمية.
@@ -58,8 +79,12 @@ Center لأنها تقرأ مستودعات التوزيعة الرسمية.
   مقبس محلي، أو
 - نشر نسخة مراقبة فقط دون حظر، وتوثيق ذلك بوضوح.
 
-المطلوب: حساب Snapcraft، حجز الاسم `network-monitor`، وبناء الحزمة بـ
-`snapcraft` ثم رفعها للمراجعة.
+اسم `network-monitor` مملوك لناشر آخر. حُجز الاسم البديل
+`network-monitor-desktop` بتاريخ 2026-11-08 ويظهر الآن في Snapcraft ←
+My snaps ← Registered snap names. تخضع الأسماء لمراجعة يدوية تستهدف 30 يومًا.
+
+ما زال مطلوبًا بناء الحزمة بـ`snapcraft` واختيار آلية مساعد الحظر قبل أول
+رفع.
 
 ## المرحلة 3: Flathub
 

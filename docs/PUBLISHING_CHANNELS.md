@@ -11,10 +11,10 @@ Do not describe a channel as live until the responsible service accepts it.
 | GitHub Releases | direct release | `v1.0.9` published | none |
 | AppImageHub | app catalog | published | none |
 | Signed APT/RPM repository on GitHub Pages | third-party signed repository | live | none |
-| AUR | community repository | files ready, not published | AUR account and SSH key |
-| Official Debian | distribution repository | `debian/` packaging ready | Debian Mentors account and sponsor |
-| Official Fedora | distribution repository | `packaging/fedora/` ready | FAS account and review request |
-| Snap Store | app store | not started | Snapcraft account and manual review |
+| AUR | community repository | files ready, not published | AUR registration is temporarily closed |
+| Official Debian | distribution repository | source accepted by Mentors; needs sponsor | RFS email and Debian sponsor |
+| Official Fedora | distribution repository | review bug `2568606` filed | package reviewer and sponsor |
+| Snap Store | app store | name `network-monitor-desktop` reserved | choose confinement architecture and pass manual review |
 | Flathub | app store | not suitable yet | sandbox redesign and Flathub policy compliance |
 
 ## Phase 1: Debian and Fedora
@@ -34,14 +34,35 @@ The `distro-packages` workflow builds both packages in Debian and Fedora
 containers. The 1.0.9 run passed for both jobs, including the AppStream and
 desktop-file checks.
 
+### Current submission state
+
+The Debian source package was accepted by Debian Mentors:
+
+- Upload: `network-monitor 1.0.9-1`, uploaded 2026-11-07 13:37 UTC.
+- Package page: <https://mentors.debian.net/package/network-monitor/>
+- Sponsor status: **needs a sponsor**.
+- The package is not in the Debian archive yet.
+- The RFS email must be sent from `asemshahen5@gmail.com` to
+  `submit@bugs.debian.org`. See `docs/DEBIAN_RFS.md` for the exact template.
+
+The Fedora review request is filed:
+
+- Bug: <https://bugzilla.redhat.com/show_bug.cgi?id=2568606>
+- Source RPM:
+  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.9/network-monitor-1.0.9-1.fc45.src.rpm>
+- Status: `NEW`, waiting for a Fedora package reviewer and sponsor.
+- `fedora-review-service` was asked to process the public source RPM URL.
+
 ### Required user actions
 
-1. Create a <https://salsa.debian.org> account and a
-   <https://mentors.debian.net> account.
-2. Build and sign a Debian source package for Debian Mentors, or ask a Debian
-   Developer to sponsor it.
-3. Create a Fedora account at <https://accounts.fedoraproject.org>, build an
-   `src.rpm`, and open a Fedora `Review Request` in Bugzilla.
+1. Send the Debian RFS email from `asemshahen5@gmail.com` and monitor the BTS
+   bug. A Debian sponsor is still required.
+2. Monitor Fedora bug `2568606` and answer reviewer comments. A Fedora reviewer
+   and sponsor are still required.
+3. The Debian Salsa account still needs manual approval before a Salsa-based
+   package repository can be used.
+4. AUR registration is temporarily closed; retry later and upload
+   `packaging/aur/` when registration reopens.
 
 These channels are the closest route to listing inside GNOME Software, KDE
 Discover, and Ubuntu App Center because those stores read the distribution
@@ -62,8 +83,13 @@ One of these must be resolved first:
   socket, or
 - publish a monitoring-only variant and document the limitation.
 
-A Snapcraft account, reservation of the `network-monitor` name, a `snapcraft`
-build, and manual review are required.
+The Snap name `network-monitor` is owned by another publisher. The available
+name `network-monitor-desktop` was reserved on 2026-11-08 and is now listed
+under Snapcraft → My snaps → Registered snap names. Registrations are subject
+to manual review, with a target of 30 days.
+
+A `snapcraft` build and a decision on the privileged-helper architecture are
+still required before the first upload.
 
 ## Phase 3: Flathub
 

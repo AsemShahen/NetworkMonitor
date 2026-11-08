@@ -23,7 +23,7 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Official distribution packages install a `distro-managed` marker, so the in-app updater directs users to `apt` or `dnf` instead of replacing a distribution package with a GitHub package.
 - Added AppStream screenshots and developer metadata, a manual page, and Debian/Fedora container builds in CI.
 - The GitHub `.deb`, `.rpm`, AppImage, and manual `/opt` update paths keep their existing signed-update behavior.
-- The Debian and Fedora packages are prepared in this source tree; official repository submission still requires maintainer accounts and human review.
+- The Debian source package was accepted by Debian Mentors and is awaiting a sponsor; the Fedora review request is filed as bug `2568606` and is awaiting a reviewer.
 
 See [docs/RELEASE_NOTES_v1.0.9.md](docs/RELEASE_NOTES_v1.0.9.md) for details.
 Previous release: [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md).

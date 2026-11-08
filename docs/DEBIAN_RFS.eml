@@ -1,0 +1,45 @@
+From: asem shahen <asemshahen5@gmail.com>
+To: submit@bugs.debian.org
+Subject: RFS: network-monitor/1.0.9-3 [ITP] -- per-application network monitor with usage tracking and blocking
+Date: Sun, 08 Nov 2026 02:15:00 +0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Package: sponsorship-requests
+Severity: wishlist
+
+Dear mentors,
+
+I am looking for a sponsor for my package "network-monitor":
+
+ * Package name     : network-monitor
+   Version          : 1.0.9-3
+   Upstream contact : Asem Shahen <asemshahen5@gmail.com>
+ * URL              : https://github.com/AsemShahen/NetworkMonitor
+ * License          : GPL-3+
+ * Vcs              : https://github.com/AsemShahen/NetworkMonitor
+   Section          : net
+
+The source builds the following binary packages:
+
+  network-monitor - per-application network monitor with usage tracking and blocking
+
+To access further information about this package, please visit the following URL:
+
+  https://mentors.debian.net/package/network-monitor/
+
+Alternatively, you can download the package with 'dget' using this command:
+
+  dget -x https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-3.dsc
+
+Changes for the initial release:
+
+ network-monitor (1.0.9-3) unstable; urgency=medium
+ .
+   * Order the DEP-5 copyright paragraphs so the metadata license applies to
+     the AppStream file.
+
+Regards,
+--
+  asem shahen

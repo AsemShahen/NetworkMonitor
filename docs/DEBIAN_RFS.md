@@ -17,7 +17,7 @@ Sponsorship (RFS) bug against the `sponsorship-requests` pseudo-package.
 
 Send this message from `asemshahen5@gmail.com` to
 `submit@bugs.debian.org`. The `[ITP]` marker is required because this is a new
-package.
+package. A ready-to-send copy of the message is in `docs/DEBIAN_RFS.eml`.
 
 ```text
 From: asem shahen <asemshahen5@gmail.com>
@@ -96,6 +96,7 @@ changes.
 
 أرسل القالب الإنجليزي أعلاه من `asemshahen5@gmail.com` إلى
 `submit@bugs.debian.org`، مع إبقاء `[ITP]` في عنوان الرسالة لأنه حزمة جديدة.
+توجد نسخة جاهزة للإرسال في `docs/DEBIAN_RFS.eml`.
 لا ترسل الرسالة من عنوان آخر؛ يجب أن يطابق عنوان المرسل عنوان صاحب الحزمة.
 
 ## بعد الإرسال

@@ -38,7 +38,7 @@ desktop-file checks.
 
 The Debian source package was accepted by Debian Mentors:
 
-- Upload: `network-monitor 1.0.9-1`, uploaded 2026-11-07 13:37 UTC.
+- Upload: `network-monitor 1.0.9-3`, uploaded 2026-11-08 02:07 UTC.
 - Package page: <https://mentors.debian.net/package/network-monitor/>
 - Sponsor status: **needs a sponsor**.
 - The package is not in the Debian archive yet.

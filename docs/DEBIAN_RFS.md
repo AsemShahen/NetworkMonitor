@@ -1,11 +1,11 @@
 # Debian RFS for network-monitor
 
-The source package `network-monitor 1.0.9-1` was accepted by
-<https://mentors.debian.net> on 2026-11-07 13:37 UTC.
+The source package `network-monitor 1.0.9-3` was accepted by
+<https://mentors.debian.net> on 2026-11-08 02:07 UTC.
 
 - Package page: <https://mentors.debian.net/package/network-monitor/>
 - Source package:
-  <https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-1.dsc>
+  <https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-3.dsc>
 - Uploader: `asem shahen <asemshahen5@gmail.com>`
 - Distribution: `unstable`
 - Sponsor status: **needs a sponsor**
@@ -22,7 +22,7 @@ package.
 ```text
 From: asem shahen <asemshahen5@gmail.com>
 To: submit@bugs.debian.org
-Subject: RFS: network-monitor/1.0.9-1 [ITP] -- per-application network monitor with usage tracking and blocking
+Subject: RFS: network-monitor/1.0.9-3 [ITP] -- per-application network monitor with usage tracking and blocking
 
 Package: sponsorship-requests
 Severity: wishlist
@@ -32,7 +32,7 @@ Dear mentors,
 I am looking for a sponsor for my package "network-monitor":
 
  * Package name     : network-monitor
-   Version          : 1.0.9-1
+   Version          : 1.0.9-3
    Upstream contact : Asem Shahen <asemshahen5@gmail.com>
  * URL              : https://github.com/AsemShahen/NetworkMonitor
  * License          : GPL-3+
@@ -49,16 +49,14 @@ To access further information about this package, please visit the following URL
 
 Alternatively, you can download the package with 'dget' using this command:
 
-  dget -x https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-1.dsc
+  dget -x https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-3.dsc
 
 Changes for the initial release:
 
- network-monitor (1.0.9-1) unstable; urgency=medium
+ network-monitor (1.0.9-3) unstable; urgency=medium
  .
-   * New upstream release.
-   * Defer in-app updates to the distribution package manager.
-   * Refresh AppStream metadata, screenshots, and the manual page.
-   * Keep using distribution-provided Python, Qt, pyroute2, and NumPy packages.
+   * Order the DEP-5 copyright paragraphs so the metadata license applies to
+     the AppStream file.
 
 Regards,
 --
@@ -74,19 +72,19 @@ Regards,
    the upload to the Debian archive.
 
 The Mentors page also exposes a prefilled `mailto:` link and an RFS template on
-the package page. The package must stay at `1.0.9-1` unless a reviewer requests
+the package page. The package must stay at `1.0.9-3` unless a reviewer requests
 changes.
 
 ---
 
 # طلب رعاية Debian (RFS)
 
-قُبلت حزمة المصدر `network-monitor 1.0.9-1` في
-<https://mentors.debian.net> بتاريخ 2026-11-07 13:37 UTC.
+قُبلت حزمة المصدر `network-monitor 1.0.9-3` في
+<https://mentors.debian.net> بتاريخ 2026-11-08 02:07 UTC.
 
 - صفحة الحزمة: <https://mentors.debian.net/package/network-monitor/>
 - حزمة المصدر:
-  <https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-1.dsc>
+  <https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_1.0.9-3.dsc>
 - البريد: `asem shahen <asemshahen5@gmail.com>`
 - التوزيعة: `unstable`
 - حالة الرعاية: **تحتاج إلى راعٍ**

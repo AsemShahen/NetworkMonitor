@@ -36,7 +36,7 @@
 
 قُبلت حزمة المصدر في Debian Mentors:
 
-- الرفع: `network-monitor 1.0.9-1` بتاريخ 2026-11-07 13:37 UTC.
+- الرفع: `network-monitor 1.0.9-3` بتاريخ 2026-11-08 02:07 UTC.
 - صفحة الحزمة: <https://mentors.debian.net/package/network-monitor/>
 - حالة الرعاية: **تحتاج إلى راعٍ**.
 - الحزمة ليست في أرشيف Debian بعد.

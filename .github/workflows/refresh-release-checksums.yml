@@ -16,6 +16,9 @@ jobs:
     name: Regenerate and sign SHA256SUMS
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
       - name: Download current release assets
         env:
           GH_TOKEN: ${{ github.token }}

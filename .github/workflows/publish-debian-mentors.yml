@@ -84,16 +84,24 @@ jobs:
           chmod 700 "$HOME/gpg-bin/gpg"
           export PATH="$HOME/gpg-bin:$PATH"
 
-          # 3.0 (quilt) source packages need an upstream tarball. Export
-          # the release tag without Debian packaging or repository metadata.
-          ORIG_DIR="$(mktemp -d)"
-          mkdir -p "$ORIG_DIR/network-monitor-${VERSION}"
-          git archive --format=tar HEAD | tar -x -C "$ORIG_DIR/network-monitor-${VERSION}"
-          rm -rf "$ORIG_DIR/network-monitor-${VERSION}/debian" \
-                 "$ORIG_DIR/network-monitor-${VERSION}/.github"
-          tar -C "$ORIG_DIR" -czf "../network-monitor_${VERSION}.orig.tar.gz" \
-            "network-monitor-${VERSION}"
-          rm -rf "$ORIG_DIR"
+          # 3.0 (quilt) source packages need an upstream tarball. Reuse the
+          # tarball already accepted by Mentors for this upstream version so a
+          # new Debian revision does not change the .orig checksum.
+          ORIG_TARBALL="../network-monitor_${VERSION}.orig.tar.gz"
+          if curl -fsSL --max-time 120 \
+            "https://mentors.debian.net/debian/pool/main/n/network-monitor/network-monitor_${VERSION}.orig.tar.gz" \
+            -o "$ORIG_TARBALL"; then
+            echo "Reusing the existing Mentors orig tarball for ${VERSION}."
+          else
+            ORIG_DIR="$(mktemp -d)"
+            mkdir -p "$ORIG_DIR/network-monitor-${VERSION}"
+            git archive --format=tar HEAD | tar -x -C "$ORIG_DIR/network-monitor-${VERSION}"
+            rm -rf "$ORIG_DIR/network-monitor-${VERSION}/debian" \
+                   "$ORIG_DIR/network-monitor-${VERSION}/.github"
+            tar -C "$ORIG_DIR" -czf "$ORIG_TARBALL" \
+              "network-monitor-${VERSION}"
+            rm -rf "$ORIG_DIR"
+          fi
           rm -rf .github
           rm -rf debian
           cp -a packaging-src/debian debian

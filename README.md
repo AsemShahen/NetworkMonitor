@@ -26,28 +26,31 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Added confirmed remote-IP blocking and unblocking through the existing polkit-authenticated cgroup v2 + nftables helper.
 - Extended connection discovery to retain local and remote endpoints, so the Security tab can match findings to the right process and destination.
 - Added English/Arabic strings, RTL-aware tables and filters, theming, filters, context menus, and unit tests for the security engine and cache.
-- Added a security screenshot and refreshed AppStream metadata, the manual page, and release documentation.
+- Added a refreshed visual gallery, AppStream screenshots, and updated release documentation for 1.1.0.
 
 See [docs/RELEASE_NOTES_v1.1.0.md](docs/RELEASE_NOTES_v1.1.0.md) for details.
 Previous release: [docs/RELEASE_NOTES_v1.0.9.md](docs/RELEASE_NOTES_v1.0.9.md).
 
-## Screenshots
+## A visual tour of 1.1.0
 
-| Live activity | Traffic chart |
-| --- | --- |
-| ![Live per-application activity](docs/screenshots/live-english.png) | ![Traffic chart](docs/screenshots/chart.png) |
+These screenshots come from the real 1.1.0 interface with realistic sample
+data. No real user traffic, API keys, or machine identifiers are shown.
 
-| Blocked applications | Settings and About |
+| Screenshot | What it shows |
 | --- | --- |
-| ![Blocked applications](docs/screenshots/blocked-apps.png) | ![Settings and About](docs/screenshots/about.png) |
-
-| Live connections | Settings |
-| --- | --- |
-| ![Live connections](docs/screenshots/live-connections.png) | ![Settings](docs/screenshots/settings.png) |
-
-| Security & Threats (English) | الأمان والتهديدات (العربية) |
-| --- | --- |
-| ![Security findings](docs/screenshots/security.png) | ![نتائج الأمان بالعربية](docs/screenshots/security-ar.png) |
+| ![Live per-application activity](docs/screenshots/live-english.png) | **Live activity — see who is using your connection.** The top cards summarize current download/upload, session totals, active apps, and the month. Each row is an app with its PID, executable path, live rates, totals, and connection count; the chart underneath turns the last two minutes into a story. |
+| ![Live connections sorted by socket count](docs/screenshots/live-connections.png) | **Connections at a glance.** Sort by the Connections column to find the app opening the most sockets. Steam leads with 35, followed by Firefox and Brave. Select a row to use **Block selected**, **Unblock**, or **Export names**. |
+| ![Interactive traffic chart](docs/screenshots/chart.png) | **Traffic chart — the shape of your network.** Download (blue) and upload (green) are plotted in KB/s on a real time axis. The legend, grid, and moving window make spikes and quiet periods obvious. |
+| ![Monthly usage table](docs/screenshots/usage.png) | **Monthly usage — who really consumed the data.** This month's totals sit above a searchable table. Every app shows download, upload, total, share of the month, and last-seen time; **Export CSV** turns the view into a spreadsheet. |
+| ![Daily usage chart](docs/screenshots/usage-chart.png) | **Daily usage chart — spot the heavy days.** The chart compares daily download and upload totals for the selected month, so a backup, game update, or video binge is easy to identify. |
+| ![Security and threats findings](docs/screenshots/security.png) | **Security & Threats — local signals first.** The cards count high/medium alerts, recent alerts, and external IPs. The table links severity, time, finding type, app, PID, remote endpoint, and executable path; selecting a row opens the evidence panel and the IP reputation table below. |
+| ![Security and threats in Arabic](docs/screenshots/security-ar.png) | **The same security view in Arabic.** Tables, filters, tooltips, and the details panel switch to RTL without losing the column meaning or the severity colors. |
+| ![Blocked applications](docs/screenshots/blocked-apps.png) | **Blocked apps — the list and the controls.** Every blocked application shows its executable path, when it was added, and its stable ID. **Apply now** re-creates the cgroup/nftables rules; **Unblock selected**, **Export list**, and **Import list** keep the list portable. |
+| ![Settings](docs/screenshots/settings.png) | **Settings that fit your workflow.** Choose language, light/dark theme, refresh interval, idle-process visibility, session totals, usage retention, cgroup grouping, start-with-system, tray behavior, and the optional background collector. |
+| ![Security settings](docs/screenshots/settings-security.png) | **Security controls in one place.** Enable or tune local heuristics, set the upload-spike threshold, choose optional automatic IP checks, pick AbuseIPDB/VirusTotal, and enter your own API keys. The hint reminds you that only the selected IP or SHA-256 leaves the device. |
+| ![Updates, diagnostics, and About](docs/screenshots/about.png) | **Updates, diagnostics, and About.** The updater verifies signed checksums before installing; Diagnostics explains the active engine, socket attribution, and fallbacks; About shows the installed version and local paths. |
+| ![Live activity in Arabic](docs/screenshots/live-ar.png) | **Live activity in Arabic.** The entire window flips to RTL: cards, table headers, rates, paths, and the status bar keep their meaning while the layout reads naturally from right to left. |
+| ![Usage in Arabic](docs/screenshots/usage-ar.png) | **Usage in Arabic.** Monthly cards, the search field, table columns, CSV export, and the reset action are all localized; numbers and dates stay readable inside the RTL layout. |
 
 ## Download
 Prebuilt packages are published on **GitHub Releases**:

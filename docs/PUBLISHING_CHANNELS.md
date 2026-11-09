@@ -10,11 +10,11 @@ Do not describe a channel as live until the responsible service accepts it.
 |---|---|---|---|
 | GitHub Releases | direct release | `v1.1.0` published | none |
 | GitHub Discussions | community forum | enabled | announcement posted |
-| AppImageHub | app catalog | published | none |
+| AppImageHub | app catalog | published; 1.1.0 retest pending | none |
 | Signed APT/RPM repository on GitHub Pages | third-party signed repository | live; serves `v1.1.0` | none |
 | AUR | community repository | `1.1.0` files ready, not published | AUR registration is temporarily closed |
 | Official Debian | distribution repository | source accepted by Mentors; RFS bug `1153391` open | Debian sponsor |
-| Official Fedora | distribution repository | review bug `2568606` filed; `fedora-review?` set | package reviewer and sponsor |
+| Official Fedora | distribution repository | review bug `2568606` filed; 1.1.0 spec and SRPM attached; `fedora-review?` set | package reviewer and sponsor |
 | Snap Store | app store | name `network-monitor-desktop` reserved | choose confinement architecture and pass manual review |
 | Flathub | app store | not suitable yet | sandbox redesign and Flathub policy compliance |
 
@@ -62,12 +62,16 @@ The Fedora review request is filed:
 
 - Bug: <https://bugzilla.redhat.com/show_bug.cgi?id=2568606>
 - Source RPM:
-  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.0.9/network-monitor-1.0.9-1.fc45.src.rpm>
-- Status: `NEW`, with `fedora-review?` requested; waiting for a Fedora package
-  reviewer and sponsor.
+  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.1.0/network-monitor-1.1.0-1.fc45.src.rpm>
+- Source RPM SHA-256:
+  `60fb8a4453b9ebc785175f77386579bd1427485bfa83405f662db366c5335013`
+- Status: `NEW`, with `fedora-review?` requested; the bug description and latest
+  comment `19295882` include the 1.1.0 spec/SRPM URLs. Waiting for a Fedora
+  package reviewer and sponsor.
 - `fedora-review-service` was triggered with the public source RPM URL.
-- The Fedora spec in the source tree is updated to 1.1.0. The review bug still
-  points at the 1.0.9 source RPM and remains blocked by `FE-NEEDSPONSOR`.
+- The Fedora spec in the source tree is 1.1.0. The package remains blocked by
+  `FE-NEEDSPONSOR`. The source RPM is a review artifact, not part of
+  `SHA256SUMS`, and is ignored by the in-app updater.
 
 ### Required user actions
 

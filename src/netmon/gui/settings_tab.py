@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from .. import __version__
-from ..config import BLOCKLIST_FILE, CACHE_DIR, CONFIG_FILE, REFRESH_CHOICES
+from ..config import BLOCKLIST_FILE, CONFIG_FILE, DATA_DIR, REFRESH_CHOICES
 from ..i18n import LANGUAGES, get_language, is_rtl, refresh_label, tr
 
 
@@ -359,7 +359,7 @@ class SettingsTab(QWidget):
             alay,
             "settings.hint.paths",
             config="\u202a" + str(CONFIG_FILE) + "\u202c",
-            data="\u202a" + str(CACHE_DIR) + "\u202c",
+            data="\u202a" + str(DATA_DIR) + "\u202c",
         )
         root.addWidget(self.group_about)
 

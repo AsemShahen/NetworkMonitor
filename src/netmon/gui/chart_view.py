@@ -64,6 +64,9 @@ class ChartView(QWidget):
 
         self.legend = self.plot.addLegend(offset=(-10, 10))
         self.apply_theme()
+        # Curves are created before the legend, so populate it immediately.
+        # Otherwise the legend stays empty until the language changes.
+        self.retranslate()
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)

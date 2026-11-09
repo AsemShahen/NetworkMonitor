@@ -23,23 +23,28 @@
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/chart.png</image>
-      <caption>Interactive traffic chart</caption>
-      <caption xml:lang="ar">مخطط حركة تفاعلي</caption>
+      <caption>Interactive traffic chart with download and upload curves</caption>
+      <caption xml:lang="ar">مخطط حركة تفاعلي لمنحنيي التنزيل والرفع</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/blocked-apps.png</image>
-      <caption>Blocked applications</caption>
-      <caption xml:lang="ar">التطبيقات المحظورة</caption>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/usage.png</image>
+      <caption>Monthly usage per application with share and CSV export</caption>
+      <caption xml:lang="ar">الاستهلاك الشهري لكل تطبيق مع النسبة وتصدير CSV</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security.png</image>
-      <caption>Security &amp; Threats: local findings and IP reputation</caption>
-      <caption xml:lang="ar">الأمان والتهديدات: النتائج المحلية وسمعة عناوين IP</caption>
+      <caption>Security &amp; Threats: local findings, evidence, and IP reputation</caption>
+      <caption xml:lang="ar">الأمان والتهديدات: النتائج المحلية والأدلة وسمعة عناوين IP</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security-ar.png</image>
       <caption xml:lang="ar">الأمان والتهديدات بالعربية مع دعم كامل للاتجاه من اليمين إلى اليسار</caption>
       <caption>Security &amp; Threats in Arabic with full RTL support</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/blocked-apps.png</image>
+      <caption>Blocked applications with apply, unblock, and import/export controls</caption>
+      <caption xml:lang="ar">التطبيقات المحظورة مع التطبيق وإلغاء الحظر والاستيراد والتصدير</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">network-monitor.desktop</launchable>

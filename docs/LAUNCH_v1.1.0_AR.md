@@ -12,7 +12,11 @@
 - **التبويب الجديد:** **الأمان والتهديدات** / **Security & Threats**
 - **الحزم:** `.deb` و`.rpm` وAppImage وأرشيف `/opt` اليدوي
 - **المستودع الموقّع:** <https://asemshahen.github.io/NetworkMonitor/>
-- **لقطة الشاشة:** <https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security.png>
+- **لقطات الشاشة:** معرض 1.1.0 المحدّث على
+  <https://github.com/AsemShahen/NetworkMonitor#جولة-بصرية-في-110>
+  (الرصد، الاستهلاك، الأمان، الحظر، الإعدادات، بالإنجليزية والعربية)
+- **حزمة مصدر مراجعة Fedora:**
+  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.1.0/network-monitor-1.1.0-1.fc45.src.rpm>
 
 ## وصف مختصر
 
@@ -99,8 +103,8 @@ Network Monitor تطبيق لينكس محلي أولًا لمراقبة است�
 عدّادات Netlink ويحفظ الاستهلاك الشهري واليومي ويدعم محدّثًا موقّعًا لحزم
 GitHub.
 
-الواجهة إنجليزية/عربية مع RTL، والترخيص GPL-3.0-or-later. لقطة الشاشة
-والتنزيل: <https://github.com/AsemShahen/NetworkMonitor>
+الواجهة إنجليزية/عربية مع RTL، والترخيص GPL-3.0-or-later. اللقطات والتنزيل:
+<https://github.com/AsemShahen/NetworkMonitor#جولة-بصرية-في-110>
 
 ### r/Ubuntu
 
@@ -111,8 +115,8 @@ Netlink، ويحفظ الاستهلاك الشهري واليومي، ويضيف
 محلي وفحص اختياري للسمعة وحظر مؤكد لعناوين IP عبر nftables.
 
 توجد حزمة `.deb` على GitHub Releases ومستودع APT موقّع على GitHub Pages.
-التعليمات ولقطات الشاشة:
-<https://github.com/AsemShahen/NetworkMonitor>
+التعليمات ومعرض اللقطات المحدّث:
+<https://github.com/AsemShahen/NetworkMonitor#جولة-بصرية-في-110>
 
 ### r/Fedora
 
@@ -192,9 +196,10 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 **العنوان:** Network Monitor 1.1.0 RPM – feedback on nftables/SELinux behavior
 
 Network Monitor مراقب استهلاك لكل تطبيق مع حظر فعلي عبر cgroup v2 + nftables
-وpolkit. ملف Fedora في شجرة المصدر وطلب المراجعة هو خطأ Fedora `2568606`.
-يضيف الإصدار 1.1.0 تبويب الأمان والتهديدات مع فحص محلي وفحص اختياري للسمعة.
-أبحث عن ملاحظات حول RPM وقواعد nftables وسلوك SELinux. RPM وملاحظات الإصدار:
+وpolkit. ملف Fedora في شجرة المصدر وطلب المراجعة هو خطأ Fedora `2568606`،
+وحزمة مصدر 1.1.0 مرفقة بالإصدار. يضيف الإصدار 1.1.0 تبويب الأمان والتهديدات
+مع فحص محلي وفحص اختياري للسمعة. أبحث عن ملاحظات حول RPM وقواعد nftables
+وسلوك SELinux. RPM وحزمة المصدر وملاحظات الإصدار:
 <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
 ### منتديات Debian / قائمة مستخدمي Debian
@@ -215,19 +220,21 @@ Network Monitor تطبيق Qt/PySide6 مفتوح المصدر (GPL-3.0-or-later)
 Network Monitor متاح كـ`.deb` وعبر مستودع APT موقّع. يضيف الإصدار 1.1.0 تبويب
 الأمان والتهديدات مع فحص محلي، وفحص اختياري عبر AbuseIPDB/VirusTotal، وفحص
 SHA-256 للملفات، وحظر مؤكد لعناوين IP عبر nftables. ويعرض التطبيق أيضًا
-السرعات اللحظية لكل تطبيق والاستهلاك الشهري والتطبيقات المحظورة. لقطات
-الشاشة وتعليمات التثبيت:
-<https://github.com/AsemShahen/NetworkMonitor>
+السرعات اللحظية لكل تطبيق والاستهلاك الشهري والتطبيقات المحظورة. اللقطات
+وتعليمات التثبيت:
+<https://github.com/AsemShahen/NetworkMonitor#جولة-بصرية-في-110>
 
 ## قائمة الإطلاق
 
-- [ ] نشر إصدار GitHub والتحقق من كل الأصول.
-- [ ] تحديث مستودع APT/RPM الموقّع وبيانات AUR.
-- [ ] نشر تحديث في مجتمع واحد، ثم الانتظار للتعليقات.
-- [ ] إرسال ملاحظتين أو ثلاث لمواقع أخبار لينكس مع لقطة الأمان.
+- [x] نشر إصدار GitHub والتحقق من كل الأصول.
+- [x] تحديث مستودع APT/RPM الموقّع؛ ملفات AUR جاهزة لكن لا يمكن دفعها حتى
+      يعاد فتح التسجيل.
+- [ ] نشر تحديث في مجتمع واحد، ثم الانتظار للتعليقات. منشور Show HN أصبح
+      `[dead]` ومحاولة r/linux أزالها AutoModerator.
+- [x] إرسال ملاحظتين لموقعي أخبار لينكس مع لقطة الأمان المحدّثة.
 - [ ] الرد على الأسئلة وفرز تقارير الأخطاء.
-- [ ] لا تدّعِ نشر Debian/Fedora الرسمي قبل قبول الراعي/المراجع.
-- [ ] لا تنشئ حسابات منتديات تلقائيًا؛ استخدم حسابات المؤلف واتبع قواعد كل
+- [x] لا تدّعِ نشر Debian/Fedora الرسمي قبل قبول الراعي/المراجع.
+- [x] لا تنشئ حسابات منتديات تلقائيًا؛ استخدم حسابات المؤلف واتبع قواعد كل
       مجتمع.
 
 ## ملاحظات

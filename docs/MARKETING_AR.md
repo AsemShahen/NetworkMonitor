@@ -15,14 +15,14 @@
 - **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
 - **AUR:** `network-monitor-qt-bin` (ملفات `1.1.0` جاهزة مع بصمة `.deb` التي بناها CI؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503)
 - **GitHub Discussions:** الإعلانات مفعّلة؛ منشور 1.1.0 على <https://github.com/AsemShahen/NetworkMonitor/discussions/2>
-- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> دُمج في 2026-11-02 (نجح الاختبار على `v1.0.4`؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
+- **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> دُمج في 2026-11-02 (نجح الاختبار على `v1.0.4`؛ إعادة اختبار `v1.1.0` معلّقة؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
 - **Show HN:** أُرسل <https://news.ycombinator.com/item?id=50268737> لكنه أصبح `[dead]`؛ لا يوجد منشور حي على Hacker News.
 - **نصائح إخبارية:** أُرسلت من <asemshahen5@gmail.com> إلى `news@phoronix.com` و`contact@omgubuntu.co.uk` في 2026-11-09؛ لا يوجد رد بعد.
 - **Reddit:** منشور r/linux <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> أزاله AutoModerator لأن الحساب يملك 1 من الكارما؛ ومحاولة r/linuxapps اصطدمت بحد المعدل/خطأ من Reddit، لذا لا يوجد منشور Reddit حي بعد.
 
-> الإصدار 1.1.0 هو إصدار الأمان والتهديدات. استخدم المسودات الجاهزة في
-> `docs/LAUNCH_v1.1.0.md` و`docs/LAUNCH_v1.1.0_AR.md`؛ مسودات 1.0.8 أدناه
-> محفوظة للمرجع فقط.
+> الإصدار 1.1.0 هو إصدار الأمان والتهديدات. المسودات أدناه محدّثة لـ1.1.0؛
+> استخدم `docs/LAUNCH_v1.1.0.md` و`docs/LAUNCH_v1.1.0_AR.md` كعدّة إطلاق
+> كاملة لكل قناة.
 
 ## الوصف المختصر
 
@@ -79,45 +79,52 @@ SQLite محلية وحظر مؤكد لعناوين IP. الفحوص المحلي
 
 **العنوان:** Network Monitor: per-app bandwidth monitor with real nftables blocking
 
-أصدرت Network Monitor 1.0.8، تطبيق سطح مكتب GPL-3.0-or-later لينكس. يعرض
+أصدرت Network Monitor 1.1.0، تطبيق سطح مكتب GPL-3.0-or-later لينكس. يعرض
 سرعات التنزيل والرفع اللحظية لكل تطبيق، والاتصالات، ومسارات الملفات
-التنفيذية، وإجماليات الجلسة، والاستهلاك الشهري واليومي. يفصل الإصدار الجديد
-تبويب الاستهلاك إلى جدول ومخطط بياني، فلا يتداخل المخطط مع الجدول عند تصغير
-النافذة، مع بقاء جامع الخلفية الاختياري الذي يحدّث الاستهلاك أثناء إغلاق
-التطبيق عبر خدمة systemd للمستخدم وتنسيق SQLite بكاتب واحد. يحظر التطبيقات
-عبر cgroup v2 + nftables بواسطة polkit، والواجهة إنجليزية/عربية مع RTL.
+التنفيذية، وإجماليات الجلسة، والاستهلاك الشهري واليومي. يضيف الإصدار الجديد
+تبويب **الأمان والتهديدات**: فحص محلي للمسارات المؤقتة ومنافذ التعدين
+وارتفاعات الرفع، وفحص اختياري لسمعة عناوين IP عبر AbuseIPDB/VirusTotal
+وبصمات SHA-256 عبر MalwareBazaar/VirusTotal بمفاتيح API الخاصة بك، وذاكرة
+SQLite محلية، وحظر مؤكد لعناوين IP. الفحوص المحلية تعمل دون مفاتيح. يبقى
+جامع الخلفية الاختياري يحدّث الاستهلاك أثناء إغلاق التطبيق عبر خدمة systemd
+للمستخدم وتنسيق SQLite بكاتب واحد. يحظر التطبيقات عبر cgroup v2 + nftables
+بواسطة polkit، والواجهة إنجليزية/عربية مع RTL.
 
-الحزم: `.deb` و`.rpm` و`.AppImage`. المصدر:
-<https://github.com/AsemShahen/NetworkMonitor>
+الحزم: `.deb` و`.rpm` و`.AppImage`. المصدر وملاحظات الإصدار:
+<https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
-أبحث عن ملاحظات حول التغليف وأي توزيعات/بيئات سطح مكتب تحتاج اختبارًا أكبر.
+أبحث عن ملاحظات حول فحوص الأمان والتغليف وأي توزيعات/بيئات سطح مكتب تحتاج
+اختبارًا أكبر.
 
 ### r/Ubuntu
 
 **العنوان:** Per-app network monitor with blocking for Ubuntu (deb + signed repo)
 
-أصدرت Network Monitor 1.0.8 لـUbuntu/Debian. يعرض سرعة كل تطبيق ويحظر
-التطبيقات المحددة عبر cgroup v2 + nftables وpolkit. أصبح الاستهلاك الشهري
-واليومي في تبويبي جدول ومخطط منفصلين، فلا يتداخل المخطط مع الجدول. يحافظ
+أصدرت Network Monitor 1.1.0 لـUbuntu/Debian. يعرض سرعة كل تطبيق ويحظر
+التطبيقات المحددة عبر cgroup v2 + nftables وpolkit. يضيف الإصدار الجديد
+تبويب **الأمان والتهديدات** مع فحص محلي، وفحص اختياري لسمعة عناوين IP عبر
+AbuseIPDB/VirusTotal، وفحص SHA-256 للملفات، وحظر مؤكد لعناوين IP. يحافظ
 جامع الخلفية الاختياري على تحديث الاستهلاك أثناء إغلاق التطبيق، ويتحقق
 المحدّث الداخلي من البصمات الموقّعة قبل التثبيت. توجد حزمة `.deb` على GitHub
 Releases ومستودع APT موقّع على GitHub Pages.
 
-التعليمات ولقطات الشاشة:
-<https://github.com/AsemShahen/NetworkMonitor>
+التعليمات ومعرض اللقطات المحدّث:
+<https://github.com/AsemShahen/NetworkMonitor#جولة-بصرية-في-110>
 
 ### r/Fedora
 
-**العنوان:** Network Monitor 1.0.8 RPM: per-app bandwidth, signed updates, and nftables blocking
+**العنوان:** Network Monitor 1.1.0 RPM: per-app bandwidth, security findings, and nftables blocking
 
 أصدرت حزمة RPM لـFedora/RHEL لتطبيق Network Monitor، وهو مراقب استهلاك
-لكل تطبيق مع حظر فعلي عبر cgroup v2 + nftables وpolkit. يعرض الإصدار 1.0.8
-الاستهلاك في تبويبي جدول ومخطط منفصلين، فلا يتداخل المخطط مع الجدول على
-النوافذ القصيرة. الواجهة إنجليزية/عربية مع RTL، ويحافظ جامع الخلفية
-الاختياري على تحديث الاستهلاك أثناء إغلاق التطبيق، ويتحقق المحدّث الداخلي من
-البصمات الموقّعة قبل التثبيت.
+لكل تطبيق مع حظر فعلي عبر cgroup v2 + nftables وpolkit. يضيف الإصدار 1.1.0
+تبويب **الأمان والتهديدات** مع فحص محلي، وفحص اختياري لسمعة عناوين IP عبر
+AbuseIPDB/VirusTotal، وفحص SHA-256 للملفات، وذاكرة SQLite محلية، وحظر مؤكد
+لعناوين IP. الواجهة إنجليزية/عربية مع RTL، ويحافظ جامع الخلفية الاختياري على
+تحديث الاستهلاك أثناء إغلاق التطبيق، ويتحقق المحدّث الداخلي من البصمات
+الموقّعة قبل التثبيت. حزمة مصدر مراجعة Fedora مرفقة بالإصدار للخطأ `2568606`.
 
-RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.8>
+RPM: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
+حزمة المصدر: <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.1.0/network-monitor-1.1.0-1.fc45.src.rpm>
 مستودع RPM موقّع: <https://asemshahen.github.io/NetworkMonitor/>
 
 أرحّب بملاحظات حول تغليف Fedora وسلوك SELinux/nftables.
@@ -139,13 +146,17 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 
 **العنوان:** مراقب الشبكة: راقب استهلاك كل تطبيق واحظره على لينكس
 
-أصدرت Network Monitor 1.0.8، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
+أصدرت Network Monitor 1.1.0، تطبيقًا مفتوح المصدر (GPL-3.0-or-later)
 لمراقبة سرعة التنزيل والرفع لكل تطبيق على لينكس، مع حظر فعلي عبر cgroup v2
-وnftables ومصادقة polkit. الواجهة إنجليزية وعربية مع دعم كامل للاتجاه من
-اليمين إلى اليسار، والافتراضي إنجليزي.
+وnftables ومصادقة polkit. يضيف الإصدار الجديد تبويب **الأمان والتهديدات**:
+فحص محلي للمسارات المؤقتة ومنافذ التعدين وارتفاعات الرفع، وفحص اختياري لسمعة
+عناوين IP عبر AbuseIPDB/VirusTotal وبصمات SHA-256 عبر MalwareBazaar/VirusTotal
+بمفاتيح API الخاصة بك، وذاكرة SQLite محلية، وحظر مؤكد لعناوين IP. الواجهة
+إنجليزية وعربية مع دعم كامل للاتجاه من اليمين إلى اليسار، والافتراضي إنجليزي.
 
 الحزم: `.deb` و`.rpm` و`.AppImage`، ومستودع APT/RPM موقّع.
-المصدر والتنزيل: <https://github.com/AsemShahen/NetworkMonitor>
+المصدر والتنزيل:
+<https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
 يسعدني اختباركم على توزيعاتكم، خصوصًا Fedora وArch وopenSUSE.
 
@@ -160,18 +171,20 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - Fedora Magazine: <https://fedoramagazine.org/contribute/>
 - Ubuntu Discourse: <https://discourse.ubuntu.com/>
 
-**الموضوع المقترح:** `Network Monitor 1.0.8: per-app bandwidth, signed updates, and nftables blocking for Linux`
+**الموضوع المقترح:** `Network Monitor 1.1.0: per-app bandwidth, security findings, and nftables blocking for Linux`
 
 **النص المقترح:**
 
-> Network Monitor 1.0.8 تطبيق سطح مكتب GPL-3.0-or-later لينكس يعرض سرعة
+> Network Monitor 1.1.0 تطبيق سطح مكتب GPL-3.0-or-later لينكس يعرض سرعة
 > التنزيل والرفع اللحظية لكل تطبيق، ويحظر التطبيقات المحددة عبر cgroup v2 +
-> nftables من خلال مساعد polkit. يعرض الاستهلاك الشهري واليومي في تبويبي
-> جدول ومخطط منفصلين، فلا يتداخل المخطط مع الجدول. يحافظ جامع الخلفية
-> الاختياري على تحديث الاستهلاك أثناء إغلاق التطبيق. يتوفر كـ`.deb` و`.rpm`
-> و`.AppImage`، وله مستودع APT/RPM موقّع وواجهة إنجليزية/عربية مع RTL. لقطات
-> الشاشة وملاحظات الإصدار:
-> <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.8>
+> nftables من خلال مساعد polkit. يضيف تبويب الأمان والتهديدات فحصًا محليًا
+> للمسارات المؤقتة ومنافذ التعدين وارتفاعات الرفع، وفحصًا اختياريًا لسمعة
+> عناوين IP عبر AbuseIPDB/VirusTotal وSHA-256 للملفات عبر
+> MalwareBazaar/VirusTotal، وذاكرة SQLite محلية، وحظرًا مؤكدًا لعناوين IP.
+> يحافظ جامع الخلفية الاختياري على تحديث الاستهلاك أثناء إغلاق التطبيق.
+> يتوفر كـ`.deb` و`.rpm` و`.AppImage`، وله مستودع APT/RPM موقّع وواجهة
+> إنجليزية/عربية مع RTL. لقطات الشاشة وملاحظات الإصدار:
+> <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
 ## SEO
 
@@ -211,7 +224,7 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها (متوقف: لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا، HTTP 503).
 - [x] فتح PR في AppImageHub (ملف واحد فقط)، ونجح الاختبار، ودُمج في 2026-11-02.
 - [x] نجاح اختبار AppImageHub على `v1.0.4` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04؛ v1.0.4 يعالج الثيم الداكن الافتراضي ويضيف معلومات تحديث `.zsync`).
-- [ ] إعادة اختبار AppImage الخاص بـ`v1.0.8` على AppImageHub بعد تغييرات تبويب الاستهلاك.
+- [ ] إعادة اختبار AppImage الخاص بـ`v1.1.0` على AppImageHub بعد تغييرات الأمان والتهديدات واللقطات.
 - [x] ظهور لقطات README على GitHub.
 - [x] ذكر المستودع الموقّع وحالة AUR وAppImageHub في ملاحظات الإصدار.
 - [x] نشر Show HN: <https://news.ycombinator.com/item?id=50268737>

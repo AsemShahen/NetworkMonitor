@@ -13,7 +13,11 @@ same text everywhere on the same day.
 - **New tab:** **Security & Threats** / **الأمان والتهديدات**
 - **Packages:** `.deb`, `.rpm`, AppImage, manual `/opt` tarball
 - **Repository:** <https://asemshahen.github.io/NetworkMonitor/> (signed APT/RPM repository)
-- **Screenshot:** <https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security.png>
+- **Screenshots:** refreshed 1.1.0 gallery at
+  <https://github.com/AsemShahen/NetworkMonitor#a-visual-tour-of-110>
+  (live activity, usage, security, blocked apps, settings, English/Arabic)
+- **Fedora review artifact:**
+  <https://github.com/AsemShahen/NetworkMonitor/releases/download/v1.1.0/network-monitor-1.1.0-1.fc45.src.rpm>
 
 ## One-line pitch
 
@@ -108,8 +112,9 @@ optional IP and file reputation checks, and confirmed IP blocking. The main
 monitor uses Netlink counters, keeps monthly/daily usage, and supports a signed
 in-app updater for GitHub packages.
 
-The UI is English/Arabic with RTL, and the app is GPL-3.0-or-later. Screenshot
-and downloads: <https://github.com/AsemShahen/NetworkMonitor>
+The UI is English/Arabic with RTL, and the app is GPL-3.0-or-later. Screenshots
+and downloads:
+<https://github.com/AsemShahen/NetworkMonitor#a-visual-tour-of-110>
 
 ### r/Ubuntu
 
@@ -121,8 +126,8 @@ a Security & Threats tab with local heuristics, optional reputation checks, and
 confirmed nftables IP blocking.
 
 There is a `.deb` on GitHub Releases and a signed APT repository on GitHub
-Pages. Install instructions and screenshots:
-<https://github.com/AsemShahen/NetworkMonitor>
+Pages. Install instructions and the refreshed screenshot gallery:
+<https://github.com/AsemShahen/NetworkMonitor#a-visual-tour-of-110>
 
 ### r/Fedora
 
@@ -209,10 +214,11 @@ depending on the community rules.
 
 Network Monitor is a per-application bandwidth monitor with real blocking
 through cgroup v2 + nftables and polkit. The Fedora source spec is in the
-upstream tree and the review request is Fedora bug `2568606`. The 1.1.0 release
-adds a Security & Threats tab with local heuristics and optional reputation
-checks. I am looking for feedback on the RPM, nftables rules, and SELinux
-behavior. RPM and release notes:
+upstream tree and the review request is Fedora bug `2568606`; the 1.1.0 source
+RPM is attached to the release. The 1.1.0 release adds a Security & Threats tab
+with local heuristics and optional reputation checks. I am looking for feedback
+on the RPM, nftables rules, and SELinux behavior. RPM, source RPM, and release
+notes:
 <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
 ### Debian forums / Debian user list
@@ -236,18 +242,20 @@ Version 1.1.0 adds a Security & Threats tab with local heuristics, optional
 AbuseIPDB/VirusTotal checks, SHA-256 file checks, and confirmed nftables IP
 blocking. The app also shows live per-application speeds, monthly usage, and
 blocked apps. Screenshots and install instructions:
-<https://github.com/AsemShahen/NetworkMonitor>
+<https://github.com/AsemShahen/NetworkMonitor#a-visual-tour-of-110>
 
 ## Checklist
 
-- [ ] Publish the GitHub release and verify all assets.
-- [ ] Update the signed APT/RPM repository and AUR metadata.
-- [ ] Post one community update, then wait for feedback.
-- [ ] Send two or three targeted news tips with the security screenshot.
+- [x] Publish the GitHub release and verify all assets.
+- [x] Update the signed APT/RPM repository; AUR metadata files are ready but
+      cannot be pushed until registration reopens.
+- [ ] Post one community update, then wait for feedback. Show HN is `[dead]`
+      and the r/linux attempt was removed by AutoModerator.
+- [x] Send two targeted news tips with the refreshed security screenshot.
 - [ ] Answer questions and triage bug reports.
-- [ ] Do not claim Debian/Fedora official publication until a sponsor/reviewer
-      accepts the package.
-- [ ] Do not create forum accounts automatically; use accounts owned by the
+- [x] Do not claim Debian/Fedora official publication before a
+      sponsor/reviewer accepts the package.
+- [x] Do not create forum accounts automatically; use accounts owned by the
       author and follow each community's self-promotion rules.
 
 ## Notes

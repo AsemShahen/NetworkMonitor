@@ -32,7 +32,7 @@ polkit-authenticated helper.
   Arabic, the tables and filters honor RTL, and the tab follows the current
   light/dark theme.
 - **Tests.** `tests/test_security.py` covers the heuristics, SQLite cache,
-  provider normalization, and file hashing. The full suite passes.
+  provider normalization, and file hashing. The full suite passes (57 tests).
 
 ## Privacy
 
@@ -63,11 +63,16 @@ After that, later releases can be installed from the update button.
 
 - `network-monitor_1.1.0_amd64.deb` — Debian/Ubuntu
 - `network-monitor-1.1.0-1.x86_64.rpm` — Fedora/RHEL
+- `network-monitor-1.1.0-1.fc45.src.rpm` — Fedora package-review source RPM
 - `NetworkMonitor-1.1.0-x86_64.AppImage` — portable
 - `NetworkMonitor-1.1.0-x86_64.AppImage.zsync` — AppImageUpdate metadata
 - `NetworkMonitor-1.1.0-linux-x86_64.tar.gz` — manual `/opt` updater archive
 - `SHA256SUMS` — release file checksums
 - `SHA256SUMS.asc` — detached GPG signature for the checksums
+
+The Fedora source RPM is a review artifact for bug `2568606`. It is not
+included in `SHA256SUMS` and is ignored by the in-app updater; install the
+binary RPM on Fedora or use the signed RPM repository.
 
 Download: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
@@ -80,12 +85,11 @@ sha256sum -c SHA256SUMS
 
 ## Package repositories and catalog
 
-- The signed APT/RPM repository publishes the release assets and signed
-  metadata after the release workflow finishes.
-- The AUR `network-monitor-qt-bin` metadata is updated after the CI-built
-  `.deb` and its SHA-256 checksum are available.
+- The signed APT/RPM repository serves `v1.1.0` with matching hashes.
+- The AUR `network-monitor-qt-bin` metadata is ready for 1.1.0, but cannot be
+  pushed until AUR registration reopens.
 - AppImageHub keeps the existing catalog entry and the
-  `gh-releases-zsync` update information.
+  `gh-releases-zsync` update information; the 1.1.0 retest is pending.
 
 ## Official distribution status
 
@@ -96,7 +100,8 @@ still waiting for human sponsors/reviewers:
   `network-monitor 1.0.9-3`; Debian bug `1153391` is awaiting a sponsor. The
   source tree now contains a `1.1.0-1` changelog entry for the next upload.
 - **Fedora:** bug `2568606` is open with `fedora-review?` and is waiting for a
-  reviewer/sponsor. The Fedora spec in the source tree is updated to 1.1.0.
+  reviewer/sponsor. The bug description and latest comment point at the 1.1.0
+  spec and source RPM; the package remains blocked by `FE-NEEDSPONSOR`.
 - **Snap:** publication is deferred until the confinement and privileged-helper
   architecture is decided.
 - **Flathub:** not part of this release; it needs a sandbox-compatible design
@@ -112,8 +117,8 @@ distribution installs.
 - The new tab is named **Security & Threats** / **الأمان والتهديدات**.
 - Reputation providers have their own quotas and terms. Add API keys in
   Settings only if you want online checks.
-- The new AppStream screenshot is
-  `docs/screenshots/security.png`.
+- AppStream screenshots now cover live activity, the traffic chart, monthly
+  usage, Security & Threats in English and Arabic, and blocked applications.
 - The full test suite is run with:
 
 ```bash
@@ -149,7 +154,7 @@ PYTHONPATH=src python3 -m unittest discover -s tests
 - **ثنائي اللغة ويراعي الثيم.** كل النصوص الجديدة متاحة بالإنجليزية والعربية،
   والجداول والمرشحات تراعي RTL، ويتبع التبويب الثيم الفاتح/الداكن الحالي.
 - **اختبارات.** يغطي `tests/test_security.py` المحرك والذاكرة وتطبيع نتائج
-  المزوّدين وحساب بصمة الملفات. وتنجح مجموعة الاختبارات كاملة.
+  المزوّدين وحساب بصمة الملفات. وتنجح مجموعة الاختبارات كاملة (57 اختبارًا).
 
 ### الخصوصية
 
@@ -181,11 +186,16 @@ sudo ./network-monitor/install.sh
 
 - `network-monitor_1.1.0_amd64.deb` — Debian/Ubuntu
 - `network-monitor-1.1.0-1.x86_64.rpm` — Fedora/RHEL
+- `network-monitor-1.1.0-1.fc45.src.rpm` — حزمة المصدر لمراجعة حزمة Fedora
 - `NetworkMonitor-1.1.0-x86_64.AppImage` — محمولة
 - `NetworkMonitor-1.1.0-x86_64.AppImage.zsync` — بيانات تحديث AppImage
 - `NetworkMonitor-1.1.0-linux-x86_64.tar.gz` — أرشيف التحديث اليدوي في `/opt`
 - `SHA256SUMS` — بصمات ملفات الإصدار
 - `SHA256SUMS.asc` — توقيع GPG المنفصل للبصمات
+
+حزمة المصدر الخاصة بـFedora هي أثر لمراجعة الخطأ `2568606`. لا تُضمّن في
+`SHA256SUMS` ويتجاهلها المحدّث الداخلي؛ ثبّت حزمة RPM الثنائية على Fedora أو
+استخدم مستودع RPM الموقّع.
 
 التحميل: <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 
@@ -198,11 +208,11 @@ sha256sum -c SHA256SUMS
 
 ### المستودعات والكتالوج
 
-- ينشر مستودع APT/RPM الموقّع أصول الإصدار وبياناته الموقّعة بعد انتهاء سير
-  عمل الإصدار.
-- تُحدّث بيانات AUR للحزمة `network-monitor-qt-bin` بعد توفر ملف `.deb` الذي
-  يبنيه CI وبصمة SHA-256 الخاصة به.
-- يحتفظ AppImageHub بمدخله الحالي وبينات تحديث `gh-releases-zsync`.
+- يخدم مستودع APT/RPM الموقّع الإصدار `v1.1.0` ببصمات مطابقة.
+- بيانات AUR للحزمة `network-monitor-qt-bin` جاهزة لـ1.1.0، لكن لا يمكن
+  دفعها حتى يعاد فتح تسجيل AUR.
+- يحتفظ AppImageHub بمدخله الحالي وبينات تحديث `gh-releases-zsync`؛ وإعادة
+  اختبار 1.1.0 معلّقة.
 
 ### حالة التوزيعات الرسمية
 
@@ -213,7 +223,8 @@ sha256sum -c SHA256SUMS
   `network-monitor 1.0.9-3`؛ والخطأ `1153391` ينتظر راعيًا. تحتوي شجرة المصدر
   الآن على مدخل changelog للإصدار `1.1.0-1` للرفع التالي.
 - **Fedora:** الخطأ `2568606` مفتوح مع `fedora-review?` وينتظر مراجعًا وراعيًا.
-  وملف Fedora في شجرة المصدر محدّث إلى 1.1.0.
+  ويشير وصف الخطأ وأحدث تعليق إلى ملف spec وحزمة المصدر 1.1.0؛ وما زالت
+  الحزمة محجوبة بـ`FE-NEEDSPONSOR`.
 - **Snap:** النشر مؤجل حتى تحديد بنية العزل والمساعد المميز.
 - **Flathub:** ليس جزءًا من هذا الإصدار؛ يحتاج تصميمًا متوافقًا مع العزل
   وتقديمًا من المستخدم.
@@ -227,7 +238,8 @@ sha256sum -c SHA256SUMS
 - اسم التبويب الجديد هو **الأمان والتهديدات** / **Security & Threats**.
 - لمزوّدي السمعة حصص وشروط خاصة بهم. أضف مفاتيح API في الإعدادات فقط إذا
   أردت الفحوص عبر الإنترنت.
-- لقطة AppStream الجديدة موجودة في `docs/screenshots/security.png`.
+- تغطي لقطات AppStream الآن الرصد المباشر، ومخطط الحركة، والاستهلاك الشهري،
+  والأمان والتهديدات بالإنجليزية والعربية، والتطبيقات المحظورة.
 - تُشغّل مجموعة الاختبارات كاملة بالأمر:
 
 ```bash

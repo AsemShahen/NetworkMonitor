@@ -39,6 +39,11 @@ repository and tests the newest AppImage from its GitHub Releases page.
 - Since 1.0.5 the AppImage bundles `pyroute2` and uses native Netlink counters,
   with `ss` and `/proc/net` fallbacks. It also adds monthly/daily usage and a
   diagnostics panel.
+- Since 1.1.0 the AppImage includes the **Security & Threats** tab: local
+  heuristics, optional IP/file reputation through the user's own API keys,
+  local SQLite caching, and confirmed IP blocking through the existing helper.
+  The refreshed 1.1.0 screenshot gallery starts at
+  <https://github.com/AsemShahen/NetworkMonitor#a-visual-tour-of-110>.
 - The AppImage targets glibc 2.34+; the oldest supported Ubuntu LTS is newer
   than that, so it should pass the glibc check.
 - Prefer the repository URL over a direct `.AppImage` URL. Use the direct URL

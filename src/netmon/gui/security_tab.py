@@ -387,7 +387,7 @@ class SecurityTab(QWidget):
             for row in range(self.table.rowCount()):
                 item = self.table.item(row, 0)
                 if item is not None and item.data(Qt.UserRole) == self._selected_key:
-                    self.table.selectRow(row)
+                    self.table.setCurrentCell(row, 0)
                     break
         self._render_details()
 
@@ -538,7 +538,7 @@ class SecurityTab(QWidget):
         index = self.table.indexAt(pos)
         if not index.isValid():
             return
-        self.table.selectRow(index.row())
+        self.table.setCurrentCell(index.row(), 0)
         finding = self._selected_finding()
         if finding is None:
             return

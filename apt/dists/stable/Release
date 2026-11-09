@@ -1,0 +1,20 @@
+Architectures: amd64
+Codename: stable
+Components: main
+Date: Mon, 09 Nov 2026 10:55:00 +0000
+Description: Network Monitor packages
+Label: Network Monitor
+Origin: Network Monitor
+Suite: stable
+MD5Sum:
+ e6b2896e46a438597e90afc239f8752a             1671 main/binary-amd64/Packages
+ 2e2ee3879126e894693613a4622ac51a              964 main/binary-amd64/Packages.gz
+SHA1:
+ 798b3db4f80eb1d3c6abd1360e968be7d65d5fd2             1671 main/binary-amd64/Packages
+ adcf33e8464a2731f79a912309e5bffaa3fe79e4              964 main/binary-amd64/Packages.gz
+SHA256:
+ d13fcd09a580e54ff2b6ad4348d1e9ba25b105e85b2a4ea8533f6f5eff3ef036             1671 main/binary-amd64/Packages
+ da88937565e637b620924daa7eae2c0e38460ffb928307fa22b7d4d363b2e054              964 main/binary-amd64/Packages.gz
+SHA512:
+ c961be024d596cc77fb3e5b3203cab6cf17e779d62467505111be42564f3015cb9a697d762e9fa0f84219377acbf4f194bcc5cbc261ccb962b79dbd3e6b5ca6b             1671 main/binary-amd64/Packages
+ c04c13200bf162d741a8076c979bacfee48bc4fb580479f66684cccda6f4b1f662be5ae603d2831a60757ff411595d60520840431f7b53347a27bce44736317a              964 main/binary-amd64/Packages.gz

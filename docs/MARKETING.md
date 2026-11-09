@@ -12,11 +12,13 @@ Do not claim a channel is live before it is.
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
 - **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; the signed repository is republished with `v1.1.0` after the release workflow finishes)
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.1.0` signed with the current key)
 - **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
-- **AUR:** `network-monitor-qt-bin` (local `1.0.9` package ready; update to `1.1.0` pending the CI-built `.deb` checksum; no AUR account yet, and registration is temporarily closed with HTTP 503)
+- **AUR:** `network-monitor-qt-bin` (`1.1.0` files ready with the CI-built `.deb` SHA-256; no AUR account yet, and registration is temporarily closed with HTTP 503)
+- **GitHub Discussions:** announcements enabled; 1.1.0 post <https://github.com/AsemShahen/NetworkMonitor/discussions/2>
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> merged on 2026-11-02 (test passed on `v1.0.4`; the v1.0.3 dark-default and missing-update-information warnings are resolved)
-- **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
+- **Show HN:** <https://news.ycombinator.com/item?id=50268737> was submitted but is now marked `[dead]`; there is no live Hacker News post.
+- **News tips:** sent from <asemshahen5@gmail.com> to `news@phoronix.com` and `contact@omgubuntu.co.uk` on 2026-11-09; no reply yet.
 - **Reddit:** r/linux post <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> was removed by AutoModerator because the account has 1 karma; an r/linuxapps retry hit Reddit's rate limit/error, so there is no live Reddit post yet.
 
 > 1.1.0 is the Security & Threats release. Use the ready-to-post drafts in
@@ -55,7 +57,7 @@ with full RTL support.
 
 ## Show HN
 
-**Posted:** <https://news.ycombinator.com/item?id=50268737>
+**Submitted (now `[dead]`):** <https://news.ycombinator.com/item?id=50268737>
 
 **Title:** Show HN: Network Monitor – per-app bandwidth and blocking for Linux
 

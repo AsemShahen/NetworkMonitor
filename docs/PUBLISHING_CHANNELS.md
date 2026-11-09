@@ -8,14 +8,22 @@ Do not describe a channel as live until the responsible service accepts it.
 
 | Channel | Type | Status | Remaining work |
 |---|---|---|---|
-| GitHub Releases | direct release | `v1.0.9` published | none |
+| GitHub Releases | direct release | `v1.1.0` published | none |
+| GitHub Discussions | community forum | enabled | announcement posted |
 | AppImageHub | app catalog | published | none |
-| Signed APT/RPM repository on GitHub Pages | third-party signed repository | live | none |
-| AUR | community repository | files ready, not published | AUR registration is temporarily closed |
+| Signed APT/RPM repository on GitHub Pages | third-party signed repository | live; serves `v1.1.0` | none |
+| AUR | community repository | `1.1.0` files ready, not published | AUR registration is temporarily closed |
 | Official Debian | distribution repository | source accepted by Mentors; RFS bug `1153391` open | Debian sponsor |
 | Official Fedora | distribution repository | review bug `2568606` filed; `fedora-review?` set | package reviewer and sponsor |
 | Snap Store | app store | name `network-monitor-desktop` reserved | choose confinement architecture and pass manual review |
 | Flathub | app store | not suitable yet | sandbox redesign and Flathub policy compliance |
+
+## GitHub Discussions
+
+GitHub Discussions is enabled for release announcements and user questions.
+The 1.1.0 announcement is posted in the Announcements category:
+
+<https://github.com/AsemShahen/NetworkMonitor/discussions/2>
 
 ## Phase 1: Debian and Fedora
 
@@ -31,8 +39,10 @@ instead of the bundled runtime:
   Fedora containers.
 
 The `distro-packages` workflow builds both packages in Debian and Fedora
-containers. The 1.0.9 run passed for both jobs, including the AppStream and
-desktop-file checks.
+containers. The 1.1.0 main-branch run passed for both jobs after the Debian
+container installs `pybuild-plugin-pyproject`, including the AppStream and
+desktop-file checks. The tag run was created before that CI fix and failed only
+on the missing Debian build dependency.
 
 ### Current submission state
 
@@ -40,6 +50,7 @@ The Debian source package was accepted by Debian Mentors:
 
 - Upload: `network-monitor 1.0.9-3`, uploaded 2026-11-08 02:07 UTC.
 - Package page: <https://mentors.debian.net/package/network-monitor/>
+- The source tree now contains a prepared `1.1.0-1` entry for the next upload.
 - Sponsor status: **needs a sponsor**.
 - The package is not in the Debian archive yet.
 - RFS bug: <https://bugs.debian.org/1153391> (open, wishlist).
@@ -55,6 +66,8 @@ The Fedora review request is filed:
 - Status: `NEW`, with `fedora-review?` requested; waiting for a Fedora package
   reviewer and sponsor.
 - `fedora-review-service` was triggered with the public source RPM URL.
+- The Fedora spec in the source tree is updated to 1.1.0. The review bug still
+  points at the 1.0.9 source RPM and remains blocked by `FE-NEEDSPONSOR`.
 
 ### Required user actions
 

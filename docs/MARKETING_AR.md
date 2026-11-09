@@ -11,11 +11,13 @@
 - **الترخيص:** GPL-3.0-or-later
 - **المستودع:** <https://github.com/AsemShahen/NetworkMonitor>
 - **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
-- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يُعاد نشر المستودع الموقّع بالإصدار `v1.1.0` بعد انتهاء سير عمل الإصدار)
+- **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.1.0` موقّعًا بالمفتاح الحالي)
 - **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
-- **AUR:** `network-monitor-qt-bin` (حزمة `1.0.9` المحلية جاهزة؛ تحديثها إلى `1.1.0` ينتظر بصمة ملف `.deb` الذي يبنيه CI؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503)
+- **AUR:** `network-monitor-qt-bin` (ملفات `1.1.0` جاهزة مع بصمة `.deb` التي بناها CI؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503)
+- **GitHub Discussions:** الإعلانات مفعّلة؛ منشور 1.1.0 على <https://github.com/AsemShahen/NetworkMonitor/discussions/2>
 - **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> دُمج في 2026-11-02 (نجح الاختبار على `v1.0.4`؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
-- **Show HN:** <https://news.ycombinator.com/item?id=50268737> (منشور؛ حُدّث العنوان إلى عنوان Show HN المُعدّ)
+- **Show HN:** أُرسل <https://news.ycombinator.com/item?id=50268737> لكنه أصبح `[dead]`؛ لا يوجد منشور حي على Hacker News.
+- **نصائح إخبارية:** أُرسلت من <asemshahen5@gmail.com> إلى `news@phoronix.com` و`contact@omgubuntu.co.uk` في 2026-11-09؛ لا يوجد رد بعد.
 - **Reddit:** منشور r/linux <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> أزاله AutoModerator لأن الحساب يملك 1 من الكارما؛ ومحاولة r/linuxapps اصطدمت بحد المعدل/خطأ من Reddit، لذا لا يوجد منشور Reddit حي بعد.
 
 > الإصدار 1.1.0 هو إصدار الأمان والتهديدات. استخدم المسودات الجاهزة في
@@ -44,7 +46,7 @@ SQLite محلية وحظر مؤكد لعناوين IP. الفحوص المحلي
 
 ## منشور Show HN
 
-**تم النشر:** <https://news.ycombinator.com/item?id=50268737>
+**تم الإرسال (أصبح `[dead]` الآن):** <https://news.ycombinator.com/item?id=50268737>
 
 **العنوان:** Show HN: Network Monitor – per-app bandwidth and blocking for Linux
 

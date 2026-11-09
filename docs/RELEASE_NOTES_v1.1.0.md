@@ -66,7 +66,6 @@ After that, later releases can be installed from the update button.
 - `NetworkMonitor-1.1.0-x86_64.AppImage` — portable
 - `NetworkMonitor-1.1.0-x86_64.AppImage.zsync` — AppImageUpdate metadata
 - `NetworkMonitor-1.1.0-linux-x86_64.tar.gz` — manual `/opt` updater archive
-- `network-monitor-1.1.0-1.fc45.src.rpm` — Fedora source RPM for the package review
 - `SHA256SUMS` — release file checksums
 - `SHA256SUMS.asc` — detached GPG signature for the checksums
 
@@ -185,7 +184,6 @@ sudo ./network-monitor/install.sh
 - `NetworkMonitor-1.1.0-x86_64.AppImage` — محمولة
 - `NetworkMonitor-1.1.0-x86_64.AppImage.zsync` — بيانات تحديث AppImage
 - `NetworkMonitor-1.1.0-linux-x86_64.tar.gz` — أرشيف التحديث اليدوي في `/opt`
-- `network-monitor-1.1.0-1.fc45.src.rpm` — حزمة مصدر Fedora لطلب المراجعة
 - `SHA256SUMS` — بصمات ملفات الإصدار
 - `SHA256SUMS.asc` — توقيع GPG المنفصل للبصمات
 

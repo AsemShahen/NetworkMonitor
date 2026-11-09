@@ -53,7 +53,7 @@ cp /path/to/NetworkMonitor/packaging/aur/PKGBUILD .
 cp /path/to/NetworkMonitor/packaging/aur/network-monitor-qt-bin.install .
 cp /path/to/NetworkMonitor/packaging/aur/.SRCINFO .
 git add PKGBUILD network-monitor-qt-bin.install .SRCINFO
-git commit -m "Initial import: network-monitor-qt-bin 1.0.9"
+git commit -m "Initial import: network-monitor-qt-bin 1.1.0"
 git push
 ```
 

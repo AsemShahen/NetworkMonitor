@@ -13,7 +13,7 @@
 - **الإصدار:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 - **مستودع الحزم:** <https://asemshahen.github.io/NetworkMonitor/> (متاح؛ يخدم `v1.1.0` موقّعًا بالمفتاح الحالي)
 - **بصمة GPG:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (المفتاح السابق `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` متقاعد)
-- **AUR:** `network-monitor-qt-bin` (ملفات `1.1.0` جاهزة مع بصمة `.deb` التي بناها CI؛ لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا بـHTTP 503)
+- **AUR:** `network-monitor-qt-bin` (ملفات `1.1.0` جاهزة مع بصمة `.deb` التي بناها CI؛ لا يوجد حساب AUR بعد، والتسجيل محمي بتحدٍّ لمكافحة الروبوتات)
 - **GitHub Discussions:** الإعلانات مفعّلة؛ منشور 1.1.0 على <https://github.com/AsemShahen/NetworkMonitor/discussions/2>
 - **AppImageHub:** PR بملف واحد <https://github.com/AppImage/appimage.github.io/pull/10786> دُمج في 2026-11-02 (نجح الاختبار على `v1.0.4`؛ إعادة اختبار `v1.1.0` معلّقة؛ عولج تحذيرا v1.0.3: الثيم الداكن افتراضيًا وغياب معلومات تحديث AppImage)
 - **Show HN:** أُرسل <https://news.ycombinator.com/item?id=50268737> لكنه أصبح `[dead]`؛ لا يوجد منشور حي على Hacker News.
@@ -221,7 +221,7 @@ AUR: `yay -S network-monitor-qt-bin` (بعد القبول)
 - [x] عودة <https://asemshahen.github.io/NetworkMonitor/> بشكل صحيح.
 - [x] التحقق من `apt/dists/stable/InRelease` بالمفتاح المنشور.
 - [x] التحقق من `rpm/x86_64/repodata/repomd.xml.asc` بالمفتاح المنشور.
-- [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها (متوقف: لا يوجد حساب AUR بعد، والتسجيل مغلق مؤقتًا، HTTP 503).
+- [ ] دفع حزمة AUR `network-monitor-qt-bin` وظهورها (متوقف: لا يوجد حساب AUR بعد؛ التسجيل يعرض تحديًا لمكافحة الروبوتات).
 - [x] فتح PR في AppImageHub (ملف واحد فقط)، ونجح الاختبار، ودُمج في 2026-11-02.
 - [x] نجاح اختبار AppImageHub على `v1.0.4` (v1.0.1 بلا `libxkbcommon-x11`؛ v1.0.2 بمرجع glibc 2.38؛ v1.0.3 مبني على Ubuntu 22.04؛ v1.0.4 يعالج الثيم الداكن الافتراضي ويضيف معلومات تحديث `.zsync`).
 - [ ] إعادة اختبار AppImage الخاص بـ`v1.1.0` على AppImageHub بعد تغييرات الأمان والتهديدات واللقطات.

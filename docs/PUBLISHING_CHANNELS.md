@@ -12,7 +12,7 @@ Do not describe a channel as live until the responsible service accepts it.
 | GitHub Discussions | community forum | enabled | announcement posted |
 | AppImageHub | app catalog | published; 1.1.0 retest pending | none |
 | Signed APT/RPM repository on GitHub Pages | third-party signed repository | live; serves `v1.1.0` | none |
-| AUR | community repository | `1.1.0` files ready, not published | AUR registration is temporarily closed |
+| AUR | community repository | `1.1.0` files ready, not published | no AUR account yet; registration is behind an anti-bot challenge |
 | Official Debian | distribution repository | source accepted by Mentors; RFS bug `1153391` open | Debian sponsor |
 | Official Fedora | distribution repository | review bug `2568606` filed; 1.1.0 spec and SRPM attached; `fedora-review?` set | package reviewer and sponsor |
 | Snap Store | app store | name `network-monitor-desktop` reserved | choose confinement architecture and pass manual review |
@@ -81,8 +81,8 @@ The Fedora review request is filed:
    and sponsor are still required.
 3. The Debian Salsa account still needs manual approval before a Salsa-based
    package repository can be used.
-4. AUR registration is temporarily closed; retry later and upload
-   `packaging/aur/` when registration reopens.
+4. AUR registration currently presents an anti-bot challenge. Create an
+   account in a browser when available, then upload `packaging/aur/`.
 
 These channels are the closest route to listing inside GNOME Software, KDE
 Discover, and Ubuntu App Center because those stores read the distribution

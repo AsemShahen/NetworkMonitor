@@ -14,7 +14,7 @@ Do not claim a channel is live before it is.
 - **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
 - **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.1.0` signed with the current key)
 - **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
-- **AUR:** `network-monitor-qt-bin` (`1.1.0` files ready with the CI-built `.deb` SHA-256; no AUR account yet, and registration is temporarily closed with HTTP 503)
+- **AUR:** `network-monitor-qt-bin` (`1.1.0` files ready with the CI-built `.deb` SHA-256; no AUR account yet, and registration is behind an anti-bot challenge)
 - **GitHub Discussions:** announcements enabled; 1.1.0 post <https://github.com/AsemShahen/NetworkMonitor/discussions/2>
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> merged on 2026-11-02 (test passed on `v1.0.4`; the `v1.1.0` retest is pending; the v1.0.3 dark-default and missing-update-information warnings are resolved)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> was submitted but is now marked `[dead]`; there is no live Hacker News post.
@@ -252,7 +252,7 @@ in `docs/screenshots/` as thumbnails.
 - [x] `https://asemshahen.github.io/NetworkMonitor/` returns the repository page.
 - [x] `apt/dists/stable/InRelease` verifies with the published key.
 - [x] `rpm/x86_64/repodata/repomd.xml.asc` verifies with the published key.
-- [ ] AUR `network-monitor-qt-bin` pushed and visible (blocked: no AUR account yet and registration temporarily closed, HTTP 503).
+- [ ] AUR `network-monitor-qt-bin` pushed and visible (blocked: no AUR account yet; registration presents an anti-bot challenge).
 - [x] AppImageHub PR opened (one file only), test passed, and merged on 2026-11-02.
 - [x] AppImageHub test passes on `v1.0.4` (v1.0.1 missed `libxkbcommon-x11`; v1.0.2 referenced glibc 2.38; v1.0.3 was built on Ubuntu 22.04; v1.0.4 resolves the dark default and adds `.zsync` update information).
 - [ ] Re-test the `v1.1.0` AppImage on AppImageHub after the Security & Threats and screenshot changes.

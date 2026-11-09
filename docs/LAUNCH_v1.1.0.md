@@ -248,7 +248,7 @@ blocked apps. Screenshots and install instructions:
 
 - [x] Publish the GitHub release and verify all assets.
 - [x] Update the signed APT/RPM repository; AUR metadata files are ready but
-      cannot be pushed until registration reopens.
+      cannot be pushed until an AUR account is available.
 - [ ] Post one community update, then wait for feedback. Show HN is `[dead]`
       and the r/linux attempt was removed by AutoModerator.
 - [x] Send two targeted news tips with the refreshed security screenshot.

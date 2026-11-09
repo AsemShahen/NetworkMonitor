@@ -87,7 +87,7 @@ sha256sum -c SHA256SUMS
 
 - The signed APT/RPM repository serves `v1.1.0` with matching hashes.
 - The AUR `network-monitor-qt-bin` metadata is ready for 1.1.0, but cannot be
-  pushed until AUR registration reopens.
+  pushed until an AUR account is available.
 - AppImageHub keeps the existing catalog entry and the
   `gh-releases-zsync` update information; the 1.1.0 retest is pending.
 
@@ -210,7 +210,7 @@ sha256sum -c SHA256SUMS
 
 - يخدم مستودع APT/RPM الموقّع الإصدار `v1.1.0` ببصمات مطابقة.
 - بيانات AUR للحزمة `network-monitor-qt-bin` جاهزة لـ1.1.0، لكن لا يمكن
-  دفعها حتى يعاد فتح تسجيل AUR.
+  دفعها حتى يتوفر حساب AUR.
 - يحتفظ AppImageHub بمدخله الحالي وبينات تحديث `gh-releases-zsync`؛ وإعادة
   اختبار 1.1.0 معلّقة.
 

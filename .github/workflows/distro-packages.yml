@@ -35,7 +35,7 @@ jobs:
             export DEBIAN_FRONTEND=noninteractive
             apt-get update
             apt-get install -y --no-install-recommends \
-              build-essential debhelper dh-python python3-all \
+              build-essential debhelper dh-python pybuild-plugin-pyproject python3-all \
               python3-setuptools python3-wheel python3-build python3-installer \
               python3-pytest desktop-file-utils appstream lintian
             dpkg-buildpackage -b -uc -us

@@ -11,23 +11,24 @@ Do not claim a channel is live before it is.
 - **Email:** <asemshahen5@gmail.com>
 - **License:** GPL-3.0-or-later
 - **Repository:** <https://github.com/AsemShahen/NetworkMonitor>
-- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.0.9>
-- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; serves `v1.0.9` signed with the new key)
+- **Release:** <https://github.com/AsemShahen/NetworkMonitor/releases/tag/v1.1.0>
+- **Package repository:** <https://asemshahen.github.io/NetworkMonitor/> (live; the signed repository is republished with `v1.1.0` after the release workflow finishes)
 - **GPG fingerprint:** `D53CB321C38875CCA82128CC77EED1C545319AE8` (previous key `4E32B2E37802A0EBF4F80C4EF75A8C4DDB4B61EE` retired)
-- **AUR:** `network-monitor-qt-bin` (local `1.0.9` package ready; no AUR account yet, and registration is temporarily closed with HTTP 503, so account creation, SSH key setup, and push are blocked for now)
+- **AUR:** `network-monitor-qt-bin` (local `1.0.9` package ready; update to `1.1.0` pending the CI-built `.deb` checksum; no AUR account yet, and registration is temporarily closed with HTTP 503)
 - **AppImageHub:** one-file PR <https://github.com/AppImage/appimage.github.io/pull/10786> merged on 2026-11-02 (test passed on `v1.0.4`; the v1.0.3 dark-default and missing-update-information warnings are resolved)
 - **Show HN:** <https://news.ycombinator.com/item?id=50268737> (live; title updated to the prepared Show HN title)
 - **Reddit:** r/linux post <https://www.reddit.com/r/linux/comments/1xhdqqs/network_monitor_perapp_bandwidth_monitor_with/> was removed by AutoModerator because the account has 1 karma; an r/linuxapps retry hit Reddit's rate limit/error, so there is no live Reddit post yet.
 
-> 1.0.9 is a packaging release. Reuse the 1.0.8 launch posts below with the new
-> release link, or mention that official Debian and Fedora source packaging is
-> now prepared and awaiting maintainer review.
+> 1.1.0 is the Security & Threats release. Use the ready-to-post drafts in
+> `docs/LAUNCH_v1.1.0.md` and `docs/LAUNCH_v1.1.0_AR.md`; the older 1.0.8
+> drafts below are kept for reference only.
 
 ## One-line pitch
 
 > Network Monitor shows accurate Netlink-based download and upload speeds for
-> every Linux application, keeps monthly usage, and lets you block any app with
-> cgroup v2 + nftables.
+> every Linux application, keeps monthly usage, and adds a Security & Threats
+> tab with local heuristics, optional IP/file reputation checks, and confirmed
+> nftables blocking.
 
 ## Short description
 
@@ -41,6 +42,12 @@ updated while the app is closed, using a systemd user service with single-writer
 SQLite coordination. Blocking is
 real: a polkit-authenticated helper applies cgroup v2 and nftables rules, with a
 persistent blocklist and import/export.
+
+Version 1.1.0 adds the **Security & Threats** tab. Local heuristics highlight
+temporary executable paths, common mining ports, and upload spikes. Optional
+checks use the user's own API keys for AbuseIPDB/VirusTotal IP reputation and
+MalwareBazaar/VirusTotal file hashes, with local SQLite caching and confirmed
+IP blocking. Local checks work offline.
 
 It is local-first: it reads `/proc` and does not need an account or a cloud
 service. The interface defaults to English and switches instantly to Arabic

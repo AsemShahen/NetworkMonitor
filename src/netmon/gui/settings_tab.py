@@ -7,10 +7,12 @@ from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
     QComboBox,
+    QDoubleSpinBox,
     QFrame,
     QGroupBox,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QPushButton,
     QScrollArea,
     QVBoxLayout,
@@ -41,6 +43,7 @@ class SettingsTab(QWidget):
     reset_totals_requested = Signal()
     apply_blocklist_requested = Signal()
     update_requested = Signal()
+    security_settings_changed = Signal(object)
 
     def __init__(self, config, parent=None):
         super().__init__(parent)
@@ -179,6 +182,89 @@ class SettingsTab(QWidget):
         self._add_hint(clay, "settings.hint.collector")
         root.addWidget(self.group_collector)
 
+        # ----------------------------- الأمان والتهديدات -----------------------------
+        self.group_security = QGroupBox()
+        slay = QVBoxLayout(self.group_security)
+        slay.setSpacing(10)
+
+        self.security_enabled = QCheckBox()
+        self.security_enabled.setChecked(bool(config.get("security_enabled", True)))
+        self.security_enabled.toggled.connect(self._emit_security)
+        slay.addWidget(self.security_enabled)
+
+        self.security_path = QCheckBox()
+        self.security_path.setChecked(bool(config.get("security_path_check", True)))
+        self.security_path.toggled.connect(self._emit_security)
+        slay.addWidget(self.security_path)
+
+        self.security_mining = QCheckBox()
+        self.security_mining.setChecked(bool(config.get("security_mining_check", True)))
+        self.security_mining.toggled.connect(self._emit_security)
+        slay.addWidget(self.security_mining)
+
+        self.security_upload = QCheckBox()
+        self.security_upload.setChecked(bool(config.get("security_upload_check", True)))
+        self.security_upload.toggled.connect(self._emit_security)
+        slay.addWidget(self.security_upload)
+
+        self.security_spike = QDoubleSpinBox()
+        self.security_spike.setRange(0.1, 100000.0)
+        self.security_spike.setDecimals(1)
+        self.security_spike.setSingleStep(0.5)
+        self.security_spike.setValue(float(config.get("security_spike_mbps", 5.0)))
+        self.security_spike.setSuffix(" MB/s")
+        self.security_spike.setMaximumWidth(180)
+        self.security_spike.valueChanged.connect(self._emit_security)
+        slay.addLayout(self._row("settings.security.spike", self.security_spike))
+
+        self.security_auto = QCheckBox()
+        self.security_auto.setChecked(bool(config.get("security_auto_ip_check", False)))
+        self.security_auto.toggled.connect(self._emit_security)
+        slay.addWidget(self.security_auto)
+
+        self.security_ip_provider = QComboBox()
+        self.security_ip_provider.addItem("", "abuseipdb")
+        self.security_ip_provider.addItem("", "virustotal")
+        self._set_combo_data(
+            self.security_ip_provider, str(config.get("security_ip_provider", "abuseipdb"))
+        )
+        self.security_ip_provider.setMaximumWidth(240)
+        self.security_ip_provider.currentIndexChanged.connect(self._emit_security)
+        slay.addLayout(self._row("settings.security.ip_provider", self.security_ip_provider))
+
+        self.security_abuse_key = QLineEdit(
+            str(config.get("security_abuseipdb_key", "") or "")
+        )
+        self.security_abuse_key.setEchoMode(QLineEdit.Password)
+        self.security_abuse_key.setClearButtonEnabled(True)
+        self.security_abuse_key.textChanged.connect(self._emit_security)
+        slay.addLayout(self._row("settings.security.abuse_key", self.security_abuse_key))
+
+        self.security_vt_key = QLineEdit(
+            str(config.get("security_virustotal_key", "") or "")
+        )
+        self.security_vt_key.setEchoMode(QLineEdit.Password)
+        self.security_vt_key.setClearButtonEnabled(True)
+        self.security_vt_key.textChanged.connect(self._emit_security)
+        slay.addLayout(self._row("settings.security.vt_key", self.security_vt_key))
+
+        self.security_hash_provider = QComboBox()
+        self.security_hash_provider.addItem("", "malwarebazaar")
+        self.security_hash_provider.addItem("", "virustotal")
+        self._set_combo_data(
+            self.security_hash_provider,
+            str(config.get("security_hash_provider", "malwarebazaar")),
+        )
+        self.security_hash_provider.setMaximumWidth(240)
+        self.security_hash_provider.currentIndexChanged.connect(self._emit_security)
+        slay.addLayout(
+            self._row("settings.security.hash_provider", self.security_hash_provider)
+        )
+
+        self._add_hint(slay, "settings.hint.security")
+        self._add_hint(slay, "settings.hint.security_privacy")
+        root.addWidget(self.group_security)
+
         # ----------------------------- الإجماليات والصيانة -----------------------------
         self.group_maintenance = QGroupBox()
         tlay = QVBoxLayout(self.group_maintenance)
@@ -316,12 +402,40 @@ class SettingsTab(QWidget):
     def _emit_apply_on_start(self, value: bool) -> None:
         self.apply_on_start_changed.emit(value)
 
+    @staticmethod
+    def _set_combo_data(combo: QComboBox, value: str) -> None:
+        index = combo.findData(value)
+        if index >= 0:
+            combo.setCurrentIndex(index)
+
+    def security_values(self) -> dict:
+        return {
+            "security_enabled": self.security_enabled.isChecked(),
+            "security_path_check": self.security_path.isChecked(),
+            "security_mining_check": self.security_mining.isChecked(),
+            "security_upload_check": self.security_upload.isChecked(),
+            "security_spike_mbps": float(self.security_spike.value()),
+            "security_auto_ip_check": self.security_auto.isChecked(),
+            "security_ip_provider": str(
+                self.security_ip_provider.currentData() or "abuseipdb"
+            ),
+            "security_abuseipdb_key": self.security_abuse_key.text().strip(),
+            "security_virustotal_key": self.security_vt_key.text().strip(),
+            "security_hash_provider": str(
+                self.security_hash_provider.currentData() or "malwarebazaar"
+            ),
+        }
+
+    def _emit_security(self, *_args) -> None:
+        self.security_settings_changed.emit(self.security_values())
+
     # -------------------------------------------------------------- translation
     def retranslate(self) -> None:
         if not self._update_busy:
             self._update_status = tr("update.idle")
         self.group_monitor.setTitle(tr("settings.group.monitor"))
         self.group_collector.setTitle(tr("settings.group.collector"))
+        self.group_security.setTitle(tr("settings.group.security"))
         self.group_maintenance.setTitle(tr("settings.group.maintenance"))
         self.group_updates.setTitle(tr("settings.group.updates"))
         self.group_diagnostics.setTitle(tr("settings.group.diagnostics"))
@@ -337,6 +451,25 @@ class SettingsTab(QWidget):
         self.group_cgroups.setText(tr("settings.group_cgroups"))
         self.autostart.setText(tr("settings.autostart"))
         self.minimize_to_tray.setText(tr("settings.minimize_to_tray"))
+        self.security_enabled.setText(tr("settings.security.enabled"))
+        self.security_path.setText(tr("settings.security.path"))
+        self.security_mining.setText(tr("settings.security.mining"))
+        self.security_upload.setText(tr("settings.security.upload"))
+        self.security_auto.setText(tr("settings.security.auto_ip"))
+        self.security_abuse_key.setPlaceholderText(tr("settings.security.key_placeholder"))
+        self.security_vt_key.setPlaceholderText(tr("settings.security.key_placeholder"))
+        for combo, keys in (
+            (
+                self.security_ip_provider,
+                ("settings.security.provider.abuseipdb", "settings.security.provider.virustotal"),
+            ),
+            (
+                self.security_hash_provider,
+                ("settings.security.provider.malwarebazaar", "settings.security.provider.virustotal"),
+            ),
+        ):
+            for index, key in enumerate(keys):
+                combo.setItemText(index, tr(key))
         self.reset_btn.setText(tr("settings.reset"))
         self.apply_btn.setText(tr("settings.reapply"))
         self.copy_diag_btn.setText(tr("diag.copy"))
@@ -402,6 +535,7 @@ class SettingsTab(QWidget):
         for group in (
             self.group_monitor,
             self.group_collector,
+            self.group_security,
             self.group_maintenance,
             self.group_updates,
             self.group_diagnostics,

@@ -10,6 +10,8 @@ from .collectors.traffic import TrafficEngine
 from .config import BlocklistStore, ConfigStore, TotalsStore, slugify
 from .i18n import tr
 from .models import BlockEntry
+from .security.cache import SecurityStore
+from .security.heuristics import SecurityEngine
 from .usage import UsageStore
 
 
@@ -22,6 +24,8 @@ class Controller:
         self.config = ConfigStore()
         self.blocklist = BlocklistStore()
         self.totals = TotalsStore()
+        self.security = SecurityEngine()
+        self.security_store = SecurityStore()
         self.usage = UsageStore(
             writer=not bool(self.config.get("background_collector", False))
         )
@@ -143,6 +147,39 @@ class Controller:
 
         rows.sort(key=lambda r: (r["down_bps"] + r["up_bps"], r["cpu"]), reverse=True)
 
+        security_report = {
+            "findings": [],
+            "counts": {"critical": 0, "high": 0, "medium": 0, "low": 0, "total": 0},
+            "external_ips": [],
+        }
+        if bool(self.config.get("security_enabled", True)):
+            try:
+                spike_mbps = float(self.config.get("security_spike_mbps", 5.0))
+            except (TypeError, ValueError):
+                spike_mbps = 5.0
+            try:
+                spike_ratio = float(self.config.get("security_spike_ratio", 4.0))
+            except (TypeError, ValueError):
+                spike_ratio = 4.0
+            try:
+                retention = int(self.config.get("security_retention_minutes", 15)) * 60.0
+            except (TypeError, ValueError):
+                retention = 900.0
+            security_report = self.security.analyze(
+                rows,
+                sample.sockets,
+                path_check=bool(self.config.get("security_path_check", True)),
+                mining_check=bool(self.config.get("security_mining_check", True)),
+                upload_check=bool(self.config.get("security_upload_check", True)),
+                spike_bps=max(0.1, spike_mbps) * 1024 * 1024,
+                spike_ratio=max(1.0, spike_ratio),
+                retention_seconds=max(60.0, retention),
+            )
+        else:
+            security_report["external_ips"] = self.security.external_ips(
+                rows, sample.sockets
+            )
+
         total_down_bps = sum(r["down_bps"] for r in rows)
         total_up_bps = sum(r["up_bps"] for r in rows)
         month_key = datetime.now().strftime("%Y-%m")
@@ -164,6 +201,7 @@ class Controller:
             "month_down": month_down,
             "month_up": month_up,
             "grouped": group_cgroups,
+            "security": security_report,
         }
         return rows, summary
 
@@ -318,6 +356,30 @@ class Controller:
 
         return HelperClient().apply(entries)
 
+    # ---------- حظر عناوين IP ----------
+    def block_ip(self, ip: str, reason: str = "") -> tuple[bool, str]:
+        if not ip:
+            return False, tr("security.error.no_ip")
+        from .firewall.helper_client import HelperClient
+
+        ok, err = HelperClient().block_ip(ip)
+        if ok:
+            self.security_store.add_blocked_ip(ip, reason)
+        return ok, err
+
+    def unblock_ip(self, ip: str) -> tuple[bool, str]:
+        if not ip:
+            return False, tr("security.error.no_ip")
+        from .firewall.helper_client import HelperClient
+
+        ok, err = HelperClient().unblock_ip(ip)
+        if ok:
+            self.security_store.remove_blocked_ip(ip)
+        return ok, err
+
+    def clear_security_history(self) -> None:
+        self.security.clear()
+
     # ---------- الإعدادات ----------
     def set_refresh_ms(self, ms: int) -> None:
         self.config.set("refresh_ms", int(ms))
@@ -363,5 +425,6 @@ class Controller:
             self.totals.save()
             self.config.save()
             self.usage.close()
+            self.security_store.close()
         except Exception:
             pass

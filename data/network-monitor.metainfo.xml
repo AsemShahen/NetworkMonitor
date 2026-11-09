@@ -9,8 +9,10 @@
   <summary xml:lang="ar">مراقب حركة الإنترنت لكل تطبيق عبر Netlink مع استهلاك شهري وإمكانية الحظر</summary>
   <description>
     <p>Network Monitor shows accurate live download and upload speeds for every application using native Netlink counters, active connections, executable paths, session totals, and monthly/daily usage. It can block selected applications with cgroup v2 and nftables through a polkit-authenticated helper.</p>
+    <p>The Security &amp; Threats tab adds local heuristics for temporary executable paths, common mining ports, and upload spikes. It can optionally query AbuseIPDB, VirusTotal, and MalwareBazaar with the user's own API keys, cache results locally in SQLite, and block remote IPs or applications after confirmation.</p>
     <p>The interface is available in English and Arabic, with full RTL support.</p>
     <p xml:lang="ar">يعرض مراقب الشبكة سرعات التنزيل والرفع اللحظية الدقيقة لكل تطبيق عبر عدّادات Netlink الأصلية، والاتصالات النشطة، ومسارات الملفات التنفيذية، وإجماليات الجلسة، والاستهلاك الشهري واليومي. ويمكنه حظر التطبيقات المحددة عبر cgroup v2 وnftables من خلال مساعد محمي بمصادقة polkit.</p>
+    <p xml:lang="ar">يضيف تبويب الأمان والتهديدات فحصًا محليًا للمسارات التنفيذية المؤقتة ومنافذ التعدين الشائعة وارتفاعات الرفع المفاجئة. ويمكنه اختياريًا الاستعلام من AbuseIPDB وVirusTotal وMalwareBazaar باستخدام مفاتيح API الخاصة بالمستخدم، وتخزين النتائج محليًا في SQLite، وحظر عناوين IP البعيدة أو التطبيقات بعد التأكيد.</p>
     <p xml:lang="ar">الواجهة متاحة بالإنجليزية والعربية مع دعم كامل للكتابة من اليمين إلى اليسار.</p>
   </description>
   <screenshots>
@@ -28,6 +30,16 @@
       <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/blocked-apps.png</image>
       <caption>Blocked applications</caption>
       <caption xml:lang="ar">التطبيقات المحظورة</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security.png</image>
+      <caption>Security &amp; Threats: local findings and IP reputation</caption>
+      <caption xml:lang="ar">الأمان والتهديدات: النتائج المحلية وسمعة عناوين IP</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/AsemShahen/NetworkMonitor/main/docs/screenshots/security-ar.png</image>
+      <caption xml:lang="ar">الأمان والتهديدات بالعربية مع دعم كامل للاتجاه من اليمين إلى اليسار</caption>
+      <caption>Security &amp; Threats in Arabic with full RTL support</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">network-monitor.desktop</launchable>
@@ -48,13 +60,18 @@
     <keyword>monitor</keyword>
     <keyword>firewall</keyword>
     <keyword>block</keyword>
+    <keyword>security</keyword>
+    <keyword>threats</keyword>
     <keyword>شبكة</keyword>
     <keyword>حظر</keyword>
+    <keyword>أمان</keyword>
+    <keyword>تهديدات</keyword>
   </keywords>
   <provides>
     <binary>network-monitor</binary>
   </provides>
   <releases>
+    <release version="1.1.0" date="2026-11-09"/>
     <release version="1.0.9" date="2026-11-07"/>
     <release version="1.0.8" date="2026-11-07"/>
     <release version="1.0.7" date="2026-11-06"/>

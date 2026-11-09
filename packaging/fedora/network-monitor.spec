@@ -5,11 +5,13 @@ unavailable. It lists active connections, executable paths, session totals,
 and monthly and daily usage with CSV export.
 
 Selected applications can be blocked with cgroup v2 and nftables through a
-small PolicyKit-authenticated helper. The interface is available in English
-and Arabic and supports right-to-left layouts.}
+small PolicyKit-authenticated helper. The Security & Threats tab adds local
+heuristics, optional IP and file reputation checks, and confirmed IP blocking.
+The interface is available in English and Arabic and supports right-to-left
+layouts.}
 
 Name:           network-monitor
-Version:        1.0.9
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Per-application network monitor with usage tracking and blocking
 License:        GPL-3.0-or-later
@@ -95,7 +97,7 @@ fi
 
 %files -f %{pyproject_files}
 %license LICENSE
-%doc README.md README_AR.md
+%doc README.md README_AR.md docs/SECURITY_TAB.md
 %{_bindir}/network-monitor
 %{_libexecdir}/network-monitor/network-monitor-helper
 %{_datadir}/applications/network-monitor.desktop
@@ -110,6 +112,10 @@ fi
 %{_mandir}/man1/network-monitor.1*
 
 %changelog
+* Mon Nov 09 2026 Asem Shahen <asemshahen5@gmail.com> - 1.1.0-1
+- Update to the upstream 1.1.0 release
+- Add the Security & Threats tab with local and reputation-based checks
+- Keep using distribution-provided Python and Qt dependencies
 * Sat Nov 07 2026 Asem Shahen <asemshahen5@gmail.com> - 1.0.9-1
 - Update to the upstream 1.0.9 release
 - Defer in-app updates to the Fedora package manager

@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag to publish (use a release built with zstd, for example v1.0.1)"
+        description: "Release tag to publish (use a release built with zstd, for example v1.1.0)"
         required: true
-        default: "v1.0.1"
+        default: "v1.1.0"
 
 permissions:
   contents: write

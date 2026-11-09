@@ -4,6 +4,7 @@ import importlib.util
 import os
 import platform
 import shutil
+import time
 from pathlib import Path
 
 from PySide6 import QtCore
@@ -32,11 +33,14 @@ from .. import collector_service
 from ..collector_status import read_collector_status
 from ..config import REFRESH_CHOICES, install_autostart
 from ..i18n import get_language, is_rtl, refresh_label, set_language, tr
+from ..util import short_path
 from . import theme
 from .blocked_tab import BlockedTab
 from .chart_view import ChartView
 from .icons import get_app_icon
 from .language import apply_language
+from .security_tab import SecurityTab
+from .security_workers import FileHashThread, IPReputationThread
 from .settings_tab import SettingsTab
 from .traffic_table import TrafficFilterProxy, TrafficModel, TrafficTable
 from .update_worker import UpdateCheckThread, UpdateInstallThread
@@ -58,6 +62,9 @@ class MainWindow(QMainWindow):
         self._pending_silent = False
         self._update_thread = None
         self._install_thread = None
+        self._ip_thread = None
+        self._hash_thread = None
+        self._last_ip_scan = 0.0
         self._collector_changing = False
         self._thread = QThread(self)
         self._worker = Worker(controller)
@@ -108,6 +115,8 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.addTab(self._build_live_tab(), tr("tab.live"))
         self.tabs.addTab(self._build_chart_tab(), tr("tab.chart"))
+        self.security_tab = SecurityTab(self.controller.config)
+        self.tabs.addTab(self.security_tab, tr("tab.security"))
         self.usage_tab = UsageTab(self.controller)
         self.tabs.addTab(self.usage_tab, tr("tab.usage"))
         self.blocked_tab = BlockedTab()
@@ -295,6 +304,16 @@ class MainWindow(QMainWindow):
         self.usage_tab.export_requested.connect(self.export_usage)
         self.usage_tab.reset_requested.connect(self._reset_usage)
 
+        self.settings_tab.security_settings_changed.connect(
+            self._on_security_settings_changed
+        )
+        self.security_tab.check_ip_requested.connect(self._start_ip_scan)
+        self.security_tab.check_hash_requested.connect(self._start_hash_check)
+        self.security_tab.block_app_requested.connect(self._block_app_from_security)
+        self.security_tab.block_ip_requested.connect(self._block_ip)
+        self.security_tab.unblock_ip_requested.connect(self._unblock_ip)
+        self.security_tab.clear_requested.connect(self._clear_security_alerts)
+
         self.blocked_tab.unblock_requested.connect(self._unblock_slug)
         self.blocked_tab.export_requested.connect(self._export_blocklist)
         self.blocked_tab.import_requested.connect(self._import_blocklist)
@@ -342,6 +361,7 @@ class MainWindow(QMainWindow):
         self.chart_live.apply_theme()
         self.chart_full.apply_theme()
         self.usage_tab.apply_theme()
+        self.security_tab.apply_theme()
         self.table.viewport().update()
         self.blocked_tab.table.viewport().update()
 
@@ -379,7 +399,16 @@ class MainWindow(QMainWindow):
         for i, ms in enumerate(REFRESH_CHOICES):
             self.interval_combo.setItemText(i, refresh_label(ms))
 
-        for i, key in enumerate(("tab.live", "tab.chart", "tab.usage", "tab.blocked", "tab.settings")):
+        for i, key in enumerate(
+            (
+                "tab.live",
+                "tab.chart",
+                "tab.security",
+                "tab.usage",
+                "tab.blocked",
+                "tab.settings",
+            )
+        ):
             self.tabs.setTabText(i, tr(key))
 
         for card, key in self._card_titles:
@@ -390,6 +419,7 @@ class MainWindow(QMainWindow):
         self.chart_live.retranslate()
         self.chart_full.retranslate()
         self.usage_tab.retranslate()
+        self.security_tab.retranslate()
         self.blocked_tab.retranslate()
         self.settings_tab.retranslate()
         self.tray.retranslate()
@@ -447,6 +477,10 @@ class MainWindow(QMainWindow):
         )
         if self.tabs.currentWidget() is self.usage_tab:
             self.usage_tab.refresh()
+
+        self.security_tab.update_report(summary.get("security") or {})
+        self.security_tab.set_blocked_ips(self.controller.security_store.blocked_ips())
+        self._maybe_auto_ip_check(summary.get("security") or {})
 
         ts = None
         self.chart_live.add_point(summary["down_bps"], summary["up_bps"], ts)
@@ -594,6 +628,15 @@ class MainWindow(QMainWindow):
         act_copy.triggered.connect(lambda: self._copy_path(row.get("exe") or ""))
         menu.addAction(act_copy)
 
+        act_hash = QAction(tr("context.hash"), self)
+        act_hash.setEnabled(bool(row.get("exe")))
+        act_hash.triggered.connect(
+            lambda: self._start_hash_check(
+                str(row.get("exe") or ""), str(row.get("name") or "")
+            )
+        )
+        menu.addAction(act_hash)
+
         menu.addSeparator()
         act_export = QAction(tr("context.export"), self)
         act_export.triggered.connect(self.export_names)
@@ -606,6 +649,239 @@ class MainWindow(QMainWindow):
             return
         QApplication.clipboard().setText(path)
         self.status.showMessage(tr("status.copied"))
+
+    # --------------------------------------------------------------- security
+    def _on_security_settings_changed(self, values) -> None:
+        if not isinstance(values, dict):
+            return
+        self.controller.config.data.update(values)
+        self.controller.config.save()
+
+    def _security_key(self, provider: str = "") -> str:
+        provider = provider or str(
+            self.controller.config.get("security_ip_provider", "abuseipdb")
+        )
+        if provider == "virustotal":
+            return str(self.controller.config.get("security_virustotal_key", "") or "")
+        return str(self.controller.config.get("security_abuseipdb_key", "") or "")
+
+    def _maybe_auto_ip_check(self, report: dict) -> None:
+        if self.tabs.currentWidget() is not self.security_tab:
+            return
+        if not bool(self.controller.config.get("security_auto_ip_check", False)):
+            return
+        if self._ip_thread is not None and self._ip_thread.isRunning():
+            return
+        if time.time() - self._last_ip_scan < 300:
+            return
+        ips = [
+            str(item.get("ip") or "")
+            for item in (report.get("external_ips") or [])
+            if item.get("ip")
+        ][:20]
+        if not ips or not self._security_key():
+            return
+        self.status.showMessage(tr("security.status.auto"))
+        self._start_ip_scan(ips)
+
+    def _start_ip_scan(self, ips: list[str]) -> None:
+        if self._ip_thread is not None and self._ip_thread.isRunning():
+            self.status.showMessage(tr("security.status.scanning"))
+            return
+        unique = []
+        for ip in ips or []:
+            value = str(ip or "").strip()
+            if value and value not in unique:
+                unique.append(value)
+        if not unique:
+            self.status.showMessage(tr("security.status.no_ips"))
+            return
+        provider = str(self.controller.config.get("security_ip_provider", "abuseipdb"))
+        api_key = self._security_key(provider)
+        if not api_key:
+            QMessageBox.information(
+                self,
+                tr("security.no_key_title"),
+                tr("security.no_key_body"),
+            )
+            self.tabs.setCurrentWidget(self.settings_tab)
+            return
+        if provider == "virustotal":
+            # Respect the free-tier rate limit while keeping the wait bounded.
+            unique = unique[:8]
+        self._last_ip_scan = time.time()
+        self.security_tab.set_scanning(True)
+        self.status.showMessage(tr("security.status.scan_started", count=len(unique)))
+        thread = IPReputationThread(
+            unique,
+            provider,
+            api_key,
+            self.controller.security_store,
+            self,
+        )
+        self._ip_thread = thread
+        thread.result_ready.connect(self._on_ip_results)
+        thread.progress.connect(
+            lambda done, total, ip: self.status.showMessage(
+                f"{tr('security.status.scanning')} {done}/{total} — {ip}"
+            )
+        )
+        thread.finished.connect(self._on_ip_finished)
+        thread.start()
+
+    def _on_ip_results(self, results) -> None:
+        self.security_tab.set_reputation_results(list(results or []))
+        self.status.showMessage(
+            tr("security.status.scan_done", count=len(results or []))
+        )
+
+    def _on_ip_finished(self) -> None:
+        self._ip_thread = None
+        self.security_tab.set_scanning(False)
+
+    def _start_hash_check(self, path: str, name: str = "") -> None:
+        if not path:
+            QMessageBox.warning(
+                self,
+                tr("security.hash_failed_title"),
+                tr("error.no_exe_short"),
+            )
+            return
+        if self._hash_thread is not None and self._hash_thread.isRunning():
+            self.status.showMessage(tr("security.status.scanning"))
+            return
+        provider = str(
+            self.controller.config.get("security_hash_provider", "malwarebazaar")
+        )
+        api_key = ""
+        if provider == "virustotal":
+            api_key = str(
+                self.controller.config.get("security_virustotal_key", "") or ""
+            )
+            if not api_key:
+                QMessageBox.information(
+                    self,
+                    tr("security.no_key_title"),
+                    tr("security.no_key_body"),
+                )
+                self.tabs.setCurrentWidget(self.settings_tab)
+                return
+        self.status.showMessage(
+            tr("security.status.hashing", name=name or os.path.basename(path))
+        )
+        thread = FileHashThread(
+            path,
+            provider,
+            api_key,
+            self.controller.security_store,
+            self,
+        )
+        self._hash_thread = thread
+        thread.result_ready.connect(self._on_hash_result)
+        thread.finished.connect(self._on_hash_finished)
+        thread.start()
+
+    def _on_hash_result(self, result) -> None:
+        data = dict(result or {})
+        self.security_tab.set_hash_result(data)
+        if not data.get("ok"):
+            message = tr(
+                str(data.get("error_key") or "security.error.network"),
+                **dict(data.get("error_args") or {}),
+            )
+            QMessageBox.warning(self, tr("security.hash_failed_title"), message)
+            return
+        if data.get("malicious"):
+            message = tr(
+                "security.hash.malicious",
+                path=short_path(str(data.get("path") or ""), 80),
+                detections=int(data.get("detections") or 0),
+                total=int(data.get("total") or 0),
+            )
+            QMessageBox.warning(self, tr("security.hash_title"), message)
+        else:
+            message = tr(
+                "security.hash.safe",
+                path=short_path(str(data.get("path") or ""), 80),
+            )
+            QMessageBox.information(self, tr("security.hash_title"), message)
+        self.status.showMessage(message)
+
+    def _on_hash_finished(self) -> None:
+        self._hash_thread = None
+
+    def _block_app_from_security(self, exe: str, name: str) -> None:
+        if not exe:
+            QMessageBox.warning(self, tr("action.block_title"), tr("action.block_no_path"))
+            return
+        if self.controller.config.get("confirm_block", True):
+            reply = QMessageBox.question(
+                self,
+                tr("security.block_title"),
+                tr(
+                    "security.confirm_block",
+                    name=name or os.path.basename(exe),
+                    exe=exe,
+                ),
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No,
+            )
+            if reply != QMessageBox.Yes:
+                return
+        self.status.showMessage(
+            tr("action.blocking", name=name or os.path.basename(exe))
+        )
+        self._run_action(
+            lambda: self.controller.block(exe, name),
+            tr("security.block_success"),
+        )
+
+    def _block_ip(self, ip: str) -> None:
+        if not ip:
+            return
+        if self.controller.security_store.is_blocked_ip(ip):
+            self.status.showMessage(tr("security.status.blocked_ip", ip=ip))
+            return
+        reply = QMessageBox.question(
+            self,
+            tr("security.confirm_block_ip_title"),
+            tr("security.confirm_block_ip", ip=ip),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        self.status.showMessage(
+            tr("action.blocking", name=ip)
+        )
+        self._run_action(
+            lambda: self.controller.block_ip(ip),
+            tr("security.block_ip_success"),
+        )
+
+    def _unblock_ip(self, ip: str) -> None:
+        if not ip:
+            return
+        self._run_action(
+            lambda: self.controller.unblock_ip(ip),
+            tr("security.unblock_ip_success"),
+        )
+
+    def _clear_security_alerts(self) -> None:
+        reply = QMessageBox.question(
+            self,
+            tr("security.clear_confirm_title"),
+            tr("security.clear_confirm"),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        self.controller.clear_security_history()
+        if isinstance(self._last_summary, dict):
+            self._last_summary["security"] = {}
+        self.security_tab.update_report({})
+        self.status.showMessage(tr("security.cleared"))
 
     # ------------------------------------------------------------------ export
     def _visible_names(self) -> list[str]:
@@ -773,10 +1049,24 @@ class MainWindow(QMainWindow):
     def _update_blocked_tab(self) -> None:
         if hasattr(self, "blocked_tab"):
             self.blocked_tab.set_entries(self.controller.blocklist.list())
+        if hasattr(self, "security_tab"):
+            self.security_tab.set_blocked_ips(
+                self.controller.security_store.blocked_ips()
+            )
 
     def _on_tab_changed(self, index: int) -> None:
         if self.tabs.widget(index) is self.blocked_tab:
             self._update_blocked_tab()
+        elif self.tabs.widget(index) is self.security_tab:
+            self.security_tab.update_report(
+                (self._last_summary or {}).get("security") or {}
+            )
+            self.security_tab.set_blocked_ips(
+                self.controller.security_store.blocked_ips()
+            )
+            self._maybe_auto_ip_check(
+                (self._last_summary or {}).get("security") or {}
+            )
         elif self.tabs.widget(index) is self.usage_tab:
             self.usage_tab.refresh_months()
             self.usage_tab.refresh()
@@ -811,9 +1101,15 @@ class MainWindow(QMainWindow):
         self.timer.stop()
         if hasattr(self, "_collector_timer"):
             self._collector_timer.stop()
+        for thread in (self._ip_thread, self._hash_thread):
+            if thread is not None and thread.isRunning():
+                thread.requestInterruption()
+        for thread in (self._ip_thread, self._hash_thread):
+            if thread is not None and thread.isRunning():
+                thread.wait(10000)
         for thread in (self._update_thread, self._install_thread):
             if thread is not None and thread.isRunning():
-                thread.wait(2000)
+                thread.wait(3000)
         self._thread.quit()
         self._thread.wait(3000)
         self.controller.shutdown()

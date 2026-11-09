@@ -14,7 +14,11 @@ reported with ``measured=False`` instead of a misleading zero speed.
 import socket
 from typing import Any
 
-from .net_conn import SocketRecord
+from .net_conn import (
+    SocketRecord,
+    format_netlink_address,
+    format_netlink_port,
+)
 
 
 class NetlinkBackend:
@@ -126,6 +130,14 @@ class NetlinkBackend:
                                 tx=tx,
                                 rx=rx,
                                 measured=measured,
+                                local_addr=format_netlink_address(
+                                    message.get("idiag_src"), family
+                                ),
+                                local_port=format_netlink_port(message.get("idiag_sport")),
+                                remote_addr=format_netlink_address(
+                                    message.get("idiag_dst"), family
+                                ),
+                                remote_port=format_netlink_port(message.get("idiag_dport")),
                             )
                         )
 
@@ -149,6 +161,14 @@ class NetlinkBackend:
                                 tx=0,
                                 rx=0,
                                 measured=False,
+                                local_addr=format_netlink_address(
+                                    message.get("idiag_src"), family
+                                ),
+                                local_port=format_netlink_port(message.get("idiag_sport")),
+                                remote_addr=format_netlink_address(
+                                    message.get("idiag_dst"), family
+                                ),
+                                remote_port=format_netlink_port(message.get("idiag_dport")),
                             )
                         )
             except Exception as exc:  # noqa: BLE001

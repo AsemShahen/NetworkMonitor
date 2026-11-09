@@ -82,5 +82,13 @@ class HelperClient:
         r = self._call({"op": "apply", "entries": entries})
         return bool(r.get("ok")), str(r.get("error") or "")
 
+    def block_ip(self, ip: str) -> tuple[bool, str]:
+        r = self._call({"op": "block_ip", "ip": ip})
+        return bool(r.get("ok")), str(r.get("error") or "")
+
+    def unblock_ip(self, ip: str) -> tuple[bool, str]:
+        r = self._call({"op": "unblock_ip", "ip": ip})
+        return bool(r.get("ok")), str(r.get("error") or "")
+
     def status(self) -> dict:
         return self._call({"op": "status"}, timeout=60)

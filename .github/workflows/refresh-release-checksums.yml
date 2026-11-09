@@ -6,7 +6,7 @@ on:
       tag:
         description: "Release tag whose SHA256SUMS should be regenerated"
         required: true
-        default: "v1.0.9"
+        default: "v1.1.0"
 
 permissions:
   contents: write

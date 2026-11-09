@@ -1,3 +1,13 @@
+network-monitor (1.1.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Add the Security & Threats tab with local heuristics, optional IP and
+    file reputation checks, local caching, and confirmed IP blocking.
+  * Refresh AppStream metadata, screenshots, translations, and the manual page.
+  * Keep using distribution-provided Python, Qt, pyroute2, and NumPy packages.
+
+ -- Asem Shahen <asemshahen5@gmail.com>  Mon, 09 Nov 2026 12:00:00 +0300
+
 network-monitor (1.0.9-3) unstable; urgency=medium
 
   * Order the DEP-5 copyright paragraphs so the metadata license applies to

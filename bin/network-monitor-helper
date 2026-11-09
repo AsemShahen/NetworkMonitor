@@ -15,6 +15,7 @@
 """
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
 import re
@@ -26,6 +27,7 @@ CGROUP_ROOT = "/sys/fs/cgroup"
 CGROUP_BASE = os.path.join(CGROUP_ROOT, "network-monitor")
 NFT = shutil.which("nft")
 TABLE = "network_monitor"
+IP_SETS = {"ipv4": "blocked_ips4", "ipv6": "blocked_ips6"}
 
 _LANG = "en"
 
@@ -85,6 +87,104 @@ def ensure_table() -> tuple[bool, str]:
 def list_chain(chain: str) -> str:
     rc, out, _ = run([NFT, "-a", "list", "chain", "inet", TABLE, chain])
     return out if rc == 0 else ""
+
+
+def ensure_ip_sets() -> tuple[bool, str]:
+    """Create the IPv4/IPv6 sets and their drop rules once."""
+    if not NFT:
+        return False, t("The nft tool is not installed (nftables package).", "أداة nft غير مثبتة (حزمة nftables).")
+    for family, set_name in IP_SETS.items():
+        run([NFT, "add", "set", "inet", TABLE, set_name, "{", "type",
+             f"{family}_addr", ";", "flags", "interval", ";", "}"])
+    rc, listing, err = run([NFT, "list", "table", "inet", TABLE])
+    if rc != 0:
+        return False, err or t("Could not create the nftables table.", "تعذّر إنشاء جدول nftables.")
+    rules = (
+        ("ip", "output", "daddr", "nm-ip4-out"),
+        ("ip", "input", "saddr", "nm-ip4-in"),
+        ("ip6", "output", "daddr", "nm-ip6-out"),
+        ("ip6", "input", "saddr", "nm-ip6-in"),
+    )
+    for family, chain, direction, comment in rules:
+        if comment in listing:
+            continue
+        set_name = IP_SETS["ipv4" if family == "ip" else "ipv6"]
+        rc, _, err = run([
+            NFT, "add", "rule", "inet", TABLE, chain,
+            family, direction, "@" + set_name, "drop", "comment", f'"{comment}"',
+        ])
+        if rc != 0:
+            return False, err or t("Could not add the nftables rule.", "تعذّر إضافة قاعدة nftables.")
+    return True, ""
+
+
+def valid_ip(value: str) -> ipaddress.IPv4Address | ipaddress.IPv6Address | None:
+    try:
+        return ipaddress.ip_address((value or "").strip())
+    except ValueError:
+        return None
+
+
+def set_name_for(address) -> str:
+    return IP_SETS["ipv4"] if address.version == 4 else IP_SETS["ipv6"]
+
+
+def list_ip_set(set_name: str) -> str:
+    rc, out, _ = run([NFT, "list", "set", "inet", TABLE, set_name])
+    return out if rc == 0 else ""
+
+
+def blocked_ip_values() -> list[str]:
+    values: list[str] = []
+    for set_name in IP_SETS.values():
+        listing = list_ip_set(set_name)
+        # Only parse the elements block.  The rest of the ``nft list set``
+        # output contains metadata such as ``type ipv4_addr`` and ``size``,
+        # whose digits would otherwise be mistaken for IP addresses.
+        match = re.search(r"elements\s*=\s*\{([^}]*)\}", listing, re.DOTALL)
+        if not match:
+            continue
+        for token in re.findall(r"[0-9A-Fa-f:.]+", match.group(1)):
+            address = valid_ip(token)
+            if address is not None and str(address) not in values:
+                values.append(str(address))
+    return sorted(values, key=lambda value: (ipaddress.ip_address(value).version, value))
+
+
+def block_ip(value: str) -> tuple[bool, str]:
+    address = valid_ip(value)
+    if address is None:
+        return False, t("Invalid IP address.", "عنوان IP غير صالح.")
+    ok, err = ensure_table()
+    if not ok:
+        return False, err
+    ok, err = ensure_ip_sets()
+    if not ok:
+        return False, err
+    set_name = set_name_for(address)
+    if str(address) in blocked_ip_values():
+        return True, t(f"{address} is already blocked.", f"{address} محظور مسبقاً.")
+    rc, _, err = run([
+        NFT, "add", "element", "inet", TABLE, set_name, "{", str(address), "}",
+    ])
+    if rc != 0 and "File exists" not in err and "already exists" not in err:
+        return False, err or t("Could not block the IP address.", "تعذّر حظر عنوان IP.")
+    return True, t(f"Blocked {address}.", f"تم حظر {address}.")
+
+
+def unblock_ip(value: str) -> tuple[bool, str]:
+    address = valid_ip(value)
+    if address is None:
+        return False, t("Invalid IP address.", "عنوان IP غير صالح.")
+    if not NFT:
+        return False, t("The nft tool is not installed (nftables package).", "أداة nft غير مثبتة (حزمة nftables).")
+    set_name = set_name_for(address)
+    rc, _, err = run([
+        NFT, "delete", "element", "inet", TABLE, set_name, "{", str(address), "}",
+    ])
+    if rc != 0 and "No such file or directory" not in err and "No such" not in err:
+        return False, err or t("Could not unblock the IP address.", "تعذّر إلغاء حظر عنوان IP.")
+    return True, t(f"Unblocked {address}.", f"تم إلغاء حظر {address}.")
 
 
 def rule_comment(slug: str, chain: str) -> str:
@@ -215,6 +315,7 @@ def status() -> tuple[bool, str, dict]:
         "nft": bool(NFT),
         "cgroup2": cgroup2_available(),
         "blocked": sorted(slugs),
+        "blocked_ips": blocked_ip_values() if NFT else [],
         "uid": os.geteuid(),
     }
 
@@ -246,6 +347,12 @@ def main() -> int:
             emit(ok, message=msg, error=None if ok else msg)
         elif op == "apply":
             ok, msg = apply_entries(list(req.get("entries") or []))
+            emit(ok, message=msg, error=None if ok else msg)
+        elif op == "block_ip":
+            ok, msg = block_ip(str(req.get("ip") or ""))
+            emit(ok, message=msg, error=None if ok else msg)
+        elif op == "unblock_ip":
+            ok, msg = unblock_ip(str(req.get("ip") or ""))
             emit(ok, message=msg, error=None if ok else msg)
         elif op == "status":
             ok, err, info = status()

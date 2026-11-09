@@ -1,4 +1,4 @@
-.TH NETWORK-MONITOR 1 "2026-11-07" "Network Monitor 1.0.9" "User Commands"
+.TH NETWORK-MONITOR 1 "2026-11-09" "Network Monitor 1.1.0" "User Commands"
 .SH NAME
 network-monitor \- per-application network monitor for Linux
 .SH SYNOPSIS
@@ -10,6 +10,12 @@ shows live download and upload speeds for each application by reading native
 Netlink counters.  It lists active connections, executable paths, session
 totals, and monthly and daily usage.  Selected applications can be blocked with
 cgroup v2 and nftables through a polkit-authenticated helper.
+.PP
+The Security & Threats tab adds local heuristics for temporary executable
+paths, common mining ports, and upload spikes.  Optional reputation checks for
+remote IP addresses and SHA-256 file hashes use the user's own API keys and a
+local SQLite cache.  Confirmed remote IP blocking uses the same privileged
+helper.
 .PP
 The interface is available in English and Arabic and supports right-to-left
 layouts.
@@ -31,6 +37,9 @@ Monthly and daily usage database.
 .TP
 .I ~/.local/share/network-monitor/blocklist.json
 Persistent blocklist.
+.TP
+.I ~/.local/share/network-monitor/security.db
+Cached security reputation results.
 .TP
 .I /usr/share/polkit-1/actions/org.networkmonitor.helper.policy
 PolicyKit action used by the privileged blocking helper.

@@ -12,6 +12,7 @@ from .net_conn import (
     inode_to_pids,
     pid_cgroup,
     read_proc_net_sockets,
+    split_endpoint,
 )
 from .netlink import NetlinkBackend
 
@@ -106,6 +107,10 @@ def parse_ss_sockets(text: str, udp: bool = False) -> list[SocketRecord]:
                 pids=list(pids),
                 name=current["name"],
                 cgroup=current["cgroup"],
+                local_addr=current["local_addr"],
+                local_port=current["local_port"],
+                remote_addr=current["remote_addr"],
+                remote_port=current["remote_port"],
             )
         )
         current = None
@@ -124,12 +129,18 @@ def parse_ss_sockets(text: str, udp: bool = False) -> list[SocketRecord]:
             users = USERS_RE.findall(line)
             inode_match = INODE_RE.search(line)
             cgroup_match = CGROUP_RE.search(line)
+            local_addr, local_port = split_endpoint(tokens[3] if len(tokens) > 3 else "")
+            remote_addr, remote_port = split_endpoint(tokens[4] if len(tokens) > 4 else "")
             current = {
                 "state": tokens[0],
                 "inode": int(inode_match.group(1)) if inode_match else 0,
                 "pids": [int(pid) for _, pid, _ in users],
                 "name": users[0][0] if users else "",
                 "cgroup": cgroup_match.group(1) if cgroup_match else "",
+                "local_addr": local_addr,
+                "local_port": local_port,
+                "remote_addr": remote_addr,
+                "remote_port": remote_port,
                 "tx": 0,
                 "rx": 0,
                 "saw_bytes": False,
@@ -267,6 +278,10 @@ class _ProcBackend:
                     measured=False,
                     pids=pids,
                     cgroup=cgroup,
+                    local_addr=socket.local_addr,
+                    local_port=socket.local_port,
+                    remote_addr=socket.remote_addr,
+                    remote_port=socket.remote_port,
                 )
             )
         return records

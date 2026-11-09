@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Upstream release version to package and upload (for example 1.0.9)"
+        description: "Upstream release version to package and upload (for example 1.1.0)"
         required: true
-        default: "1.0.9"
+        default: "1.1.0"
       packaging_ref:
         description: "Git ref whose debian/ directory provides the package revision"
         required: true

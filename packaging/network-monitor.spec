@@ -26,7 +26,9 @@ Network Monitor shows accurate live download and upload speeds for every
 application using native Netlink counters, active connections, executable
 paths, session totals, and monthly/daily usage. It can block selected
 applications with cgroup v2 and nftables through a polkit-authenticated helper.
-The interface is available in English and Arabic.
+The Security & Threats tab adds local heuristics, optional IP and file
+reputation checks, and confirmed IP blocking. The interface is available in
+English and Arabic.
 
 %install
 rm -rf %{buildroot}
@@ -65,6 +67,10 @@ fi
 /usr/share/icons/hicolor/scalable/apps/network-monitor.svg
 
 %changelog
+* Mon Nov 09 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.1.0-1
+- Add the Security & Threats tab with local heuristics and reputation lookups
+- Add confirmed remote IP blocking through the privileged helper
+- Refresh AppStream metadata and bilingual strings
 * Sat Nov 07 2026 AL-Asem Software By Asem Shahen And DeepSeek V4.1 Flash Free <asemshahen5@gmail.com> - 1.0.9-1
 - Add distribution-managed install detection for official packages
 - Add Debian and Fedora source packaging metadata and validation

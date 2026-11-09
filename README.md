@@ -15,18 +15,21 @@ A light/dark, bilingual (English/Arabic) desktop network monitor for Linux (Debi
 - Persistent blocklist with import/export and apply-on-start.
 - Diagnostics panel with copy-to-clipboard, showing the active engine, socket attribution, and why counters may be limited.
 - Signed in-app updates from Settings for manual `/opt` installs, AppImage, `.deb`, `.rpm`, and Flatpak, with checksum and GPG verification plus backup/rollback for manual installs. Official distribution packages defer to the distribution package manager instead of replacing themselves.
+- Security & Threats tab with local heuristics (temporary executable paths, common mining ports, upload spikes), asynchronous AbuseIPDB/VirusTotal IP reputation checks with SQLite caching, on-demand SHA-256 file checks through MalwareBazaar/VirusTotal, and one-click app/IP blocking through the existing cgroup v2 + nftables helper.
 - English and Arabic interfaces with instant switching in Settings (English is the default), full RTL support, light/dark themes that follow the system by default, tray icon, optional start-with-system, and desktop integration.
 
-## New in 1.0.9
+## New in 1.1.0
 
-- Added official Debian and Fedora source packaging that uses distribution-provided Python, PySide6, pyqtgraph, pyroute2, and NumPy packages instead of the bundled runtime.
-- Official distribution packages install a `distro-managed` marker, so the in-app updater directs users to `apt` or `dnf` instead of replacing a distribution package with a GitHub package.
-- Added AppStream screenshots and developer metadata, a manual page, and Debian/Fedora container builds in CI.
-- The GitHub `.deb`, `.rpm`, AppImage, and manual `/opt` update paths keep their existing signed-update behavior.
-- The Debian source package was accepted by Debian Mentors; the RFS is open as Debian bug `1153391` and is awaiting a sponsor. The Fedora review request is filed as bug `2568606` and is awaiting a reviewer.
+- Added the **Security & Threats** tab with local heuristics for temporary executable paths, common mining ports, and upload spikes.
+- Added asynchronous AbuseIPDB and VirusTotal IP reputation checks with a local SQLite cache, optional automatic checks, and clear API-key fields in Settings. API keys stay on the machine and are only sent to the selected provider.
+- Added on-demand SHA-256 file checks through MalwareBazaar and VirusTotal, with cached results and a details panel.
+- Added confirmed remote-IP blocking and unblocking through the existing polkit-authenticated cgroup v2 + nftables helper.
+- Extended connection discovery to retain local and remote endpoints, so the Security tab can match findings to the right process and destination.
+- Added English/Arabic strings, RTL-aware tables and filters, theming, filters, context menus, and unit tests for the security engine and cache.
+- Added a security screenshot and refreshed AppStream metadata, the manual page, and release documentation.
 
-See [docs/RELEASE_NOTES_v1.0.9.md](docs/RELEASE_NOTES_v1.0.9.md) for details.
-Previous release: [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md).
+See [docs/RELEASE_NOTES_v1.1.0.md](docs/RELEASE_NOTES_v1.1.0.md) for details.
+Previous release: [docs/RELEASE_NOTES_v1.0.9.md](docs/RELEASE_NOTES_v1.0.9.md).
 
 ## Screenshots
 
@@ -41,6 +44,10 @@ Previous release: [docs/RELEASE_NOTES_v1.0.8.md](docs/RELEASE_NOTES_v1.0.8.md).
 | Live connections | Settings |
 | --- | --- |
 | ![Live connections](docs/screenshots/live-connections.png) | ![Settings](docs/screenshots/settings.png) |
+
+| Security & Threats (English) | الأمان والتهديدات (العربية) |
+| --- | --- |
+| ![Security findings](docs/screenshots/security.png) | ![نتائج الأمان بالعربية](docs/screenshots/security-ar.png) |
 
 ## Download
 Prebuilt packages are published on **GitHub Releases**:

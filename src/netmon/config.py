@@ -61,6 +61,18 @@ class ConfigStore:
         "usage_retention_days": 90,
         "first_run": True,
         "confirm_block": True,
+        "security_enabled": True,
+        "security_path_check": True,
+        "security_mining_check": True,
+        "security_upload_check": True,
+        "security_spike_mbps": 5.0,
+        "security_spike_ratio": 4.0,
+        "security_auto_ip_check": False,
+        "security_ip_provider": "abuseipdb",
+        "security_abuseipdb_key": "",
+        "security_virustotal_key": "",
+        "security_hash_provider": "malwarebazaar",
+        "security_retention_minutes": 15,
     }
 
     def __init__(self, path: Path = CONFIG_FILE):
@@ -92,6 +104,29 @@ class ConfigStore:
         except (TypeError, ValueError):
             interval = 5000
         self.data["collector_interval_ms"] = max(1000, min(60000, interval))
+
+        if self.data.get("security_ip_provider") not in ("abuseipdb", "virustotal"):
+            self.data["security_ip_provider"] = "abuseipdb"
+        if self.data.get("security_hash_provider") not in ("malwarebazaar", "virustotal"):
+            self.data["security_hash_provider"] = "malwarebazaar"
+        try:
+            self.data["security_spike_mbps"] = max(
+                0.1, min(100000.0, float(self.data.get("security_spike_mbps", 5.0)))
+            )
+        except (TypeError, ValueError):
+            self.data["security_spike_mbps"] = 5.0
+        try:
+            self.data["security_spike_ratio"] = max(
+                1.0, min(1000.0, float(self.data.get("security_spike_ratio", 4.0)))
+            )
+        except (TypeError, ValueError):
+            self.data["security_spike_ratio"] = 4.0
+        try:
+            self.data["security_retention_minutes"] = max(
+                1, min(1440, int(self.data.get("security_retention_minutes", 15)))
+            )
+        except (TypeError, ValueError):
+            self.data["security_retention_minutes"] = 15
 
     def save(self) -> None:
         _atomic_write(self.path, self.data)

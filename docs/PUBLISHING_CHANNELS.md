@@ -79,8 +79,10 @@ The Fedora review request is filed:
    sponsor is still required.
 2. Monitor Fedora bug `2568606` and answer reviewer comments. A Fedora reviewer
    and sponsor are still required.
-3. The Debian Salsa account still needs manual approval before a Salsa-based
-   package repository can be used.
+3. The Debian Salsa account request was rejected on 2026-11-12. This does not
+   reject the package or the RFS; Salsa is optional for Mentors-based review.
+   Appeal via `salsa@debian.org` or `#debian-salsa`, and do not create a
+   duplicate account.
 4. AUR registration currently presents an anti-bot challenge. Create an
    account in a browser when available, then upload `packaging/aur/`.
 

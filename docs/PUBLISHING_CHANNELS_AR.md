@@ -78,11 +78,10 @@
    مراجع وراعٍ Fedora.
 3. رُفض طلب حساب Debian Salsa في 2026-11-12. هذا لا يرفض الحزمة أو RFS؛
    فـSalsa اختياري عند المراجعة عبر Mentors. ردّت إدارة Salsa بأن الطلب
-   المرفوض لا يترك أثرًا. أُعيد التسجيل باسم `asemshahen` من
-   <https://salsa.debian.org/users/sign_up>، لكن طلب `POST /users` أعاد
-   `422: The change you requested was rejected`. لم يُنشأ حساب ولم يصل بريد
-   تفعيل. أعد المحاولة من صفحة جديدة؛ إن تكرر الخطأ فأرسل التفاصيل ورقم
-   الطلب `01M78RVMAVGYH8YK7VZCT4WFCP` إلى `salsa-admin@debian.org`.
+   المرفوض لا يترك أثرًا. نجحت إعادة التسجيل باسم `asemshahen` والبريد
+   `asemshahen5@gmail.com` من <https://salsa.debian.org/users/sign_up>.
+   الحساب الآن **بانتظار موافقة إدارة Salsa**، ولا يمكن تسجيل الدخول قبل
+   الموافقة. أُرسلت تفاصيل التسجيل إلى `salsa-admin@debian.org`.
 4. تسجيل AUR يعرض حاليًا تحديًا لمكافحة الروبوتات. أنشئ حسابًا من متصفح عند
    توفره، ثم ارفع `packaging/aur/`.
 

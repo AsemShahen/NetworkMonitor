@@ -115,9 +115,12 @@ network-monitor
 - الصفحة: <https://mentors.debian.net/package/network-monitor/>
 - رُفض طلب حساب Salsa في 2026-11-12. هذا لا يرفض الحزمة أو طلب RFS؛
   فالمراجعة عبر Mentors لا تتطلب Salsa. ردّ Antonio Terceiro من إدارة Salsa
-  في 2026-11-12 موضحًا أن الطلب المرفوض لا يترك أثرًا، والمطلوب إعادة التسجيل
-  من <https://salsa.debian.org/users/sign_up> ثم إبلاغ الإدارة باسم المستخدم
-  والبريد عبر `salsa-admin@debian.org`. لا يوجد حساب نشط بعد.
+  في 2026-11-12 موضحًا أن الطلب المرفوض لا يترك أثرًا، والمطلوب إعادة التسجيل.
+  أُعيد التسجيل من <https://salsa.debian.org/users/sign_up> باسم المستخدم
+  `asemshahen`، لكن طلب `POST /users` أعاد خطأ GitLab العام
+  `422: The change you requested was rejected`. لا يوجد حساب نشط بعد، ولا
+  وصل بريد تفعيل. أعد المحاولة من صفحة جديدة؛ إن تكرر الخطأ فأرسل التفاصيل
+  ورقم الطلب `01M78RVMAVGYH8YK7VZCT4WFCP` إلى `salsa-admin@debian.org`.
 - لا يوجد راعٍ بعد. لا تُرفع حزمة `1.1.0-1` إلى Mentors حتى يطلبها
   مراجع/راعٍ، ثم تُحدّث الحزمة والخطأ معًا.
 

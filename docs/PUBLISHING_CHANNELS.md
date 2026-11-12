@@ -82,9 +82,11 @@ The Fedora review request is filed:
 3. The Debian Salsa account request was rejected on 2026-11-12. This does not
    reject the package or the RFS; Salsa is optional for Mentors-based review.
    The Salsa admins replied that a rejected registration leaves no record.
-   Register again at <https://salsa.debian.org/users/sign_up>, then email
-   `salsa-admin@debian.org` with the username and email used. No active Salsa
-   account exists yet.
+   A retry at <https://salsa.debian.org/users/sign_up> as `asemshahen` returned
+   HTTP `422: The change you requested was rejected`; no account or activation
+   email was created. Retry from a fresh page. If it persists, email
+   `salsa-admin@debian.org` with the username, email, time, and request ID
+   `01M78RVMAVGYH8YK7VZCT4WFCP`.
 4. AUR registration currently presents an anti-bot challenge. Create an
    account in a browser when available, then upload `packaging/aur/`.
 

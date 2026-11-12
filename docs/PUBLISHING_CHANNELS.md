@@ -81,8 +81,8 @@ The Fedora review request is filed:
    and sponsor are still required.
 3. The Debian Salsa account request was rejected on 2026-11-12. This does not
    reject the package or the RFS; Salsa is optional for Mentors-based review.
-   Appeal via `salsa@debian.org` or `#debian-salsa`, and do not create a
-   duplicate account.
+   Appeal via `salsa-admin@debian.org` or `#salsa` on OFTC/Matrix. The old
+   `salsa@debian.org` address bounces. Do not create a duplicate account.
 4. AUR registration currently presents an anti-bot challenge. Create an
    account in a browser when available, then upload `packaging/aur/`.
 

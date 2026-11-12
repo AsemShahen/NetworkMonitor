@@ -114,8 +114,10 @@ network-monitor
 - حزمة المصدر الحالية على Mentors: `network-monitor 1.0.9-3`.
 - الصفحة: <https://mentors.debian.net/package/network-monitor/>
 - رُفض طلب حساب Salsa في 2026-11-12. هذا لا يرفض الحزمة أو طلب RFS؛
-  فالمراجعة عبر Mentors لا تتطلب Salsa. يُنصح بالاستئناف عبر
-  `salsa@debian.org` أو `#debian-salsa` وعدم إنشاء حساب مكرر.
+  فالمراجعة عبر Mentors لا تتطلب Salsa. أُرسل الاستئناف إلى العنوان الصحيح
+  `salsa-admin@debian.org` بعد أن ارتد العنوان القديم `salsa@debian.org`.
+  يمكن أيضًا طلب المساعدة في `#salsa` على OFTC أو Matrix، مع عدم إنشاء
+  حساب مكرر.
 - لا يوجد راعٍ بعد. لا تُرفع حزمة `1.1.0-1` إلى Mentors حتى يطلبها
   مراجع/راعٍ، ثم تُحدّث الحزمة والخطأ معًا.
 

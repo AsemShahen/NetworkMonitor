@@ -84,7 +84,11 @@ The Fedora review request is filed:
    2026-11-13, and the Debian GitLab confirmation email was completed
    successfully. The account can now sign in at <https://salsa.debian.org>
    with the user's password. Salsa access does not grant Debian package upload
-   rights; the RFS still needs a Debian sponsor.
+   rights; the RFS still needs a Debian sponsor. A public packaging mirror is
+   available at <https://salsa.debian.org/asemshahen/network-monitor> (branch
+   `main`, including `debian/`). It is a review reference, not an official
+   upload; the Mentors package remains 1.0.9-3 and 1.1.0-1 has not been
+   uploaded.
 4. AUR registration currently presents an anti-bot challenge. Create an
    account in a browser when available, then upload `packaging/aur/`.
 

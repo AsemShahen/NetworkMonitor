@@ -80,7 +80,11 @@
    `asemshahen5@gmail.com`. وافق Thomas Goirand (zigo) على الحساب في
    2026-11-13، وتم إكمال تأكيد البريد من Debian GitLab بنجاح. يمكن الآن
    تسجيل الدخول من <https://salsa.debian.org> بكلمة مرور المستخدم. لا يمنح
-   Salsa صلاحية رفع حزم Debian؛ ما زال RFS بحاجة إلى راعٍ Debian.
+   Salsa صلاحية رفع حزم Debian؛ ما زال RFS بحاجة إلى راعٍ Debian. مستودع
+   التغليف العام متاح على
+   <https://salsa.debian.org/asemshahen/network-monitor> (فرع `main`، ويضم
+   `debian/`). هو مرجع للمراجعة وليس رفعًا رسميًا؛ ما زالت حزمة Mentors هي
+   `1.0.9-3`، ولم تُرفع `1.1.0-1`.
 4. تسجيل AUR يعرض حاليًا تحديًا لمكافحة الروبوتات. أنشئ حسابًا من متصفح عند
    توفره، ثم ارفع `packaging/aur/`.
 

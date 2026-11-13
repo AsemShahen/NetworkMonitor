@@ -113,13 +113,12 @@ network-monitor
 - طلب RFS: <https://bugs.debian.org/1153391>
 - حزمة المصدر الحالية على Mentors: `network-monitor 1.0.9-3`.
 - الصفحة: <https://mentors.debian.net/package/network-monitor/>
-- رُفض طلب حساب Salsa في 2026-11-12. هذا لا يرفض الحزمة أو طلب RFS؛
-  فالمراجعة عبر Mentors لا تتطلب Salsa. ردّ Antonio Terceiro من إدارة Salsa
-  موضحًا أن الطلب المرفوض لا يترك أثرًا، والمطلوب إعادة التسجيل. نجحت إعادة
-  التسجيل من <https://salsa.debian.org/users/sign_up> باسم المستخدم
-  `asemshahen` والبريد `asemshahen5@gmail.com`. الحساب الآن **بانتظار موافقة
-  إدارة Salsa**، ولا يمكن تسجيل الدخول قبل الموافقة. أُرسل تأكيد التسجيل إلى
-  `salsa-admin@debian.org`.
+- رُفض طلب حساب Salsa الأول في 2026-11-12، ثم نجحت إعادة التسجيل باسم
+  `asemshahen` والبريد `asemshahen5@gmail.com`. وافق Thomas Goirand (zigo)
+  على الحساب في 2026-11-13، ووصلت رسالتا الموافقة وتعليمات التأكيد من
+  Debian GitLab. تم تأكيد البريد بنجاح، والحساب جاهز لتسجيل الدخول من
+  <https://salsa.debian.org> بكلمة المرور الخاصة بالمستخدم. لا يمنح Salsa
+  صلاحية رفع الحزمة؛ ما زال RFS بحاجة إلى راعٍ Debian.
 - لا يوجد راعٍ بعد. لا تُرفع حزمة `1.1.0-1` إلى Mentors حتى يطلبها
   مراجع/راعٍ، ثم تُحدّث الحزمة والخطأ معًا.
 

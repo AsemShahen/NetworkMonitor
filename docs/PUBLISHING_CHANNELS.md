@@ -79,13 +79,12 @@ The Fedora review request is filed:
    sponsor is still required.
 2. Monitor Fedora bug `2568606` and answer reviewer comments. A Fedora reviewer
    and sponsor are still required.
-3. The Debian Salsa account request was rejected on 2026-11-12. This does not
-   reject the package or the RFS; Salsa is optional for Mentors-based review.
-   The Salsa admins replied that a rejected registration leaves no record.
-   Re-registration at <https://salsa.debian.org/users/sign_up> succeeded with
-   username `asemshahen` and email `asemshahen5@gmail.com`. The account is now
-   **awaiting administrator approval**; sign-in is disabled until then. The
-   registration details were sent to `salsa-admin@debian.org`.
+3. Salsa re-registration succeeded with username `asemshahen` and email
+   `asemshahen5@gmail.com`. Thomas Goirand (zigo) approved the account on
+   2026-11-13, and the Debian GitLab confirmation email was completed
+   successfully. The account can now sign in at <https://salsa.debian.org>
+   with the user's password. Salsa access does not grant Debian package upload
+   rights; the RFS still needs a Debian sponsor.
 4. AUR registration currently presents an anti-bot challenge. Create an
    account in a browser when available, then upload `packaging/aur/`.
 

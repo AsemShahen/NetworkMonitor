@@ -14,8 +14,8 @@ Build-Depends:
  appstream,
 Standards-Version: 4.7.4
 Homepage: https://github.com/AsemShahen/NetworkMonitor
-Vcs-Git: https://github.com/AsemShahen/NetworkMonitor.git
-Vcs-Browser: https://github.com/AsemShahen/NetworkMonitor
+Vcs-Git: https://salsa.debian.org/asemshahen/network-monitor.git
+Vcs-Browser: https://salsa.debian.org/asemshahen/network-monitor
 Rules-Requires-Root: no
 
 Package: network-monitor

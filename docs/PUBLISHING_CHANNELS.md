@@ -57,6 +57,10 @@ The Debian source package was accepted by Debian Mentors:
 - The RFS email was sent from `asemshahen5@gmail.com` to
   `submit@bugs.debian.org` on 2026-11-08. See `docs/DEBIAN_RFS.md` for the
   template; the sent message is preserved in `docs/DEBIAN_RFS.eml`.
+- The packaging `Vcs-Git` and `Vcs-Browser` fields now point to the public
+  Salsa repository. A status update was posted to the RFS as message #6 on
+  2026-11-19, covering the Salsa repository, the prepared `1.1.0-1` package,
+  and the 57 passing upstream tests.
 
 The Fedora review request is filed:
 

@@ -99,6 +99,9 @@ still waiting for human sponsors/reviewers:
 - **Debian:** the Mentors source package currently in the RFS is
   `network-monitor 1.0.9-3`; Debian bug `1153391` is awaiting a sponsor. The
   source tree now contains a `1.1.0-1` changelog entry for the next upload.
+  The packaging `Vcs-Git` and `Vcs-Browser` fields point to the public Salsa
+  repository, and a status update was posted to the RFS as message #6 on
+  2026-11-19.
 - **Fedora:** bug `2568606` is open with `fedora-review?` and is waiting for a
   reviewer/sponsor. The bug description and latest comment point at the 1.1.0
   spec and source RPM; the package remains blocked by `FE-NEEDSPONSOR`.
@@ -221,7 +224,9 @@ sha256sum -c SHA256SUMS
 
 - **Debian:** حزمة المصدر الحالية في Mentors وطلب RFS هي
   `network-monitor 1.0.9-3`؛ والخطأ `1153391` ينتظر راعيًا. تحتوي شجرة المصدر
-  الآن على مدخل changelog للإصدار `1.1.0-1` للرفع التالي.
+  الآن على مدخل changelog للإصدار `1.1.0-1` للرفع التالي. وتشير حقول
+  `Vcs-Git` و`Vcs-Browser` إلى مستودع Salsa العام، وأُضيف تحديث حالة إلى RFS
+  كرسالة رقم 6 في 2026-11-19.
 - **Fedora:** الخطأ `2568606` مفتوح مع `fedora-review?` وينتظر مراجعًا وراعيًا.
   ويشير وصف الخطأ وأحدث تعليق إلى ملف spec وحزمة المصدر 1.1.0؛ وما زالت
   الحزمة محجوبة بـ`FE-NEEDSPONSOR`.
